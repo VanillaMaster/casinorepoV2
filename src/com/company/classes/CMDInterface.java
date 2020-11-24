@@ -1,6 +1,7 @@
 package com.company.classes;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.FileWriter;
 
@@ -15,6 +16,8 @@ public class CMDInterface {
     private static final Scanner scanner = new Scanner(System.in);
 
     private static final Gson g = new Gson();
+
+    private static player currentPlayer = null;
 
     public static void inerface(){
 
@@ -78,6 +81,39 @@ public class CMDInterface {
                 System.out.println("An error occurred.");
             }
 
+        }
+
+    }
+
+    private static void login(){
+        System.out.println("Enter your username:");
+        String username = scanner.next();
+        String filename= username + ".json";
+
+        File f = new File("./users");
+        List<String> pathnames = Arrays.asList(f.list());
+        if(pathnames.contains(username)){
+
+            File myObj = new File("./users/"+filename);
+
+            String str ="";
+            Scanner myReader = null;
+            try {
+                myReader = new Scanner(myObj);
+            } catch (FileNotFoundException e) {
+                System.out.println("An error occurred.");
+            }
+
+            while (myReader.hasNextLine()) {
+                str+=myReader.nextLine();
+            }
+
+            System.out.println(str);
+            currentPlayer = g.fromJson(str, player.class);
+
+
+        } else {
+            System.out.println("user dont exsist");
         }
 
     }
