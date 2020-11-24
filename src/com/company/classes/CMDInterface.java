@@ -37,6 +37,9 @@ public class CMDInterface {
                 case "/register": register();
                 break;
 
+                case "/login": login();
+                break;
+
             }
 
         }
