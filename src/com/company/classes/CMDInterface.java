@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.FileWriter;
 
+import com.company.classes.Gamse.Kreps;
 import com.google.gson.Gson;
 
 import java.util.Arrays;
@@ -39,6 +40,11 @@ public class CMDInterface {
 
                 case "/login": login();
                 break;
+
+                case "/log": System.out.println(g.toJson(currentPlayer));
+                break;
+
+                case "/casino": Kreps.Play(currentPlayer);
 
             }
 
@@ -95,7 +101,12 @@ public class CMDInterface {
 
         File f = new File("./users");
         List<String> pathnames = Arrays.asList(f.list());
-        if(pathnames.contains(username)){
+
+        //System.out.println(pathnames.toString());
+
+        //System.out.println();
+
+        if(pathnames.contains(filename)){
 
             File myObj = new File("./users/"+filename);
 
@@ -111,7 +122,8 @@ public class CMDInterface {
                 str+=myReader.nextLine();
             }
 
-            System.out.println(str);
+            //System.out.println(str);
+
             currentPlayer = g.fromJson(str, player.class);
 
 

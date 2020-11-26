@@ -26,12 +26,16 @@ public class GamePattern {
     private int[] winrateTimeLine;
     private int pointer = 0;
 
-    public void addWin(){
-        winrateTimeLine[shiftPointer()] = 1;
+    public void addWin(int amount){
+        for (int i = 0; i < amount;i++) {
+            winrateTimeLine[shiftPointer()] = 1;
+        }
     }
 
-    public void addLose(){
-        winrateTimeLine[shiftPointer()] = 0;
+    public void addLose(int amount){
+        for (int i = 0; i < amount;i++) {
+            winrateTimeLine[shiftPointer()] = 0;
+        }
     }
 
     private int shiftPointer(){

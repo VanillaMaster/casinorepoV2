@@ -1,6 +1,7 @@
 package com.company;
 
 import com.company.classes.CMDInterface;
+import com.company.classes.Gamse.Kreps;
 import com.company.classes.NTRandom;
 import com.company.classes.player;
 import com.google.gson.Gson;
@@ -9,6 +10,7 @@ import com.google.gson.Gson;
 import java.io.File;
 import java.io.IOException;
 import java.io.FileWriter;
+import java.util.Random;
 
 public class Main {
 
@@ -16,6 +18,23 @@ public class Main {
     public static void main(String[] args) {
 
         CMDInterface.inerface();
+
+        //player p = new player("vova");
+
+        //Kreps.Play(p);
+
+        //final Random random = new Random();
+
+        //int preroll = RNG.rollNumber(50,50,2,24,inputNumber,10);
+
+        //int preroll = 20;
+
+        //System.out.println(24-preroll);
+
+        //int roll12_2 = random.nextInt(25-preroll)+preroll-12;
+
+        //System.out.println(roll12_2);
+
 
         /*
 
