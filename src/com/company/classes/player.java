@@ -1,11 +1,10 @@
 package com.company.classes;
 
-import com.company.classes.Gamse.Kreps;
 import com.company.classes.playerinnerclasses.GamePattern;
 
 public class player {
 
-    public player(String name){
+    public player(String name) {
         this.Name = name;
         this.points = 1000;
     }

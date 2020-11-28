@@ -31,8 +31,6 @@ public class NTRandom {
 
     public int rollNumber(int winrate,int desiredWinrate ,int minRoll, int maxRoll, int desiredRoll,int defaultWinrate){
 
-        //int curWinrate = 50;
-
         int chance = random.nextInt(101);
 
         if (chance < defaultWinrate){

@@ -14,76 +14,76 @@ import java.util.Scanner;
 
 public class CMDInterface {
 
-    private static final Scanner scanner = new Scanner(System.in);
+    private final Scanner scanner = new Scanner(System.in);
 
-    private static final Gson g = new Gson();
+    private final Gson g = new Gson();
 
-    private static player currentPlayer = null;
+    private player currentPlayer = null;
 
-    public static void inerface(){
+    public void inerface() {
 
         boolean isWorking = true;
 
-        while (isWorking){
+        while (isWorking) {
 
             String input = scanner.next();
 
             switch (input) {
-                case "/exit": isWorking = false;
-                break;
+                case "/exit":
+                    isWorking = false;
+                    break;
 
-                case "/help": System.out.println("\"/help\" - show this info\n\"/exit\" - exit bot/trogramm/idk\n\"/register\" - register new user");
-                break;
+                case "/help":
+                    System.out.println("\"/help\" - show this info\n\"/exit\" - exit bot/trogramm/idk\n\"/register\" - register new user");
+                    break;
 
-                case "/register": register();
-                break;
+                case "/register":
+                    register();
+                    break;
 
-                case "/login": login();
-                break;
+                case "/login":
+                    login();
+                    break;
 
-                case "/log": System.out.println(g.toJson(currentPlayer));
-                break;
+                case "/log":
+                    System.out.println(g.toJson(currentPlayer));
+                    break;
 
-                case "/casino": Kreps.Play(currentPlayer);
+                case "/casino":
+                    Kreps k = new Kreps(currentPlayer);
+                    k.Play();
 
             }
 
         }
     }
 
-    private static void register(){
+    private void register() {
         System.out.println("Enter username:");
         String username = scanner.next();
-        String filename= username + ".json";
+        String filename = username + ".json";
 
-        //System.out.println(username);
 
         File f = new File("./users");
         List<String> pathnames = Arrays.asList(f.list());
 
-        /*
-        for (String pathname : pathnames) {
-            System.out.println(pathname);
-        }
-        */
 
-        if(pathnames.contains(username)){
+        if (pathnames.contains(username)) {
             System.out.println("nickname already taken");
         } else {
 
             try {
-                File myObj = new File("./users/"+filename);
+                File myObj = new File("./users/" + filename);
                 myObj.createNewFile();
             } catch (IOException e) {
                 System.out.println("error on file creation");
             }
 
-            //player p = new player(username);
 
             String json = g.toJson(new player(username));
 
             try {
-                FileWriter myWriter = new FileWriter("./users/"+filename);
+                FileWriter myWriter = new FileWriter("./users/" + filename);
                 myWriter.write(json);
                 myWriter.close();
             } catch (IOException e) {
@@ -94,23 +94,20 @@ public class CMDInterface {
 
     }
 
-    private static void login(){
+    private void login() {
         System.out.println("Enter your username:");
         String username = scanner.next();
-        String filename= username + ".json";
+        String filename = username + ".json";
 
         File f = new File("./users");
         List<String> pathnames = Arrays.asList(f.list());
 
-        //System.out.println(pathnames.toString());
 
-        //System.out.println();
+        if (pathnames.contains(filename)) {
 
-        if(pathnames.contains(filename)){
+            File myObj = new File("./users/" + filename);
 
-            File myObj = new File("./users/"+filename);
-
-            String str ="";
+            String str = "";
             Scanner myReader = null;
             try {
                 myReader = new Scanner(myObj);
@@ -119,10 +116,9 @@ public class CMDInterface {
             }
 
             while (myReader.hasNextLine()) {
-                str+=myReader.nextLine();
+                str += myReader.nextLine();
             }
 
-            //System.out.println(str);
 
             currentPlayer = g.fromJson(str, player.class);
 

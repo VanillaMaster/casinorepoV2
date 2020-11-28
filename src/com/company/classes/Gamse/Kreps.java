@@ -9,14 +9,17 @@ import java.util.concurrent.TimeUnit;
 
 public class Kreps {
 
-    private static NTRandom RNG = new NTRandom();
+    private NTRandom RNG = new NTRandom();
 
-    public static void Play(player p){
+    private player p;
 
-        int winChance = RNG.roll(50,50,0,1);
+    public Kreps(player inputPlayer){
+        p = inputPlayer;
+    }
 
-        //int roll6x2 = RNG.roll(50,50,2,12);
-        //krepsPointer = roll6x2;
+    public void Play() {
+
+        int winChance = RNG.roll(50, 50, 0, 1);
 
         System.out.println("pass или dpass и количество ставки");
         String[] input = scanner.nextLine().split(" ");
@@ -25,27 +28,35 @@ public class Kreps {
 
         int roll = -1;
 
-        if (winChance == 0){
-            if (inputStatus.equals("dpass")){
-                roll = random.nextInt(6)+4;
-                if (roll >= 7){
+        if (winChance == 0) {
+            if (inputStatus.equals("dpass")) {
+                roll = random.nextInt(6) + 4;
+                if (roll >= 7) {
                     roll++;
                 }
             } else {
-                roll = random.nextInt(6)+1;
-                if (roll >= 4){roll+=3;}
-                if (roll >= 8){roll+=3;}
+                roll = random.nextInt(6) + 1;
+                if (roll >= 4) {
+                    roll += 3;
+                }
+                if (roll >= 8) {
+                    roll += 3;
+                }
             }
         } else {
-            if (inputStatus.equals("pass")){
-                roll = random.nextInt(6)+4;
-                if (roll >= 7){
+            if (inputStatus.equals("pass")) {
+                roll = random.nextInt(6) + 4;
+                if (roll >= 7) {
                     roll++;
                 }
             } else {
-                roll = random.nextInt(6)+1;
-                if (roll >= 4){roll+=3;}
-                if (roll >= 8){roll+=3;}
+                roll = random.nextInt(6) + 1;
+                if (roll >= 4) {
+                    roll += 3;
+                }
+                if (roll >= 8) {
+                    roll += 3;
+                }
             }
         }
 
@@ -55,30 +66,30 @@ public class Kreps {
 
         p.points -= inputBet;
 
-        if (inputStatus.equals("dpass") && (roll == 1 || roll == 2 || roll == 3 || roll == 7 || roll == 11 || roll == 12 )) {
+        if (inputStatus.equals("dpass") && (roll == 1 || roll == 2 || roll == 3 || roll == 7 || roll == 11 || roll == 12)) {
 
-            p.points += (inputBet*2);
-            showDice(roll,p.points);
+            p.points += (inputBet * 2);
+            showDice(roll, p.points);
             p.krepsParth1.addWin(2);
 
-        } else if (inputStatus.equals("pass") && (roll == 4 || roll == 5 || roll == 6 || roll == 8 || roll == 9 || roll == 10)){
+        } else if (inputStatus.equals("pass") && (roll == 4 || roll == 5 || roll == 6 || roll == 8 || roll == 9 || roll == 10)) {
 
-            p.points += (inputBet*2);
-            showDice(roll,p.points);
+            p.points += (inputBet * 2);
+            showDice(roll, p.points);
             p.krepsParth1.addWin(2);
             seccondParth(p);
 
-        } else /*if (roll6x2 == 3 || roll6x2 == 12 || roll6x2 == 2)*/ {
+        } else {
 
             //p.points += inputBet;
-            showDice(roll,p.points);
+            showDice(roll, p.points);
             p.krepsParth1.addLose(1);
 
         }
 
     }
 
-    private static void seccondParth(player p){
+    private void seccondParth(player p) {
 
         boolean keepRolling = true;
 
@@ -91,30 +102,30 @@ public class Kreps {
 
         p.points -= inputaBet;
 
-        int roll12_1=-1;
-        int roll12_2=-1;
+        int roll12_1 = -1;
+        int roll12_2 = -1;
 
         System.out.println(krepsPointer);
 
         do {
 
-            int preroll = RNG.rollNumber(50,50,2,24,inputNumber,4);
+            int preroll = RNG.rollNumber(50, 50, 2, 24, inputNumber, 4);
 
-            if (preroll>12){
-                roll12_2 = random.nextInt(25-preroll)+preroll-12;
+            if (preroll > 12) {
+                roll12_2 = random.nextInt(25 - preroll) + preroll - 12;
                 roll12_1 = preroll - roll12_2;
             } else {
-                roll12_1 = random.nextInt(preroll-1)+1;
+                roll12_1 = random.nextInt(preroll - 1) + 1;
                 roll12_2 = preroll - roll12_1;
             }
 
-            if (roll12_1 == krepsPointer || roll12_1 == 7 || roll12_2 == krepsPointer || roll12_2 == 7){
+            if (roll12_1 == krepsPointer || roll12_1 == 7 || roll12_2 == krepsPointer || roll12_2 == 7) {
                 keepRolling = false;
                 p.krepsParth2.addLose(1);
             }
 
             if ((keepRolling) && (inputNumber == (roll12_1 + roll12_2))) {
-                p.points += (inputaBet*8);
+                p.points += (inputaBet * 8);
                 keepRolling = false;
                 p.krepsParth2.addWin(1);
             }
@@ -137,16 +148,16 @@ public class Kreps {
         System.out.println(p.points);
     }
 
-    private static void showDice(int roll, int points){
+    private void showDice(int roll, int points) {
         System.out.println("*****");
         System.out.println(roll);
         System.out.println("*****");
         System.out.println(points);
     }
 
-    private static Scanner scanner = new Scanner(System.in);
+    private Scanner scanner = new Scanner(System.in);
 
-    private static int krepsPointer;
+    private int krepsPointer;
 
-    final static Random random = new Random();
+    final Random random = new Random();
 }
