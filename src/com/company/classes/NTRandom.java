@@ -7,10 +7,15 @@ public class NTRandom {
 
     final Random random = new Random();
 
-    private static boolean contains(final int[] arr, final int key) {
-        return Arrays.stream(arr).anyMatch(i -> i == key);
-    }
-
+    /**
+     *
+     * @param winrate текущий винрейт игрока
+     * @param desiredWinrate нужный винрейт игрока
+     * @param minRoll нижняя граница броска
+     * @param maxRoll верхняя граница броска
+     * @return рандомное число
+     *
+     */
     public int roll(int winrate,int desiredWinrate ,int minRoll, int maxRoll){
 
         int[] rn = new int[]{0,0};
@@ -29,13 +34,21 @@ public class NTRandom {
         }
     }
 
-    public int rollNumber(int winrate,int desiredWinrate ,int minRoll, int maxRoll, int desiredRoll){
-
-        int curWinrate = 50;
+    /**
+     *
+     * @param winrate текущий винрейт игрока
+     * @param desiredWinrate нужный винрейт игрока
+     * @param minRoll нижняя граница броска
+     * @param maxRoll верхняя граница броска
+     * @param desiredRoll нужныое число
+     * @param defaultWinrate базовый винрейт
+     * @return квази рандомное число
+     */
+    public int rollNumber(int winrate,int desiredWinrate ,int minRoll, int maxRoll, int desiredRoll,int defaultWinrate){
 
         int chance = random.nextInt(101);
 
-        if (chance > 50){
+        if (chance < defaultWinrate + (desiredWinrate - winrate)){
             return desiredRoll;
         } else {
             int roll = random.nextInt((maxRoll-minRoll)) + minRoll;
