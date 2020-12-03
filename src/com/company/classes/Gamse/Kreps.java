@@ -7,11 +7,9 @@ import java.util.Random;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
-public class Kreps {
+public class Kreps implements Game{
 
     private NTRandom RNG = new NTRandom();
-
-    public Kreps(){}
 
     public void Play(player p) {
 
