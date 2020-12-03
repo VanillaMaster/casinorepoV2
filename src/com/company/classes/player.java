@@ -2,6 +2,9 @@ package com.company.classes;
 
 import com.company.classes.playerinnerclasses.GamePattern;
 
+/**
+ * хранит данные: имени, количестве поинтов и игре
+ */
 public class player {
 
     public player(String name) {

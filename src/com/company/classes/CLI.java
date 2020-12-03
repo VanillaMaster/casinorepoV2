@@ -11,7 +11,9 @@ public class CLI {
     Kreps k = new Kreps();
     CLICommands commands = new CLICommands();
 
-
+    /**
+     * запускает CLI
+     */
     public void start() {
         boolean isWorking = true;
         while (isWorking) {

@@ -15,6 +15,9 @@ public class CLICommands {
     private final Scanner scanner = new Scanner(System.in);
     private final Gson g = new Gson();
 
+    /**
+     * регистрация пользователя
+     */
     public void register() {
         System.out.println("Enter username:");
         String username = scanner.next();
@@ -51,6 +54,10 @@ public class CLICommands {
 
     }
 
+    /**
+     * авторизует пользователя
+     * @return текцщего игрока
+     */
     public player login() {
         System.out.println("Enter your username:");
         String username = scanner.next();

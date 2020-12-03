@@ -5,7 +5,7 @@ import com.company.classes.player;
 public interface Game {
     /**
      * @param p поинты игрока
-     * Запускает игру Крепс
+     * Запускает игру
      */
     void Play(player p);
 }
