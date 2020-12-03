@@ -8,9 +8,9 @@ public class Main {
 
     public static void main(String[] args) {
 
-        CLI cmdInterface = new CLI();
+        CLI cli = new CLI();
 
-        cmdInterface.inerface();
+        cli.start();
 
     }
 }
