@@ -1,6 +1,6 @@
 package com.company.classes;
 
-import com.company.classes.playerinnerclasses.GamePattern;
+import com.company.classes.playerinnerclasses.GameDataPattern;
 
 /**
  * хранит данные: имени, количестве поинтов и игре
@@ -17,7 +17,7 @@ public class Player {
     public String Name;
 
 
-    public GamePattern krepsParth1 = new GamePattern(0.5);
-    public GamePattern krepsParth2 = new GamePattern(0.5);
+    public GameDataPattern krepsParth1 = new GameDataPattern(0.5);
+    public GameDataPattern krepsParth2 = new GameDataPattern(0.5);
 
 }

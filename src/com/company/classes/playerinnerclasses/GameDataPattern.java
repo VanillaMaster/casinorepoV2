@@ -1,7 +1,10 @@
 package com.company.classes.playerinnerclasses;
 
-public class GamePattern {
-    public GamePattern(double defaultWinFactor) {
+/**
+ * хранит игровые данные
+ */
+public class GameDataPattern {
+    public GameDataPattern(double defaultWinFactor) {
         winFactor = defaultWinFactor;
     }
 
