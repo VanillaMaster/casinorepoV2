@@ -7,7 +7,7 @@ import java.util.Scanner;
 public class CLI {
 
     private final Scanner scanner = new Scanner(System.in);
-    private player currentPlayer = null;
+    private Player currentPlayer = null;
     Kreps k = new Kreps();
     CLICommands commands = new CLICommands();
 
@@ -39,7 +39,7 @@ public class CLI {
 
                 case "/casino":
                     if (currentPlayer!=null){
-                        k.Play(currentPlayer);
+                        k.play(currentPlayer);
                     } else {
                         System.out.println("u should login first");
                     }

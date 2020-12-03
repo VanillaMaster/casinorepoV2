@@ -1,11 +1,11 @@
 package com.company.classes.Gamse;
 
-import com.company.classes.player;
+import com.company.classes.Player;
 
 public interface Game {
     /**
      * @param p поинты игрока
      * Запускает игру
      */
-    void Play(player p);
+    void play(Player p);
 }

@@ -1,7 +1,7 @@
 package com.company.classes.Gamse;
 
 import com.company.classes.NTRandom;
-import com.company.classes.player;
+import com.company.classes.Player;
 
 import java.util.Random;
 import java.util.Scanner;
@@ -11,7 +11,7 @@ public class Kreps implements Game{
 
     private NTRandom RNG = new NTRandom();
 
-    public void Play(player p) {
+    public void play(Player p) {
 
         int winChance = RNG.roll(50, 50, 0, 1);
 
@@ -83,7 +83,7 @@ public class Kreps implements Game{
 
     }
 
-    private void seccondParth(player p) {
+    private void seccondParth(Player p) {
 
         boolean keepRolling = true;
 
@@ -96,37 +96,37 @@ public class Kreps implements Game{
 
         p.points -= inputaBet;
 
-        int roll12_1 = -1;
-        int roll12_2 = -1;
+        int firstRoll12 = -1;
+        int secondRoll12 = -1;
 
         System.out.println(krepsPointer);
 
         do {
 
-            int preroll = RNG.rollNumber(50, 50, 2, 24, inputNumber, 4);
+            int preRoll = RNG.rollNumber(50, 50, 2, 24, inputNumber, 4);
 
-            if (preroll > 12) {
-                roll12_2 = random.nextInt(25 - preroll) + preroll - 12;
-                roll12_1 = preroll - roll12_2;
+            if (preRoll > 12) {
+                secondRoll12 = random.nextInt(25 - preRoll) + preRoll - 12;
+                firstRoll12 = preRoll - secondRoll12;
             } else {
-                roll12_1 = random.nextInt(preroll - 1) + 1;
-                roll12_2 = preroll - roll12_1;
+                firstRoll12 = random.nextInt(preRoll - 1) + 1;
+                secondRoll12 = preRoll - firstRoll12;
             }
 
-            if (roll12_1 == krepsPointer || roll12_1 == 7 || roll12_2 == krepsPointer || roll12_2 == 7) {
+            if (firstRoll12 == krepsPointer || firstRoll12 == 7 || secondRoll12 == krepsPointer || secondRoll12 == 7) {
                 keepRolling = false;
                 p.krepsParth2.addLose(1);
             }
 
-            if ((keepRolling) && (inputNumber == (roll12_1 + roll12_2))) {
+            if ((keepRolling) && (inputNumber == (firstRoll12 + secondRoll12))) {
                 p.points += (inputaBet * 8);
                 keepRolling = false;
                 p.krepsParth2.addWin(1);
             }
 
             System.out.println("*****");
-            System.out.println(roll12_1);
-            System.out.println(roll12_2);
+            System.out.println(firstRoll12);
+            System.out.println(secondRoll12);
             System.out.println("*****");
 
 

@@ -40,7 +40,7 @@ public class CLICommands {
             }
 
 
-            String json = g.toJson(new player(username));
+            String json = g.toJson(new Player(username));
 
             try {
                 FileWriter myWriter = new FileWriter("./users/" + filename);
@@ -58,7 +58,7 @@ public class CLICommands {
      * авторизует пользователя
      * @return текцщего игрока
      */
-    public player login() {
+    public Player login() {
         System.out.println("Enter your username:");
         String username = scanner.next();
         String filename = username + ".json";
@@ -84,7 +84,7 @@ public class CLICommands {
             }
 
             System.out.println("successfully logged in");
-            return g.fromJson(str, player.class);
+            return g.fromJson(str, Player.class);
 
 
         } else {
