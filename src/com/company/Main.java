@@ -1,6 +1,6 @@
 package com.company;
 
-import com.company.classes.CMDInterface;
+import com.company.classes.CLI;
 
 
 public class Main {
@@ -8,7 +8,7 @@ public class Main {
 
     public static void main(String[] args) {
 
-        CMDInterface cmdInterface = new CMDInterface();
+        CLI cmdInterface = new CLI();
 
         cmdInterface.inerface();
 

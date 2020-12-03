@@ -11,13 +11,9 @@ public class Kreps {
 
     private NTRandom RNG = new NTRandom();
 
-    private player p;
+    public Kreps(){}
 
-    public Kreps(player inputPlayer){
-        p = inputPlayer;
-    }
-
-    public void Play() {
+    public void Play(player p) {
 
         int winChance = RNG.roll(50, 50, 0, 1);
 

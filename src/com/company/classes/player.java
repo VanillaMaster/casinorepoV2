@@ -13,9 +13,8 @@ public class player {
 
     public String Name;
 
-    public GamePattern gameName = new GamePattern();
 
-    public GamePattern krepsParth1 = new GamePattern();
-    public GamePattern krepsParth2 = new GamePattern();
+    public GamePattern krepsParth1 = new GamePattern(0.5);
+    public GamePattern krepsParth2 = new GamePattern(0.5);
 
 }

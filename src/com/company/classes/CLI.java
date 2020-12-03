@@ -12,7 +12,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
-public class CMDInterface {
+public class CLI {
 
     private final Scanner scanner = new Scanner(System.in);
 
@@ -50,8 +50,8 @@ public class CMDInterface {
                     break;
 
                 case "/casino":
-                    Kreps k = new Kreps(currentPlayer);
-                    k.Play();
+                    Kreps k = new Kreps();
+                    k.Play(currentPlayer);
 
             }
 

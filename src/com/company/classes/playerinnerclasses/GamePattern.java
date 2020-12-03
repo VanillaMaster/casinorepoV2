@@ -1,47 +1,23 @@
 package com.company.classes.playerinnerclasses;
 
 public class GamePattern {
-    public GamePattern() {
-        pointer = 0;
-        winrateTimeLine = new int[200];
-        for (int i = 0; i < winrateTimeLine.length; i += 2) {
-            winrateTimeLine[i] = 1;
-        }
-        for (int i = 1; i < winrateTimeLine.length; i += 2) {
-            winrateTimeLine[i] = 0;
-        }
+    public GamePattern(double defaultWinFactor) {
+        winFactor = defaultWinFactor;
     }
+
+    public double winFactor;
 
     public int winrate() {
-        int tmpWinrate = 0;
-        for (int i = 0; i < winrateTimeLine.length; i++) {
-            tmpWinrate += winrateTimeLine[i];
-        }
-
-        return tmpWinrate / 2;
+        return (int)(winFactor*100);
     }
 
-    private int[] winrateTimeLine;
-    private int pointer = 0;
-
     public void addWin(int amount) {
-        for (int i = 0; i < amount; i++) {
-            winrateTimeLine[shiftPointer()] = 1;
-        }
+        winFactor+=(0.01*amount);
     }
 
     public void addLose(int amount) {
-        for (int i = 0; i < amount; i++) {
-            winrateTimeLine[shiftPointer()] = 0;
-        }
+        winFactor-=(0.01*amount);
     }
 
-    private int shiftPointer() {
-        pointer++;
-        if (pointer >= 200) {
-            pointer = 0;
-        }
-        return pointer;
-    }
 
 }
