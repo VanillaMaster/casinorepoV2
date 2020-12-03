@@ -4,7 +4,7 @@ import com.company.classes.Player;
 
 public interface Game {
     /**
-     * @param p поинты игрока
+     * @param p игрок
      * Запускает игру
      */
     void play(Player p);
