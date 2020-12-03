@@ -13,9 +13,7 @@ public class CLI {
 
 
     public void start() {
-
         boolean isWorking = true;
-
         while (isWorking) {
 
             String input = scanner.next();
@@ -37,14 +35,12 @@ public class CLI {
                     currentPlayer = commands.login();
                     break;
 
-
                 case "/casino":
                     if (currentPlayer!=null){
                         k.Play(currentPlayer);
                     } else {
                         System.out.println("u should login first");
                     }
-
             }
 
         }

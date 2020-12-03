@@ -7,9 +7,6 @@ public class NTRandom {
 
     final Random random = new Random();
 
-    private static boolean contains(final int[] arr, final int key) {
-        return Arrays.stream(arr).anyMatch(i -> i == key);
-    }
 
     public int roll(int winrate,int desiredWinrate ,int minRoll, int maxRoll){
 
@@ -33,7 +30,7 @@ public class NTRandom {
 
         int chance = random.nextInt(101);
 
-        if (chance < defaultWinrate){
+        if (chance < defaultWinrate + (desiredWinrate - winrate)){
             return desiredRoll;
         } else {
             int roll = random.nextInt((maxRoll-minRoll)) + minRoll;
