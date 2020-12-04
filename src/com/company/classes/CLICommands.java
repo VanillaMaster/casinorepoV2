@@ -14,6 +14,7 @@ public class CLICommands {
 
     private final Scanner scanner = new Scanner(System.in);
     private final Gson gson = new Gson();
+    private Scanner fileReader;
 
     /**
      * метод для регистрации пользователя
@@ -71,15 +72,14 @@ public class CLICommands {
             File myObj = new File("./users/" + filename);
 
             String str = "";
-            Scanner myReader = null;
             try {
-                myReader = new Scanner(myObj);
+                fileReader = new Scanner(myObj);
             } catch (FileNotFoundException e) {
                 System.out.println("An error occurred.");
             }
 
-            while (myReader.hasNextLine()) {
-                str += myReader.nextLine();
+            while (fileReader.hasNextLine()) {
+                str += fileReader.nextLine();
             }
 
             System.out.println("successfully logged in");
