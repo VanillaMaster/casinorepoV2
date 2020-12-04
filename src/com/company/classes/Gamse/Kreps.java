@@ -8,7 +8,10 @@ import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
 public class Kreps implements Game{
-
+ enum betOption{
+     pass,
+     dpass
+ }
     private NTRandom RNG = new NTRandom();
 
     public void play(Player p) {
@@ -23,7 +26,7 @@ public class Kreps implements Game{
         int roll = -1;
 
         if (winChance == 0) {
-            if (inputStatus.equals("dpass")) {
+            if (inputStatus.equals((betOption.dpass).toString())){
                 roll = random.nextInt(6) + 4;
                 if (roll >= 7) {
                     roll++;
@@ -38,7 +41,7 @@ public class Kreps implements Game{
                 }
             }
         } else {
-            if (inputStatus.equals("pass")) {
+            if (inputStatus.equals((betOption.pass).toString())) {
                 roll = random.nextInt(6) + 4;
                 if (roll >= 7) {
                     roll++;
@@ -56,17 +59,15 @@ public class Kreps implements Game{
 
         krepsPointer = roll;
 
-        //1 раунд тута
-
         p.points -= inputBet;
-
-        if (inputStatus.equals("dpass") && (roll == 1 || roll == 2 || roll == 3 || roll == 7 || roll == 11 || roll == 12)) {
-
+        String rollString=Integer.toString(roll);
+        if (inputStatus.equals((betOption.dpass).toString()) && (rollString.matches("1|2|3|7|11|12"))) {
+            System.out.println("jija");
             p.points += (inputBet * 2);
             showDice(roll, p.points);
             p.krepsParth1.addWin(2);
 
-        } else if (inputStatus.equals("pass") && (roll == 4 || roll == 5 || roll == 6 || roll == 8 || roll == 9 || roll == 10)) {
+        } else if (inputStatus.equals((betOption.pass).toString()) && (rollString.matches("4|5|6|8|9|10|11"))) {
 
             p.points += (inputBet * 2);
             showDice(roll, p.points);
@@ -75,7 +76,6 @@ public class Kreps implements Game{
 
         } else {
 
-            //p.points += inputBet;
             showDice(roll, p.points);
             p.krepsParth1.addLose(1);
 
@@ -99,8 +99,6 @@ public class Kreps implements Game{
         int firstRoll12 = -1;
         int secondRoll12 = -1;
 
-        System.out.println(krepsPointer);
-
         do {
 
             int preRoll = RNG.rollNumber(50, 50, 2, 24, inputNumber, 4);
@@ -115,13 +113,13 @@ public class Kreps implements Game{
 
             if (firstRoll12 == krepsPointer || firstRoll12 == 7 || secondRoll12 == krepsPointer || secondRoll12 == 7) {
                 keepRolling = false;
-                p.krepsParth2.addLose(1);
+                p.krepsPart2.addLose(1);
             }
 
             if ((keepRolling) && (inputNumber == (firstRoll12 + secondRoll12))) {
                 p.points += (inputaBet * 8);
                 keepRolling = false;
-                p.krepsParth2.addWin(1);
+                p.krepsPart2.addWin(1);
             }
 
             System.out.println("*****");

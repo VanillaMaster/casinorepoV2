@@ -18,6 +18,6 @@ public class Player {
 
 
     public GameDataPattern krepsParth1 = new GameDataPattern(0.5);
-    public GameDataPattern krepsParth2 = new GameDataPattern(0.5);
+    public GameDataPattern krepsPart2 = new GameDataPattern(0.5);
 
 }
