@@ -4,6 +4,9 @@ import com.company.classes.Gamse.Kreps;
 
 import java.util.Scanner;
 
+/**
+ * мнтерйейс командных строк
+ */
 public class CLI {
 
     private final Scanner scanner = new Scanner(System.in);
