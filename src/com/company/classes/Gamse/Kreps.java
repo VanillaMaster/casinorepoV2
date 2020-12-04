@@ -7,6 +7,9 @@ import java.util.Random;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * игра Крепс
+ */
 public class Kreps implements Game{
  enum betOption{
      pass,
