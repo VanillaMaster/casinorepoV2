@@ -5,7 +5,7 @@ import com.company.classes.Gamse.Kreps;
 import java.util.Scanner;
 
 /**
- * мнтерйейс командных строк
+ * интерйейс командных строк
  */
 public class CLI {
 

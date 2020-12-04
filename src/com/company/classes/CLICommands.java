@@ -16,7 +16,7 @@ public class CLICommands {
     private final Gson gson = new Gson();
 
     /**
-     * регистрация пользователя
+     * метод для регистрации пользователя
      */
     public void register() {
         System.out.println("Enter username:");
@@ -55,7 +55,7 @@ public class CLICommands {
     }
 
     /**
-     * авторизует пользователя
+     * метод для авторизации пользователя
      * @return текцщего игрока
      */
     public Player login() {
