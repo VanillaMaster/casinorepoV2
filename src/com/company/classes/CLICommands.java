@@ -13,7 +13,7 @@ import java.util.Scanner;
 public class CLICommands {
 
     private final Scanner scanner = new Scanner(System.in);
-    private final Gson g = new Gson();
+    private final Gson gson = new Gson();
 
     /**
      * регистрация пользователя
@@ -40,7 +40,7 @@ public class CLICommands {
             }
 
 
-            String json = g.toJson(new Player(username));
+            String json = gson.toJson(new Player(username));
 
             try {
                 FileWriter myWriter = new FileWriter("./users/" + filename);
@@ -84,7 +84,7 @@ public class CLICommands {
             }
 
             System.out.println("successfully logged in");
-            return g.fromJson(str, Player.class);
+            return gson.fromJson(str, Player.class);
 
 
         } else {
