@@ -56,13 +56,12 @@ public class CLICommands {
 
     /**
      * метод для авторизации пользователя
-     * @return текцщего игрока
+     * @return текущего игрока
      */
     public Player login() {
         System.out.println("Enter your username:");
         String username = scanner.next();
         String filename = username + ".json";
-
         File f = new File("./users");
         List<String> pathnames = Arrays.asList(f.list());
 
