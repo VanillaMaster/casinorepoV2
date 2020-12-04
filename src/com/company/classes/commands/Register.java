@@ -10,6 +10,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
+/**
+ * комманда регистрации нового пользователя
+ */
 public class Register implements Command{
 
     private final Scanner scanner = new Scanner(System.in);

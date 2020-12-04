@@ -9,6 +9,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
+/**
+ * команда входа в пользовательский профмль
+ */
 public class LogIn implements Command{
 
     public LogIn(Player iPlayer){

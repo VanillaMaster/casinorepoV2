@@ -1,5 +1,8 @@
 package com.company.classes.commands;
 
+/**
+ * коммнада справки
+ */
 public class Help implements Command{
 
     public void execute() {

@@ -15,6 +15,9 @@ public class CLI {
     private Player currentPlayer = new Player();
     private boolean isWorking = true;
 
+    /**
+     * заканчивает работу CIL
+     */
     public void Stop(){ this.isWorking = false; }
 
     private Command exit = new Exit(this);
