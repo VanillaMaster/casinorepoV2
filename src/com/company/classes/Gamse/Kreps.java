@@ -68,19 +68,19 @@ public class Kreps implements Game{
             System.out.println("jija");
             p.points += (inputBet * 2);
             showDice(roll, p.points);
-            p.krepsParth1.addWin(2);
+            p.krepsPart1.addWin(2);
 
         } else if (inputStatus.equals((betOption.pass).toString()) && (rollString.matches("4|5|6|8|9|10|11"))) {
 
             p.points += (inputBet * 2);
             showDice(roll, p.points);
-            p.krepsParth1.addWin(2);
+            p.krepsPart1.addWin(2);
             seccondParth(p);
 
         } else {
 
             showDice(roll, p.points);
-            p.krepsParth1.addLose(1);
+            p.krepsPart1.addLose(1);
 
         }
 

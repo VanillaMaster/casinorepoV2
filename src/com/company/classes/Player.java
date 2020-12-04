@@ -12,12 +12,25 @@ public class Player {
         this.points = 1000;
     }
 
-    public Integer points;
+    public Player(){
 
-    public String Name;
+    }
 
+    public void assemble(Integer iPoints,String iName, GameDataPattern iKrepsPart1,GameDataPattern iKrepsPart2){
+        points = iPoints;
+        Name = iName;
+        krepsPart1 = iKrepsPart1;
+        krepsPart2 = iKrepsPart2;
+        isLoggedIn = true;
+    }
 
-    public GameDataPattern krepsParth1 = new GameDataPattern(0.5);
+    public Integer points = -1;
+
+    public String Name = "";
+
+    public boolean isLoggedIn = false;
+
+    public GameDataPattern krepsPart1 = new GameDataPattern(0.5);
     public GameDataPattern krepsPart2 = new GameDataPattern(0.5);
 
 }

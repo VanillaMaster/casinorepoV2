@@ -1,7 +1,9 @@
 package com.company.classes;
 
-import com.company.classes.Gamse.Kreps;
+import com.company.classes.commands.*;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 /**
@@ -10,45 +12,29 @@ import java.util.Scanner;
 public class CLI {
 
     private final Scanner scanner = new Scanner(System.in);
-    private Player currentPlayer = null;
-    Kreps k = new Kreps();
-    CLICommands commands = new CLICommands();
+    private Player currentPlayer = new Player();
+    private boolean isWorking = true;
+
+    public void Stop(){ this.isWorking = false; }
+
+    private Command exit = new Exit(this);
+
+    Map<String, Command> commands = new HashMap<String, Command>() {{
+        put("/login", new LogIn(currentPlayer));
+        put("/register", new Register());
+        put("/help", new Help());
+        put("/log", new Log(currentPlayer));
+        put("/casino", new Casino(currentPlayer));
+        put("/exit", exit);
+    }};
 
     /**
      * запускает CLI
      */
     public void start() {
-        boolean isWorking = true;
         while (isWorking) {
-
             String input = scanner.next();
-
-            switch (input) {
-                case "/exit":
-                    isWorking = false;
-                    break;
-
-                case "/help":
-                    System.out.println("\"/help\" - show this info\n\"/exit\" - exit bot/trogramm/idk\n\"/register\" - register new user");
-                    break;
-
-                case "/register":
-                    commands.register();
-                    break;
-
-                case "/login":
-                    currentPlayer = commands.login();
-                    break;
-
-                case "/casino":
-                    if (currentPlayer!=null){
-                        k.play(currentPlayer);
-                    } else {
-                        System.out.println("u should login first");
-                    }
-            }
-
+            if (commands.containsKey(input)) { commands.get(input).execute(); }
         }
     }
-
 }

@@ -1,5 +1,6 @@
-package com.company.classes;
+package com.company.classes.legacy;
 
+import com.company.classes.Player;
 import com.google.gson.Gson;
 
 import java.io.File;
