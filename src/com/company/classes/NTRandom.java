@@ -58,4 +58,8 @@ public class NTRandom {
             return roll;
         }
     }
+
+    public int getRandom(int[] mx){
+        return mx[random.nextInt(mx.length)];
+    }
 }

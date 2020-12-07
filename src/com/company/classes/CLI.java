@@ -14,13 +14,13 @@ public class CLI {
     private final Scanner scanner = new Scanner(System.in);
     private Player currentPlayer = new Player();
     private boolean isWorking = true;
+    private CLI IThis = this;
 
     /**
      * заканчивает работу CIL
      */
     public void Stop(){ this.isWorking = false; }
 
-    private Command exit = new Exit(this);
 
     Map<String, Command> commands = new HashMap<String, Command>() {{
         put("/login", new LogIn(currentPlayer));
@@ -28,7 +28,7 @@ public class CLI {
         put("/help", new Help());
         put("/log", new Log(currentPlayer));
         put("/casino", new Casino(currentPlayer));
-        put("/exit", exit);
+        put("/exit", new Exit(IThis));
     }};
 
     /**
@@ -38,6 +38,7 @@ public class CLI {
         while (isWorking) {
             String input = scanner.next();
             if (commands.containsKey(input)) { commands.get(input).execute(); }
+            else {System.out.println("unknown command, \"/help\" for command list");}
         }
     }
 }
