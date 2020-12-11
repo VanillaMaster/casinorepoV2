@@ -5,6 +5,7 @@ import com.company.classes.NTRandom;
 import com.company.classes.Player;
 import com.company.classes.utilits.SmartIO;
 
+import java.util.Arrays;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
@@ -104,14 +105,15 @@ public class Kreps implements Game {
         System.out.println("число ставки и количество ставки");
 
         String input;
-
+        int rateNumber;
         do {
             do {
                 input = SIO.sInput();
-                if (!input.matches("[0-9]+ [0-9]+")) {
+                rateNumber= Integer.parseInt(input.split(" ")[0]);
+                if (!input.matches("[0-9]+ [0-9]+") || rateNumber > 24 ) {
                     SIO.sOutput("incorrect input, please try again");
                 }
-            } while (!input.matches("[0-9]+ [0-9]+"));
+            } while (!input.matches("[0-9]+ [0-9]+") || rateNumber > 24);
 
             if (Integer.parseInt(input.split(" ")[1]) > p.points) {
                 SIO.sOutput("у вас недостаточно средств для такой ставки, please try again");
