@@ -71,4 +71,11 @@ public class SmartIO {
         System.out.println(seccond);
         System.out.println("/\\/\\/\\/\\/\\/\\");
     }
+    public void hTripleOutput(Integer first,Integer seccond,Integer third){
+        System.out.println("\\/\\/\\/\\/\\/\\/\\/");
+        System.out.print(" | "+first);
+        System.out.print(" | "+seccond+" | ");
+        System.out.println(third+" |");
+        System.out.println("/\\/\\/\\/\\/\\/\\/\\");
+    }
 }

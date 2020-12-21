@@ -3,9 +3,9 @@ package com.company.classes.commands;
 import com.company.classes.Gamse.Kreps.Kreps;
 import com.company.classes.Player;
 
-public class Casino implements Command {
+public class CasinoKreps implements Command {
 
-    public Casino(Player iPlayer){
+    public CasinoKreps(Player iPlayer){
         this.p = iPlayer;
     }
 

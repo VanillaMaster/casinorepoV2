@@ -27,8 +27,10 @@ public class CLI {
         put("/register", new Register());
         put("/help", new Help());
         put("/log", new Log(currentPlayer));
-        put("/casino", new Casino(currentPlayer));
+        put("/Kreps", new CasinoKreps(currentPlayer));
+        put("/Slot", new CasinoSlot(currentPlayer));
         put("/exit", new Exit(IThis));
+        put("/info", new Info(currentPlayer));
     }};
 
     /**
