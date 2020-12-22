@@ -7,7 +7,6 @@ import com.company.classes.playerDataConstruct.playerData;
 import com.company.classes.utilits.TCISmartIO;
 
 import java.util.Random;
-import java.util.concurrent.TimeUnit;
 
 /**
  * игра Крепс
@@ -31,6 +30,7 @@ public class Kreps implements TCIGame {
     private final Random random = new Random();
 
     private int pointer = -1;
+    private boolean isAdditionalInputRequired = false;
 
     private int stage = 0;
     //private TCI TCI;
@@ -49,8 +49,9 @@ public class Kreps implements TCIGame {
      */
     public boolean play(playerData p,String data){
         //SlotMachineIO(p);
+        isAdditionalInputRequired = false;
 
-        System.out.println("slots stage: " + stage);
+        System.out.println("kreps stage: " + stage);
 
         switch (stage){
             case 0:
@@ -63,22 +64,23 @@ public class Kreps implements TCIGame {
 
             case 3:
                 stage = stageThree(p);
-                return true;
+                break;
 
             case 4:
                 stage = stageFour(p,data);
+                break;
 
             default:
-                SIO.outPut(p,"wtf error");
+                SIO.outPut(p,"wtf error № "+stage);
                 break;
         }
 
-        return false;
+        return isAdditionalInputRequired;
 
     }
 
     private int stageZero(playerData p){
-        System.out.println("pass или dpass и количество ставки");
+        SIO.outPut(p,"pass или dpass и количество ставки");
         return 1;
     }
 
@@ -142,6 +144,7 @@ public class Kreps implements TCIGame {
     }
 
     private int stageThree(playerData p){
+        isAdditionalInputRequired = true;
         SIO.outPut(p,"число ставки и количество ставки");
         return 4;
     }
@@ -198,7 +201,7 @@ public class Kreps implements TCIGame {
 
             SIO.hDoubleOutput(p,Integer.toString(firsDice),Integer.toString(secondDice));
 
-            try { TimeUnit.SECONDS.sleep(2); } catch (InterruptedException e) { System.out.println("delay error(Kreps)"); }
+            //try { TimeUnit.SECONDS.sleep(10); } catch (InterruptedException e) { System.out.println("delay error(Kreps)"); }
 
         } while (keepRolling);
 

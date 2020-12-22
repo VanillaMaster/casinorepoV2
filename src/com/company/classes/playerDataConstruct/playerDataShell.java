@@ -44,6 +44,7 @@ public class playerDataShell {
         commands.put("/help", new help(iTCI));
         commands.put("/info",new info(iTCI));
         commands.put("/slots",new slots(iTCI));
+        commands.put("/kreps",new kreps(iTCI));
     }
 
     public int currentLifeSpan = lifeSpan;
@@ -164,12 +165,16 @@ public class playerDataShell {
 
             switch (tmp){
 
-                case "slots":
+                case "/slots":
                     commands.get("/slots").execute(iThis,command);
                     break;
 
+                case "/kreps":
+                    commands.get("/kreps").execute(iThis,command);
+                    break;
+
                 default:
-                    TCI.sendMsg("wtf error",getPlayerData().telegramID);
+                    TCI.sendMsg("error on pds switch: "+tmp,getPlayerData().telegramID);
                     break;
 
             }
