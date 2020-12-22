@@ -1,4 +1,4 @@
-package com.company.classes.Gamse;
+package com.company.classes.legacy;
 
 import com.company.classes.legacy.Player;
 

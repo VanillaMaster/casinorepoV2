@@ -1,6 +1,6 @@
 package com.company.classes.Gamse.Kreps;
 
-import com.company.classes.Gamse.Game;
+import com.company.classes.legacy.Game;
 import com.company.classes.NTRandom;
 import com.company.classes.legacy.Player;
 import com.company.classes.utilits.SmartIO;

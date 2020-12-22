@@ -9,21 +9,11 @@ public class Main {
 
     public static void main(String[] args) throws TelegramApiException {
 
-        //CLI cli = new CLI();
-
-        //cli.start();
-
-
         try {
             TelegramBotsApi botsApi = new TelegramBotsApi(DefaultBotSession.class);
             botsApi.registerBot(new TCI());
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
-
-
-
-
-
     }
 }

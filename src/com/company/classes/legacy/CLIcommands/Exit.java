@@ -1,4 +1,4 @@
-package com.company.classes.CLIcommands;
+package com.company.classes.legacy.CLIcommands;
 
 import com.company.classes.legacy.CLI;
 
