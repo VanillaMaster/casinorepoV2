@@ -17,4 +17,17 @@ public class TCISmartIO {
     public void outPut(playerData playerData,String str){
         TCI.sendMsg(str,playerData.telegramID);
     }
+
+    public void hMultiOutput(playerData playerData, String roll, String points){
+
+        TCI.sendMsg(roll+"\n\n"+points,playerData.telegramID);
+
+    }
+
+    public void hDoubleOutput(playerData playerData, String firstRoll, String seccondRoll){
+
+        TCI.sendMsg(firstRoll+"\n"+seccondRoll,playerData.telegramID);
+
+    }
+
 }

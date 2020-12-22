@@ -7,19 +7,16 @@ import com.company.classes.playerDataConstruct.playerData;
 import com.company.classes.utilits.TCISmartIO;
 
 import java.util.Random;
-import java.util.Scanner;
 
 public class SlotMachine implements TCIGame {
 
-    private Scanner scanner = new Scanner(System.in);
-
     public SlotMachine(TCI iTCI){
-        TCI = iTCI;
+        //TCI = iTCI;
         SIO = new TCISmartIO(iTCI);
         stage = 0;
     }
 
-    private TCI TCI;
+    //private TCI TCI;
 
     private int stage;
 
