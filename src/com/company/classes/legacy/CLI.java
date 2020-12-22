@@ -1,6 +1,6 @@
-package com.company.classes;
+package com.company.classes.legacy;
 
-import com.company.classes.commands.*;
+import com.company.classes.CLIcommands.*;
 
 import java.util.HashMap;
 import java.util.Map;

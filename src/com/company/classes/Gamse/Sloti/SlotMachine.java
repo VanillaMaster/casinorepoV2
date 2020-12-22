@@ -1,50 +1,85 @@
 package com.company.classes.Gamse.Sloti;
 
-import com.company.classes.Player;
-import com.company.classes.Gamse.Game;
+import com.company.classes.Gamse.TCIGame;
 import com.company.classes.NTRandom;
-import com.company.classes.Player;
-import com.company.classes.utilits.SmartIO;
+import com.company.classes.TCI;
+import com.company.classes.playerDataConstruct.playerData;
+import com.company.classes.utilits.TCISmartIO;
 
-import java.util.Arrays;
 import java.util.Random;
-import java.util.concurrent.TimeUnit;
+import java.util.Scanner;
 
-public class SlotMachine implements Game{
+public class SlotMachine implements TCIGame {
+
+    private Scanner scanner = new Scanner(System.in);
+
+    public SlotMachine(TCI iTCI){
+        TCI = iTCI;
+        SIO = new TCISmartIO(iTCI);
+        stage = 0;
+    }
+
+    private TCI TCI;
+
+    private int stage;
+
+    public int getStage(){
+        return stage;
+    }
+
     private final NTRandom RNG = new NTRandom();
-    private final SmartIO SIO = new SmartIO();
+    private final TCISmartIO SIO;
     private final Random random = new Random();
 
 
-    public void play(Player p){SlotMachineIO(p); }
+    public boolean play(playerData p,String data){
+        //SlotMachineIO(p);
 
+        System.out.println("slots stage: " + stage);
 
-    private void SlotMachineIO(Player p) {
-        System.out.println("количество ставки");
-        String input;
+        switch (stage){
+            case 0:
+                stage = stageZero(p);
+                return true;
 
-        do {
-            do {
-                input = SIO.sInput();
-                if (!input.matches("[0-9]+")) {
-                    SIO.sOutput("incorrect input, please try again");
-                }
-            } while (!input.matches("[0-9]+"));
+            case 1:
+                stage = stageOne(p,data);
+                break;
 
-            if (Integer.parseInt(input) > p.points) {
-                SIO.sOutput("у вас недостаточно средств для такой ставки, please try again");
-            }
-        } while (Integer.parseInt(input) > p.points);
+            default:
+                SIO.outPut(p,"wtf error");
+                break;
+        }
 
-        SlotMachineMath(p,Integer.parseInt(input));
+        return false;
+
     }
 
-    private void SlotMachineMath(Player p, int inputBet) {
+    private int stageZero(playerData p){
+        SIO.outPut(p,"количество ставки");
+
+        return 1;
+    }
+
+    private int stageOne(playerData p,String input){
+        if (!input.matches("[0-9]+")) {
+            SIO.outPut(p,"incorrect input, please try again");
+            return 0;
+        }
+        if (Integer.parseInt(input) > p.points) {
+            SIO.outPut(p,"у вас недостаточно средств для такой ставки, please try again");
+            return 0;
+        }
+
+        return stageThree(p,Integer.parseInt(input));
+    }
+
+    private int stageThree(playerData p,int inputBet){
+
         p.points -= inputBet;
         int roll1=RNG.roll(50,50,1,7);
         int roll2=RNG.roll(50,50,1,7);
         int roll3=RNG.roll(50,50,1,7);
-        SIO.hTripleOutput(roll1,roll2,roll3);
         if(roll1 == 6 && roll2 == 6 && roll3 == 6){
             p.points -= p.points;
         }else if (roll1 == 7 && roll2 == 7 && roll3 == 7){
@@ -56,7 +91,10 @@ public class SlotMachine implements Game{
                 p.points += (inputBet * 5);
             }
         }
-        System.out.println("ваши очки: "+p.points);
+        SIO.slotResultOutput(p,("ваши очки: "+p.points),roll1,roll2,roll3);
+
+        return 0;
     }
+
 }
 

@@ -1,8 +1,6 @@
-package com.company.classes.commands;
+package com.company.classes.CLIcommands;
 
-import com.company.classes.Player;
-import com.company.classes.Gamse.Kreps.Kreps;
-import com.company.classes.Gamse.Sloti.SlotMachine;
+import com.company.classes.legacy.Player;
 
 public class Info implements Command{
     public Info(Player iPlayer){

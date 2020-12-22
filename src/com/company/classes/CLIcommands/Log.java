@@ -1,6 +1,6 @@
-package com.company.classes.commands;
+package com.company.classes.CLIcommands;
 
-import com.company.classes.Player;
+import com.company.classes.legacy.Player;
 import com.google.gson.Gson;
 
 /**

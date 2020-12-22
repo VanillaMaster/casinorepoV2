@@ -1,6 +1,6 @@
 package com.company.classes.Gamse;
 
-import com.company.classes.Player;
+import com.company.classes.legacy.Player;
 
 public interface Game {
     /**

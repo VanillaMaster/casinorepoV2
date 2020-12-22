@@ -1,4 +1,4 @@
-package com.company.classes.commands;
+package com.company.classes.CLIcommands;
 
 /**
  * коммнада справки

@@ -1,6 +1,6 @@
-package com.company.classes.commands;
+package com.company.classes.CLIcommands;
 
-import com.company.classes.CLI;
+import com.company.classes.legacy.CLI;
 
 /**
  * комманда выхода

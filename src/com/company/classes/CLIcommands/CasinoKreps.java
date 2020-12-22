@@ -1,7 +1,7 @@
-package com.company.classes.commands;
+package com.company.classes.CLIcommands;
 
 import com.company.classes.Gamse.Kreps.Kreps;
-import com.company.classes.Player;
+import com.company.classes.legacy.Player;
 
 public class CasinoKreps implements Command {
 

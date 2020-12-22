@@ -3,7 +3,6 @@
 // после полной отладки будет удалйн
 package com.company.classes.legacy;
 
-import com.company.classes.Player;
 import com.google.gson.Gson;
 
 import java.io.File;

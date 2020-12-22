@@ -2,10 +2,9 @@ package com.company.classes.Gamse.Kreps;
 
 import com.company.classes.Gamse.Game;
 import com.company.classes.NTRandom;
-import com.company.classes.Player;
+import com.company.classes.legacy.Player;
 import com.company.classes.utilits.SmartIO;
 
-import java.util.Arrays;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 

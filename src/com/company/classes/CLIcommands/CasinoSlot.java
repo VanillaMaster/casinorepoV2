@@ -1,8 +1,6 @@
-package com.company.classes.commands;
+package com.company.classes.CLIcommands;
 
-import com.company.classes.Gamse.Kreps.Kreps;
-import com.company.classes.Gamse.Sloti.SlotMachine;
-import com.company.classes.Player;
+import com.company.classes.legacy.Player;
 
 public class CasinoSlot implements Command {
 
@@ -11,11 +9,11 @@ public class CasinoSlot implements Command {
     }
 
     private Player p;
-    SlotMachine k = new SlotMachine();
+    //SlotMachine k = new SlotMachine();
 
     public void execute() {
         if (p.isLoggedIn){
-            k.play(p);
+            //k.play(p);
         } else {
             System.out.println("u should login first");
         }

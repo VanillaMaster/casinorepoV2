@@ -1,4 +1,4 @@
-package com.company.classes;
+package com.company.classes.legacy;
 
 import com.company.classes.playerinnerclasses.GameDataPattern;
 
@@ -12,9 +12,7 @@ public class Player {
         this.points = 1000;
     }
 
-    public Player(){
-
-    }
+    public Player(){}
 
     public void assemble(Integer iPoints,String iName, GameDataPattern iKrepsPart1,GameDataPattern iKrepsPart2){
         points = iPoints;

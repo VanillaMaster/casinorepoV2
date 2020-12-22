@@ -1,6 +1,7 @@
 package com.company.classes;
 
 
+import com.company.classes.playerDataConstruct.playerDataShell;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -10,9 +11,23 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.Keyboard
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class TCI extends TelegramLongPollingBot {
+
+    private TCI TCI = this;
+
+    /*
+    private Map<String, TCICommands> commands = new HashMap<String, TCICommands>() {{
+        put("/help", new help(TCI));
+    }};
+     */
+
+    private Map<String, playerDataShell> players = new HashMap<String, playerDataShell>() {{
+        //put("telegramID", new help(TCI));
+    }};
 
     @Override
     public String getBotUsername() {
@@ -27,28 +42,54 @@ public class TCI extends TelegramLongPollingBot {
     @Override
     public void onUpdateReceived(Update update) {
 
-        // We check if the update has a message and the message has text
         if (update.hasMessage() && update.getMessage().hasText()) {
-            // Set variables
-            String message_text = update.getMessage().getText();
+
+            String inputMsg = update.getMessage().getText();
             String chat_id = String.valueOf(update.getMessage().getChatId());
 
-
-            SendMessage message = new SendMessage(); // Create a message object object
-            message.setChatId(chat_id);
-            message.setText(message_text);
-
-            setButtons(message);
-
-
-            try {
-                execute(message); // Sending our message object to user
-            } catch (TelegramApiException e) {
-                e.printStackTrace();
+            if (!players.containsKey(chat_id)){
+                playerDataShell tmpShell = new playerDataShell(this,chat_id);
+                //tmpShell.initPlayer(chat_id);
+                players.put(chat_id,tmpShell);
             }
 
+            players.get(chat_id).executeCommand(inputMsg);
+
+            /*
+            if (commands.containsKey(inputMsg)) {
+                //commands.get(inputMsg).execute(players.get(chat_id).getPlayerData());
+                players.get(chat_id).executeCommand(inputMsg);
+            }
+            else {
+                SendMessage message = new SendMessage(); // Create a message object object
+                message.setChatId(chat_id);
+                message.setText("unknown command, \"/help\" for command list");
+
+                try {
+                    execute(message);
+                } catch (TelegramApiException e) {
+                    e.printStackTrace();
+                }
+
+            }*/
+
+        }
+
+    }
+
+    public void sendMsg(String msg, String chat_id){
+
+        SendMessage message = new SendMessage(); // Create a message object object
+        message.setChatId(chat_id);
+        message.setText(msg);
+
+        setButtons(message);
 
 
+        try {
+            execute(message); // Sending our message object to user
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
         }
 
     }
