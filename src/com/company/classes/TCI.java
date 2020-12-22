@@ -19,14 +19,7 @@ public class TCI extends TelegramLongPollingBot {
 
     private TCI TCI = this;
 
-    /*
-    private Map<String, TCICommands> commands = new HashMap<String, TCICommands>() {{
-        put("/help", new help(TCI));
-    }};
-     */
-
     private Map<String, playerDataShell> players = new HashMap<String, playerDataShell>() {{
-        //put("telegramID", new help(TCI));
     }};
 
     @Override
@@ -49,30 +42,10 @@ public class TCI extends TelegramLongPollingBot {
 
             if (!players.containsKey(chat_id)){
                 playerDataShell tmpShell = new playerDataShell(this,chat_id);
-                //tmpShell.initPlayer(chat_id);
                 players.put(chat_id,tmpShell);
             }
 
             players.get(chat_id).executeCommand(inputMsg);
-
-            /*
-            if (commands.containsKey(inputMsg)) {
-                //commands.get(inputMsg).execute(players.get(chat_id).getPlayerData());
-                players.get(chat_id).executeCommand(inputMsg);
-            }
-            else {
-                SendMessage message = new SendMessage(); // Create a message object object
-                message.setChatId(chat_id);
-                message.setText("unknown command, \"/help\" for command list");
-
-                try {
-                    execute(message);
-                } catch (TelegramApiException e) {
-                    e.printStackTrace();
-                }
-
-            }*/
-
         }
 
     }
@@ -85,7 +58,6 @@ public class TCI extends TelegramLongPollingBot {
 
         setButtons(message);
 
-
         try {
             execute(message); // Sending our message object to user
         } catch (TelegramApiException e) {
@@ -93,8 +65,6 @@ public class TCI extends TelegramLongPollingBot {
         }
 
     }
-
-    // trash ============================================
 
     public synchronized void setButtons(SendMessage sendMessage) {
 
@@ -106,11 +76,9 @@ public class TCI extends TelegramLongPollingBot {
         replyKeyboardMarkup.setResizeKeyboard(true);
         replyKeyboardMarkup.setOneTimeKeyboard(false);
 
-
 // Создаем список строк клавиатуры
 
         List<KeyboardRow> keyboard = new ArrayList<>();
-
 
 // Первая строчка клавиатуры
 
@@ -118,8 +86,8 @@ public class TCI extends TelegramLongPollingBot {
 
 // Добавляем кнопки в первую строчку клавиатуры
 
-        keyboardFirstRow.add(new KeyboardButton("Привет"));
-
+        keyboardFirstRow.add(new KeyboardButton("/help"));
+        keyboardFirstRow.add(new KeyboardButton("/info"));
 
 // Вторая строчка клавиатуры
 
@@ -127,8 +95,8 @@ public class TCI extends TelegramLongPollingBot {
 
 // Добавляем кнопки во вторую строчку клавиатуры
 
-        keyboardSecondRow.add(new KeyboardButton("Помощь?"));
-
+        keyboardSecondRow.add(new KeyboardButton("/slots"));
+        keyboardSecondRow.add(new KeyboardButton("/kreps"));
 
 // Добавляем все строчки клавиатуры в список
 

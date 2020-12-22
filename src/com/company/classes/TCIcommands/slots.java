@@ -4,6 +4,9 @@ import com.company.classes.Gamse.Sloti.SlotMachine;
 import com.company.classes.TCI;
 import com.company.classes.playerDataConstruct.playerDataShell;
 
+/**
+ * Слот машина в telegram
+ */
 public class slots implements TCICommands {
 
     private TCI TCI;
@@ -19,7 +22,6 @@ public class slots implements TCICommands {
     @Override
     public void execute(playerDataShell playerDataShell,String data) {
         boolean isAdditionalInputRequired = slotMachine.play(playerDataShell.getPlayerData(),data);
-        //System.out.println(isAdditionalInputRequired);
         if (isAdditionalInputRequired){
             playerDataShell.addToQueue("/slots");
         }

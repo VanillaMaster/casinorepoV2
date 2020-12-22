@@ -15,27 +15,18 @@ import java.util.*;
 
 public class playerDataShell {
 
-    public playerDataShell(TCI iTCI,String telegramID){
-        TCI = iTCI;
-        initPlayer(telegramID);
-
-        commands.put("/help", new help(iTCI));
-        commands.put("/slots",new slots(iTCI));
-    }
-
-    //========================================================
-
     private playerDataShell iThis = this;
 
     private final Gson gson = new Gson();
 
     //написать жабадок
-    private static final int lifeSpan = 5;
+    private static final int lifeSpan = 5; //Сктолько сколько существует информация о сущности(не работает)
 
     private HashMap parrentMap;
 
-    private ArrayDeque<String> commandTimeLine = new ArrayDeque<String>();
+    private ArrayDeque<String> commandTimeLine = new ArrayDeque<String>();   //Очередь для перенаправления потока ввода
 
+    //добавить элемент в очередь(станет первым)
     public void addToQueue(String nextInputTarget){
         commandTimeLine.addFirst(nextInputTarget);
     }
@@ -43,17 +34,27 @@ public class playerDataShell {
     private TCI TCI;
 
     private Map<String, TCICommands> commands = new HashMap<String, TCICommands>() {{
-        //put("/help", new help());
     }};
+
+    //команды доступные игроку
+    public playerDataShell(TCI iTCI,String telegramID){
+        TCI = iTCI;
+        initPlayer(telegramID);
+
+        commands.put("/help", new help(iTCI));
+        commands.put("/info",new info(iTCI));
+        commands.put("/slots",new slots(iTCI));
+    }
 
     public int currentLifeSpan = lifeSpan;
 
-    private Timer timer = new Timer(true);
+    private Timer timer = new Timer(true); //(не работает)
 
     private void initTimer(){
         TimerTask timerTask = new playerKillTimer(parrentMap,this);
         timer.schedule(timerTask,0,60*1000);
     }
+
     private void initPlayer(String telegramID){
 
         boolean alreadyExsist = false;
@@ -66,8 +67,6 @@ public class playerDataShell {
             HttpURLConnection http = (HttpURLConnection)con;
             http.setRequestMethod("POST"); // PUT is another valid option
             http.setDoOutput(true);
-
-            //{password: "000000", login: "adminApp", name: "asd.json"}
 
             byte[] out = ("{\"login\":\"adminApp\",\"password\":\"000000\",\"name\":\""+ telegramID +".json\"}") .getBytes(StandardCharsets.UTF_8);
             int length = out.length;
@@ -138,6 +137,7 @@ public class playerDataShell {
 
     }
 
+    //инициализирует данные игрока
     public playerData getPlayerData(){
 
         currentLifeSpan = lifeSpan;
@@ -145,6 +145,7 @@ public class playerDataShell {
         return playerData;
     }
 
+    //исполняет команды доступные игроку + для определния потока ввода для команд требущих ввод после себя
     public void executeCommand(String command){
 
         if (commandTimeLine.peekFirst()== null){
