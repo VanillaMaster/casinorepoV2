@@ -3,7 +3,9 @@ package com.company.classes.TCIcommands;
 import com.company.classes.Gamse.Kreps.Kreps;
 import com.company.classes.TCI;
 import com.company.classes.playerDataConstruct.playerDataShell;
-
+/**
+ * команда запуска Крепс в telegram
+ */
 public class kreps implements TCICommands {
     private com.company.classes.TCI TCI;
 
@@ -18,7 +20,6 @@ public class kreps implements TCICommands {
     @Override
     public void execute(playerDataShell playerDataShell, String data) {
         boolean isAdditionalInputRequired = Kreps.play(playerDataShell.getPlayerData(), data);
-        //System.out.println(isAdditionalInputRequired);
         if (isAdditionalInputRequired) {
             playerDataShell.addToQueue("/kreps");
         }

@@ -11,12 +11,9 @@ import java.util.Random;
 public class SlotMachine implements TCIGame {
 
     public SlotMachine(TCI iTCI){
-        //TCI = iTCI;
         SIO = new TCISmartIO(iTCI);
         stage = 0;
     }
-
-    //private TCI TCI;
 
     private int stage;
 
@@ -30,9 +27,6 @@ public class SlotMachine implements TCIGame {
 
 
     public boolean play(playerData playerData, String data){
-        //SlotMachineIO(p);
-
-        System.out.println("slots stage: " + stage);
 
         switch (stage){
             case 0:

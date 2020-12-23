@@ -5,7 +5,7 @@ import com.company.classes.TCI;
 import com.company.classes.playerDataConstruct.playerDataShell;
 
 /**
- * Слот машина в telegram
+ * команда запуска Слот машины в telegram
  */
 public class slots implements TCICommands {
 

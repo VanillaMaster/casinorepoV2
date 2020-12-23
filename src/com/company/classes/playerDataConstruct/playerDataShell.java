@@ -19,7 +19,6 @@ public class playerDataShell {
 
     private final Gson gson = new Gson();
 
-    //написать жабадок
     private static final int lifeSpan = 5; //Сктолько сколько существует информация о сущности(не работает)
 
     private HashMap parrentMap;

@@ -14,8 +14,6 @@ public class playerData {
 
     public Integer points = -1;
 
-    //public String Name = "";
-
     public String telegramID = "";
 
     public GameDataPattern krepsPart1 = new GameDataPattern(0.5);

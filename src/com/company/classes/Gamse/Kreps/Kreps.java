@@ -40,7 +40,6 @@ public class Kreps implements TCIGame {
     private int stage = 0;
 
     public Kreps(TCI iTCI){
-        //TCI = iTCI;
         SIO = new TCISmartIO(iTCI);
         stage = 0;
     }
@@ -52,10 +51,8 @@ public class Kreps implements TCIGame {
      * @param playerData игрок
      */
     public boolean play(playerData playerData, String data){
-        //SlotMachineIO(p);
-        isAdditionalInputRequired = false;
 
-        System.out.println("kreps stage: " + stage);
+        isAdditionalInputRequired = false;
 
         switch (stage){
             case 0:
