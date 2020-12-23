@@ -163,21 +163,13 @@ public class playerDataShell {
 
             String tmp = commandTimeLine.pollFirst();
 
-            switch (tmp){
-
-                case "/slots":
-                    commands.get("/slots").execute(iThis,command);
-                    break;
-
-                case "/kreps":
-                    commands.get("/kreps").execute(iThis,command);
-                    break;
-
-                default:
-                    TCI.sendMsg("error on pds switch: "+tmp,getPlayerData().telegramID);
-                    break;
-
+            if (commands.containsKey(tmp)) {
+                commands.get(tmp).execute(this,command);
             }
+            else {
+                TCI.sendMsg("error on pds switch: "+tmp,getPlayerData().telegramID);
+            }
+
 
         }
 

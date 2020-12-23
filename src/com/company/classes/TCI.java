@@ -17,10 +17,13 @@ import java.util.Map;
 
 public class TCI extends TelegramLongPollingBot {
 
-    private TCI TCI = this;
+    private String token;
 
-    private Map<String, playerDataShell> players = new HashMap<String, playerDataShell>() {{
-    }};
+    private Map<String, playerDataShell> players = new HashMap<>();
+
+    public TCI(String token){
+        this.token = token;
+    }
 
     @Override
     public String getBotUsername() {
@@ -28,9 +31,7 @@ public class TCI extends TelegramLongPollingBot {
     }
 
     @Override
-    public String getBotToken() {
-        return "1402260417:AAEWd3c_9fHZSjb5fM1ixvO-9BMfsqq-W5U";
-    }
+    public String getBotToken() { return token; }
 
     @Override
     public void onUpdateReceived(Update update) {
@@ -68,43 +69,35 @@ public class TCI extends TelegramLongPollingBot {
 
     public synchronized void setButtons(SendMessage sendMessage) {
 
-// Создаем клавиуатуру
-
+        // Создаем клавиуатуру
         ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
         sendMessage.setReplyMarkup(replyKeyboardMarkup);
         replyKeyboardMarkup.setSelective(true);
         replyKeyboardMarkup.setResizeKeyboard(true);
         replyKeyboardMarkup.setOneTimeKeyboard(false);
 
-// Создаем список строк клавиатуры
-
+        // Создаем список строк клавиатуры
         List<KeyboardRow> keyboard = new ArrayList<>();
 
-// Первая строчка клавиатуры
-
+        // Первая строчка клавиатуры
         KeyboardRow keyboardFirstRow = new KeyboardRow();
 
-// Добавляем кнопки в первую строчку клавиатуры
-
+        // Добавляем кнопки в первую строчку клавиатуры
         keyboardFirstRow.add(new KeyboardButton("/help"));
         keyboardFirstRow.add(new KeyboardButton("/info"));
 
-// Вторая строчка клавиатуры
-
+        // Вторая строчка клавиатуры
         KeyboardRow keyboardSecondRow = new KeyboardRow();
 
-// Добавляем кнопки во вторую строчку клавиатуры
-
+        // Добавляем кнопки во вторую строчку клавиатуры
         keyboardSecondRow.add(new KeyboardButton("/slots"));
         keyboardSecondRow.add(new KeyboardButton("/kreps"));
 
-// Добавляем все строчки клавиатуры в список
-
+        // Добавляем все строчки клавиатуры в список
         keyboard.add(keyboardFirstRow);
         keyboard.add(keyboardSecondRow);
 
-// и устанваливаем этот список нашей клавиатуре
-
+        // и устанваливаем этот список нашей клавиатуре
         replyKeyboardMarkup.setKeyboard(keyboard);
     }
 
