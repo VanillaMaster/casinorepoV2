@@ -48,7 +48,7 @@ public class Kreps implements TCIGame {
      * @param p игрок
      */
     public boolean play(playerData p, String data) {
-        //SlotMachineIO(p);
+
         isAdditionalInputRequired = false;
 
         System.out.println("kreps stage: " + stage);
@@ -56,7 +56,7 @@ public class Kreps implements TCIGame {
         switch (stage) {
             case 0:
                 stage = stageZero(p);
-                return true;
+                break;
 
             case 1:
                 stage = stageOne(p, data);
@@ -81,6 +81,7 @@ public class Kreps implements TCIGame {
 
     private int stageZero(playerData p) {
         SIO.outPut(p, "pass или dpass и количество ставки");
+        isAdditionalInputRequired = true;
         return 1;
     }
 
@@ -88,11 +89,13 @@ public class Kreps implements TCIGame {
 
         if (!input.matches("(pass|dpass) [0-9]+")) {
             SIO.outPut(p, "incorrect input, please try again");
-            return 0;
+            isAdditionalInputRequired = true;
+            return 1;
         }
         if (Integer.parseInt(input.split(" ")[1]) > p.points) {
             SIO.outPut(p, "у вас недостаточно средств для такой ставки, please try again");
-            return 0;
+            isAdditionalInputRequired = true;
+            return 1;
         }
 
 
@@ -150,17 +153,18 @@ public class Kreps implements TCIGame {
 
     private int stageFour(playerData p, String input) {
 
-
-        int rateNumber = Integer.parseInt(input.split(" ")[0]);
-
-        if (!input.matches("[0-9]+ [0-9]+") || rateNumber > 24) {
+        if (!input.matches("[0-9]+ [0-9]+")) {
             SIO.outPut(p, "incorrect input, please try again");
-            return 3;
-        }
-
-        if (Integer.parseInt(input.split(" ")[1]) > p.points) {
+            isAdditionalInputRequired = true;
+            return 4;
+        } else if (Integer.parseInt(input.split(" ")[0]) > 24){
+            SIO.outPut(p, "incorrect input, please try again");
+            isAdditionalInputRequired = true;
+            return 4;
+        } else if (Integer.parseInt(input.split(" ")[1]) > p.points) {
             SIO.outPut(p, "у вас недостаточно средств для такой ставки, please try again");
-            return 3;
+            isAdditionalInputRequired = true;
+            return 4;
         }
 
         return stageFive(p, pointer, Integer.parseInt(input.split(" ")[0]), Integer.parseInt(input.split(" ")[1]));
