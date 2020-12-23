@@ -1,7 +1,7 @@
 package com.company.classes.playerDataConstruct;
 
 import com.company.classes.playerinnerclasses.GameDataPattern;
-
+// содержит информацию об игроке
 public class playerData {
 
     public playerData(String ID) {

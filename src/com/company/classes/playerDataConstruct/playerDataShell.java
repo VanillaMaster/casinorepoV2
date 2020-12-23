@@ -27,7 +27,7 @@ public class playerDataShell {
     private ArrayDeque<String> commandTimeLine = new ArrayDeque<String>();   //Очередь для перенаправления потока ввода
 
     //добавить элемент в очередь(станет первым)
-    public void addToQueue(String nextInputTarget) {
+    public void addToQueue(String nextInputTarget){
         commandTimeLine.addFirst(nextInputTarget);
     }
 
@@ -37,26 +37,26 @@ public class playerDataShell {
     }};
 
     //команды доступные игроку
-    public playerDataShell(TCI iTCI, String telegramID) {
+    public playerDataShell(TCI iTCI,String telegramID){
         TCI = iTCI;
         initPlayer(telegramID);
 
         commands.put("/help", new help(iTCI));
-        commands.put("/info", new info(iTCI));
-        commands.put("/slots", new slots(iTCI));
-        commands.put("/kreps", new kreps(iTCI));
+        commands.put("/info",new info(iTCI));
+        commands.put("/slots",new slots(iTCI));
+        commands.put("/kreps",new kreps(iTCI));
     }
 
     public int currentLifeSpan = lifeSpan;
 
     private Timer timer = new Timer(true); //(не работает)
 
-    private void initTimer() {
-        TimerTask timerTask = new playerKillTimer(parrentMap, this);
-        timer.schedule(timerTask, 0, 60 * 1000);
+    private void initTimer(){
+        TimerTask timerTask = new playerKillTimer(parrentMap,this);
+        timer.schedule(timerTask,0,60*1000);
     }
 
-    private void initPlayer(String telegramID) {
+    private void initPlayer(String telegramID){
 
         boolean alreadyExsist = false;
 
@@ -65,21 +65,21 @@ public class playerDataShell {
 
             url = new URL("https://vanilla-db.herokuapp.com/api/v1/isexisting");
             URLConnection con = url.openConnection();
-            HttpURLConnection http = (HttpURLConnection) con;
+            HttpURLConnection http = (HttpURLConnection)con;
             http.setRequestMethod("POST"); // PUT is another valid option
             http.setDoOutput(true);
 
-            byte[] out = ("{\"login\":\"adminApp\",\"password\":\"000000\",\"name\":\"" + telegramID + ".json\"}").getBytes(StandardCharsets.UTF_8);
+            byte[] out = ("{\"login\":\"adminApp\",\"password\":\"000000\",\"name\":\""+ telegramID +".json\"}") .getBytes(StandardCharsets.UTF_8);
             int length = out.length;
 
             http.setFixedLengthStreamingMode(length);
             http.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
             http.connect();
-            try (OutputStream os = http.getOutputStream()) {
+            try(OutputStream os = http.getOutputStream()) {
                 os.write(out);
             }
 
-            try (BufferedReader br = new BufferedReader(
+            try(BufferedReader br = new BufferedReader(
                     new InputStreamReader(con.getInputStream(), "utf-8"))) {
                 StringBuilder response = new StringBuilder();
                 String responseLine = null;
@@ -89,25 +89,25 @@ public class playerDataShell {
                 alreadyExsist = Boolean.parseBoolean(response.toString());
             }
 
-            if (alreadyExsist) {
+            if (alreadyExsist){
 
                 url = new URL("https://vanilla-db.herokuapp.com/api/v1/getdbdata");
                 con = url.openConnection();
-                http = (HttpURLConnection) con;
+                http = (HttpURLConnection)con;
                 http.setRequestMethod("POST"); // PUT is another valid option
                 http.setDoOutput(true);
 
-                out = ("{\"login\":\"adminApp\",\"password\":\"000000\",\"name\":\"" + telegramID + ".json\"}").getBytes(StandardCharsets.UTF_8);
+                out = ("{\"login\":\"adminApp\",\"password\":\"000000\",\"name\":\""+ telegramID +".json\"}") .getBytes(StandardCharsets.UTF_8);
                 length = out.length;
 
                 http.setFixedLengthStreamingMode(length);
                 http.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
                 http.connect();
-                try (OutputStream os = http.getOutputStream()) {
+                try(OutputStream os = http.getOutputStream()) {
                     os.write(out);
                 }
 
-                try (BufferedReader br = new BufferedReader(
+                try(BufferedReader br = new BufferedReader(
                         new InputStreamReader(con.getInputStream(), "utf-8"))) {
                     StringBuilder response = new StringBuilder();
                     String responseLine = null;
@@ -139,7 +139,7 @@ public class playerDataShell {
     }
 
     //инициализирует данные игрока
-    public playerData getPlayerData() {
+    public playerData getPlayerData(){
 
         currentLifeSpan = lifeSpan;
 
@@ -147,14 +147,15 @@ public class playerDataShell {
     }
 
     //исполняет команды доступные игроку + для определния потока ввода для команд требущих ввод после себя
-    public void executeCommand(String command) {
+    public void executeCommand(String command){
 
-        if (commandTimeLine.peekFirst() == null) {
+        if (commandTimeLine.peekFirst()== null){
 
             if (commands.containsKey(command)) {
-                commands.get(command).execute(iThis, "");
-            } else {
-                TCI.sendMsg("unknown command, \"/help\" for command list", getPlayerData().telegramID);
+                commands.get(command).execute(iThis,"");
+            }
+            else {
+                TCI.sendMsg("unknown command, \"/help\" for command list",getPlayerData().telegramID);
             }
 
         } else {
@@ -163,9 +164,10 @@ public class playerDataShell {
             String tmp = commandTimeLine.pollFirst();
 
             if (commands.containsKey(tmp)) {
-                commands.get(tmp).execute(this, command);
-            } else {
-                TCI.sendMsg("error on pds switch: " + tmp, getPlayerData().telegramID);
+                commands.get(tmp).execute(this,command);
+            }
+            else {
+                TCI.sendMsg("error on pds switch: "+tmp,getPlayerData().telegramID);
             }
 
 

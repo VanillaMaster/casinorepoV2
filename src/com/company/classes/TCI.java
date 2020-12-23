@@ -50,7 +50,7 @@ public class TCI extends TelegramLongPollingBot {
         }
 
     }
-
+    //отправляет сообщение пользователю
     public void sendMsg(String msg, String chat_id) {
 
         SendMessage message = new SendMessage(); // Create a message object object
