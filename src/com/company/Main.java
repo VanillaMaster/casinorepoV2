@@ -26,7 +26,7 @@ public class Main {
             System.out.println("token: " + token);
 
         } catch (IOException e) {
-            System.err.println("Error: conf file does");
+            System.err.println("Error: conf file doesn't exist");
         }
 
         if (token!="-1") {
