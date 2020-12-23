@@ -13,17 +13,19 @@ import java.util.Random;
  */
 public class Kreps implements TCIGame {
 
-     enum BetOption {
-         pass,
-         dpass
-     }
+    enum BetOption {
+        pass,
+        dpass
+    }
 
     int firsDice;
     int secondDice;
 
-    int phaseOneWinRate = 50; //винрейт фазы 1
-    int phaseTwoWinRate = 50; //винрейт фазы 2
-    int phaseTwoBaseWinRate = 4; //базовый винрейт для фазы 2
+    private final int phaseOneWinRate = 50; //винрейт фазы 1
+    private final int phaseTwoWinRate = 50; //винрейт фазы 2
+    private final int phaseTwoBaseWinRate = 4; //базовый винрейт для фазы 2
+
+    private final int loseNumber=7;//число проигрыша 2 стадии
 
     private final int[] dpassWinNumbers = new int[] {1,2,3,7,11,12}; //выйгрышные числа для dpass
     private final int[] passWinNumbers = new int[] {4,5,6,8,9,10,11}; //выйгрышные числа для pass
@@ -87,22 +89,22 @@ public class Kreps implements TCIGame {
         return 1;
     }
 
-    private int stageOne(playerData p, String input){
+    private int stageOne(playerData playerData, String input){
 
         if (!input.matches("(pass|dpass) [0-9]+")) {
-            SIO.outPut(p,"incorrect input, please try again");
+            SIO.outPut(playerData,"incorrect input, please try again");
             isAdditionalInputRequired = true;
             return 1;
         }
-        if (Integer.parseInt(input.split(" ")[1]) > p.points) {
-            SIO.outPut(p,"у вас недостаточно средств для такой ставки, please try again");
+        if (Integer.parseInt(input.split(" ")[1]) > playerData.points) {
+            SIO.outPut(playerData,"у вас недостаточно средств для такой ставки, please try again");
             isAdditionalInputRequired = true;
             return 1;
         }
 
 
 
-        return stageTwo(p,input.split(" ")[0],Integer.parseInt(input.split(" ")[1]));//next stage
+        return stageTwo(playerData,input.split(" ")[0],Integer.parseInt(input.split(" ")[1]));//next stage
     }
 
     private int stageTwo(playerData playerData,String inputStatus, int inputBet){
@@ -148,67 +150,67 @@ public class Kreps implements TCIGame {
 
     }
 
-    private int stageThree(playerData p){
+    private int stageThree(playerData playerData){
         isAdditionalInputRequired = true;
-        SIO.outPut(p,"число ставки и количество ставки");
+        SIO.outPut(playerData,"число ставки и количество ставки");
         return 4;
     }
 
-    private int stageFour(playerData p,String input){
+    private int stageFour(playerData playerData,String input){
 
         if (!input.matches("[0-9]+ [0-9]+")) {
-            SIO.outPut(p, "incorrect input, please try again");
+            SIO.outPut(playerData, "incorrect input, please try again");
             isAdditionalInputRequired = true;
             return 4;
         } else if (Integer.parseInt(input.split(" ")[0]) > 24){
-            SIO.outPut(p, "incorrect input, please try again");
+            SIO.outPut(playerData, "incorrect input, please try again");
             isAdditionalInputRequired = true;
             return 4;
-        } else if (Integer.parseInt(input.split(" ")[1]) > p.points) {
-            SIO.outPut(p, "у вас недостаточно средств для такой ставки, please try again");
+        } else if (Integer.parseInt(input.split(" ")[1]) > playerData.points) {
+            SIO.outPut(playerData, "у вас недостаточно средств для такой ставки, please try again");
             isAdditionalInputRequired = true;
             return 4;
         }
-        return stageFive(p,pointer,Integer.parseInt(input.split(" ")[0]),Integer.parseInt(input.split(" ")[1]));
+        return stageFive(playerData,pointer,Integer.parseInt(input.split(" ")[0]),Integer.parseInt(input.split(" ")[1]));
 
     }
 
-    private int stageFive(playerData p,int pointer,int inputNumber,int inputBet){
+    private int stageFive(playerData playerData,int pointer,int inputNumber,int inputBet){
 
-        p.points -= inputBet;
+        playerData.points -= inputBet;
 
         boolean keepRolling = true;
 
         do {
 
-            int preRoll = RNG.rollNumber(p.krepsPart2.winrate(), phaseTwoWinRate, 2, 24, inputNumber, phaseTwoBaseWinRate);
+            int preRoll = RNG.rollNumber(playerData.krepsPart2.winrate(), phaseTwoWinRate, 2, 24, inputNumber, phaseTwoBaseWinRate);
 
-            Generator(preRoll);
+            GeneratorOfNumber(preRoll);
 
-            if (firsDice == pointer || firsDice == 7 || secondDice == pointer || secondDice == 7) {
+            if (firsDice == pointer || firsDice == loseNumber || secondDice == pointer || secondDice == loseNumber) {
                 keepRolling = false;
-                p.krepsPart2.addLose(1);
+                playerData.krepsPart2.addLose(1);
             }
 
             if ((keepRolling) && (inputNumber == (firsDice + secondDice))) {
-                p.points += (inputBet * 8);
+                playerData.points += (inputBet * 8);
                 keepRolling = false;
-                p.krepsPart2.addWin(1);
+                playerData.krepsPart2.addWin(1);
             }
 
-            SIO.hDoubleOutput(p,Integer.toString(firsDice),Integer.toString(secondDice));
+            SIO.hDoubleOutput(playerData,Integer.toString(firsDice),Integer.toString(secondDice));
 
             //try { TimeUnit.SECONDS.sleep(10); } catch (InterruptedException e) { System.out.println("delay error(Kreps)"); }
 
         } while (keepRolling);
 
-        SIO.outPut(p,"ваши очки: "+p.points);
+        SIO.outPut(playerData,"ваши очки: "+playerData.points);
 
         return 0;
 
     }
     //генерирует два квази рандомных числа из квизи рандомного числа
-    private void Generator(int preRoll){
+    private void GeneratorOfNumber(int preRoll){
         if (preRoll > 12) {
             secondDice = random.nextInt(25 - preRoll) + preRoll - 12;
             firsDice = preRoll - secondDice;
