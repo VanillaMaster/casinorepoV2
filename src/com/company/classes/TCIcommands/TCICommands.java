@@ -3,7 +3,7 @@ package com.company.classes.TCIcommands;
 import com.company.classes.playerDataConstruct.playerDataShell;
 
 public interface TCICommands {
-    //написать жабадок
+    //выполняет команду
     void execute(playerDataShell playerDataShell, String data);
 
 }

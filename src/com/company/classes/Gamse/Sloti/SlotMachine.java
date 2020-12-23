@@ -65,24 +65,24 @@ public class SlotMachine implements TCIGame {
         return stageThree(p,Integer.parseInt(input));
     }
 
-    private int stageThree(playerData p,int inputBet){
+    private int stageThree(playerData playerData,int inputBet){
 
-        p.points -= inputBet;
+        playerData.points -= inputBet;
         int roll1=RNG.roll(50,50,1,7);
         int roll2=RNG.roll(50,50,1,7);
         int roll3=RNG.roll(50,50,1,7);
         if(roll1 == 6 && roll2 == 6 && roll3 == 6){
-            p.points -= p.points;
+            playerData.points -= playerData.points;
         }else if (roll1 == 7 && roll2 == 7 && roll3 == 7){
-            p.points += (inputBet * 100);
+            playerData.points += (inputBet * 100);
         }
         else if (roll1 == roll2) {
-            p.points += (inputBet * 2);
+            playerData.points += (inputBet * 2);
             if (roll2 == roll3){
-                p.points += (inputBet * 5);
+                playerData.points += (inputBet * 5);
             }
         }
-        SIO.slotResultOutput(p,("ваши очки: "+p.points),roll1,roll2,roll3);
+        SIO.slotResultOutput(playerData,("ваши очки: "+playerData.points),roll1,roll2,roll3);
 
         return 0;
     }
