@@ -1,25 +1,28 @@
 package com.company.classes;
 
 
+import com.company.classes.keyboards.keyboard;
+import com.company.classes.keyboards.mainkeyboard;
 import com.company.classes.playerDataConstruct.playerDataShell;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class TCI extends TelegramLongPollingBot {
-
+    
     private String token;
 
     private Map<String, playerDataShell> players = new HashMap<>();
+
+    private Map<String, keyboard> keyboards = new HashMap<>(){
+        {
+            put("commands",new mainkeyboard());
+        }
+    };
 
     public TCI(String token) { this.token = token; }
 
@@ -57,7 +60,9 @@ public class TCI extends TelegramLongPollingBot {
         message.setChatId(chat_id);
         message.setText(msg);
 
-        setButtons(message);
+        keyboards.get("commands").setKeyboard(message);
+
+        //setButtons(message);
 
         try {
             execute(message); // Sending our message object to user
@@ -66,6 +71,8 @@ public class TCI extends TelegramLongPollingBot {
         }
 
     }
+
+    /*
 
     public synchronized void setButtons(SendMessage sendMessage) {
 
@@ -100,5 +107,7 @@ public class TCI extends TelegramLongPollingBot {
         // и устанваливаем этот список нашей клавиатуре
         replyKeyboardMarkup.setKeyboard(keyboard);
     }
+
+     */
 
 }
