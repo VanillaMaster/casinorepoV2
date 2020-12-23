@@ -4,6 +4,6 @@ import com.company.classes.playerDataConstruct.playerDataShell;
 
 public interface TCICommands {
     //написать жабадок
-    void execute(playerDataShell playerDataShell,String data);
+    void execute(playerDataShell playerDataShell, String data);
 
 }

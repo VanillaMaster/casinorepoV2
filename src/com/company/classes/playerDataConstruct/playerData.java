@@ -9,13 +9,14 @@ public class playerData {
         points = 1000;
     }
 
-    public playerData(){}
+    public playerData() {
+    }
 
     public Integer points = -1;
 
     //public String Name = "";
 
-    public String telegramID ="";
+    public String telegramID = "";
 
     public GameDataPattern krepsPart1 = new GameDataPattern(0.5);
     public GameDataPattern krepsPart2 = new GameDataPattern(0.5);

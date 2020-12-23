@@ -11,11 +11,9 @@ public class help implements TCICommands {
     private static final String helpText = "Введите /slots - для игры в слоты \nВведите /kreps - для игры в крепс \nВведите /info - для всей доступной информации об игроке ";
     private TCI TCI;
 
-    public help(TCI iTCI){
-        TCI = iTCI;
-    }
+    public help(TCI iTCI) { TCI = iTCI; }
 
-    public void execute(playerDataShell playerDataShell,String data) {
-        TCI.sendMsg(helpText,playerDataShell.getPlayerData().telegramID);
+    public void execute(playerDataShell playerDataShell, String data) {
+        TCI.sendMsg(helpText, playerDataShell.getPlayerData().telegramID);
     }
 }

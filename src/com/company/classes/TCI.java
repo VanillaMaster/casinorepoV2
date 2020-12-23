@@ -21,9 +21,7 @@ public class TCI extends TelegramLongPollingBot {
 
     private Map<String, playerDataShell> players = new HashMap<>();
 
-    public TCI(String token){
-        this.token = token;
-    }
+    public TCI(String token) { this.token = token; }
 
     @Override
     public String getBotUsername() {
@@ -31,7 +29,9 @@ public class TCI extends TelegramLongPollingBot {
     }
 
     @Override
-    public String getBotToken() { return token; }
+    public String getBotToken() {
+        return token;
+    }
 
     @Override
     public void onUpdateReceived(Update update) {
@@ -41,9 +41,9 @@ public class TCI extends TelegramLongPollingBot {
             String inputMsg = update.getMessage().getText();
             String chat_id = String.valueOf(update.getMessage().getChatId());
 
-            if (!players.containsKey(chat_id)){
-                playerDataShell tmpShell = new playerDataShell(this,chat_id);
-                players.put(chat_id,tmpShell);
+            if (!players.containsKey(chat_id)) {
+                playerDataShell tmpShell = new playerDataShell(this, chat_id);
+                players.put(chat_id, tmpShell);
             }
 
             players.get(chat_id).executeCommand(inputMsg);
@@ -51,7 +51,7 @@ public class TCI extends TelegramLongPollingBot {
 
     }
 
-    public void sendMsg(String msg, String chat_id){
+    public void sendMsg(String msg, String chat_id) {
 
         SendMessage message = new SendMessage(); // Create a message object object
         message.setChatId(chat_id);

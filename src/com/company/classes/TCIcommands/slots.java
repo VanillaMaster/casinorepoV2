@@ -13,16 +13,16 @@ public class slots implements TCICommands {
 
     private SlotMachine slotMachine;
 
-    public slots(TCI iTCI){
+    public slots(TCI iTCI) {
         TCI = iTCI;
         slotMachine = new SlotMachine(iTCI);
     }
 
 
     @Override
-    public void execute(playerDataShell playerDataShell,String data) {
-        boolean isAdditionalInputRequired = slotMachine.play(playerDataShell.getPlayerData(),data);
-        if (isAdditionalInputRequired){
+    public void execute(playerDataShell playerDataShell, String data) {
+        boolean isAdditionalInputRequired = slotMachine.play(playerDataShell.getPlayerData(), data);
+        if (isAdditionalInputRequired) {
             playerDataShell.addToQueue("/slots");
         }
     }
