@@ -1,21 +1,19 @@
 package com.company.classes.playerDataConstruct;
 
 import com.company.classes.TCI;
-import com.company.classes.TCIcommands.TCICommands;
 import com.company.classes.TCIcommands.*;
 import com.google.gson.Gson;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.net.*;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 public class playerDataShell {
 
-    private playerDataShell iThis = this;
+    private httpRequest requset = new httpRequest();
 
     private final Gson gson = new Gson();
 
@@ -61,62 +59,14 @@ public class playerDataShell {
 
         URL url = null;
         try {
-
-            url = new URL("https://vanilla-db.herokuapp.com/api/v1/isexisting");
-            URLConnection con = url.openConnection();
-            HttpURLConnection http = (HttpURLConnection)con;
-            http.setRequestMethod("POST"); // PUT is another valid option
-            http.setDoOutput(true);
-
-            byte[] out = ("{\"login\":\"adminApp\",\"password\":\"000000\",\"name\":\""+ telegramID +".json\"}") .getBytes(StandardCharsets.UTF_8);
-            int length = out.length;
-
-            http.setFixedLengthStreamingMode(length);
-            http.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
-            http.connect();
-            try(OutputStream os = http.getOutputStream()) {
-                os.write(out);
-            }
-
-            try(BufferedReader br = new BufferedReader(
-                    new InputStreamReader(con.getInputStream(), "utf-8"))) {
-                StringBuilder response = new StringBuilder();
-                String responseLine = null;
-                while ((responseLine = br.readLine()) != null) {
-                    response.append(responseLine.trim());
-                }
-                alreadyExsist = Boolean.parseBoolean(response.toString());
-            }
+            alreadyExsist = Boolean.parseBoolean(requset.getDBIndex("https://vanilla-db.herokuapp.com/api/v1/isexisting",
+                    ("{\"login\":\"adminApp\",\"password\":\"000000\",\"name\":\""+ telegramID +".json\"}").getBytes(StandardCharsets.UTF_8)));
+            System.out.println(alreadyExsist);
 
             if (alreadyExsist){
+                playerData = gson.fromJson(requset.getDBIndex("https://vanilla-db.herokuapp.com/api/v1/getdbdata",
+                        ("{\"login\":\"adminApp\",\"password\":\"000000\",\"name\":\""+ telegramID +".json\"}") .getBytes(StandardCharsets.UTF_8) ),playerData.class);
 
-                url = new URL("https://vanilla-db.herokuapp.com/api/v1/getdbdata");
-                con = url.openConnection();
-                http = (HttpURLConnection)con;
-                http.setRequestMethod("POST"); // PUT is another valid option
-                http.setDoOutput(true);
-
-                out = ("{\"login\":\"adminApp\",\"password\":\"000000\",\"name\":\""+ telegramID +".json\"}") .getBytes(StandardCharsets.UTF_8);
-                length = out.length;
-
-                http.setFixedLengthStreamingMode(length);
-                http.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
-                http.connect();
-                try(OutputStream os = http.getOutputStream()) {
-                    os.write(out);
-                }
-
-                try(BufferedReader br = new BufferedReader(
-                        new InputStreamReader(con.getInputStream(), "utf-8"))) {
-                    StringBuilder response = new StringBuilder();
-                    String responseLine = null;
-                    while ((responseLine = br.readLine()) != null) {
-                        response.append(responseLine.trim());
-                    }
-
-                    playerData = gson.fromJson(response.toString(), playerData.class);
-
-                }
 
             } else {
 
@@ -151,10 +101,10 @@ public class playerDataShell {
         if (commandTimeLine.peekFirst()== null){
 
             if (commands.containsKey(command)) {
-                commands.get(command).execute(iThis,"");
+                commands.get(command).execute(this,"");
             }
             else {
-                TCI.sendMsg("unknown command, \"/help\" for command list",getPlayerData().telegramID);
+                TCI.sendMsg("unknown command, \"/help\" for command list",getPlayerData().telegramID,"non");
             }
 
         } else {
@@ -166,7 +116,7 @@ public class playerDataShell {
                 commands.get(tmp).execute(this,command);
             }
             else {
-                TCI.sendMsg("error on pds switch: "+tmp,getPlayerData().telegramID);
+                TCI.sendMsg("error on pds switch: "+tmp,getPlayerData().telegramID ,"non");
             }
 
 

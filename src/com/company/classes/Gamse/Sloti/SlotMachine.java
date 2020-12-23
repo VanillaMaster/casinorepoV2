@@ -25,13 +25,17 @@ public class SlotMachine implements TCIGame {
     private final TCISmartIO SIO;
     private final Random random = new Random();
 
+    private boolean isAdditionalInputRequired = false;
+
 
     public boolean play(playerData playerData, String data){
+
+        isAdditionalInputRequired = false;
 
         switch (stage){
             case 0:
                 stage = stageZero(playerData);
-                return true;
+                break;
 
             case 1:
                 stage = stageOne(playerData,data);
@@ -42,24 +46,26 @@ public class SlotMachine implements TCIGame {
                 break;
         }
 
-        return false;
+        return isAdditionalInputRequired;
 
     }
 
     private int stageZero(playerData playerData){
         SIO.outPut(playerData,"количество ставки");
-
+        isAdditionalInputRequired = true;
         return 1;
     }
 
     private int stageOne(playerData p,String input){
         if (!input.matches("[0-9]+")) {
-            SIO.outPut(p,"incorrect input, please try again");
-            return 0;
+            SIO.outPut(p,"incorrect input, please try again (slots)");
+            isAdditionalInputRequired = true;
+            return 1;
         }
         if (Integer.parseInt(input) > p.points) {
             SIO.outPut(p,"у вас недостаточно средств для такой ставки, please try again");
-            return 0;
+            isAdditionalInputRequired = true;
+            return 1;
         }
 
         return stageThree(p,Integer.parseInt(input));

@@ -17,6 +17,6 @@ public class info implements TCICommands {
     public void execute(playerDataShell playerDataShell, String data) {
         String outputPoints = "Points: " + playerDataShell.getPlayerData().points.toString();
         String outputID = "ID: " + playerDataShell.getPlayerData().telegramID;
-        TCI.sendMsg(outputPoints + "\n" + outputID, playerDataShell.getPlayerData().telegramID);
+        TCI.sendMsg(outputPoints + "\n" + outputID, playerDataShell.getPlayerData().telegramID,"non");
     }
 }

@@ -14,6 +14,6 @@ public class help implements TCICommands {
     public help(TCI iTCI) { TCI = iTCI; }
 
     public void execute(playerDataShell playerDataShell, String data) {
-        TCI.sendMsg(helpText, playerDataShell.getPlayerData().telegramID);
+        TCI.sendMsg(helpText, playerDataShell.getPlayerData().telegramID,"commands");
     }
 }

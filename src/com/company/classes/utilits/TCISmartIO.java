@@ -12,21 +12,21 @@ public class TCISmartIO {
     }
 
     public void slotResultOutput(playerData playerData, String msg, Integer first, Integer seccond, Integer third){
-        TCI.sendMsg("\\/\\/\\/\\/\\/ \n"+"| "+first+" | "+seccond+" | "+ third +" |" + "\n/\\/\\/\\/\\/\\"+"\n \n" +msg,playerData.telegramID);
+        TCI.sendMsg("\\/\\/\\/\\/\\/ \n"+"| "+first+" | "+seccond+" | "+ third +" |" + "\n/\\/\\/\\/\\/\\"+"\n \n" +msg,playerData.telegramID,"non");
     }
     public void outPut(playerData playerData,String str){
-        TCI.sendMsg(str,playerData.telegramID);
+        TCI.sendMsg(str,playerData.telegramID,"slots");
     }
 
     public void hMultiOutput(playerData playerData, String roll, String points){
 
-        TCI.sendMsg(roll+"\n\n"+points,playerData.telegramID);
+        TCI.sendMsg(roll+"\n\n"+points,playerData.telegramID,"non");
 
     }
 
     public void hDoubleOutput(playerData playerData, String firstRoll, String seccondRoll){
 
-        TCI.sendMsg(firstRoll+"\n"+seccondRoll,playerData.telegramID);
+        TCI.sendMsg(firstRoll+"\n"+seccondRoll,playerData.telegramID,"non");
 
     }
 

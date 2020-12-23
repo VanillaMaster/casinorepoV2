@@ -89,7 +89,7 @@ public class Kreps implements TCIGame {
     private int stageOne(playerData playerData, String input){
 
         if (!input.matches("(pass|dpass) [0-9]+")) {
-            SIO.outPut(playerData,"incorrect input, please try again");
+            SIO.outPut(playerData,"incorrect input, please try again (kreps phase1)");
             isAdditionalInputRequired = true;
             return 1;
         }
@@ -156,11 +156,11 @@ public class Kreps implements TCIGame {
     private int stageFour(playerData playerData,String input){
 
         if (!input.matches("[0-9]+ [0-9]+")) {
-            SIO.outPut(playerData, "incorrect input, please try again");
+            SIO.outPut(playerData, "incorrect input, please try again (kreps phase2)");
             isAdditionalInputRequired = true;
             return 4;
         } else if (Integer.parseInt(input.split(" ")[0]) > 24){
-            SIO.outPut(playerData, "incorrect input, please try again");
+            SIO.outPut(playerData, "incorrect input, please try again (kreps phase2)");
             isAdditionalInputRequired = true;
             return 4;
         } else if (Integer.parseInt(input.split(" ")[1]) > playerData.points) {

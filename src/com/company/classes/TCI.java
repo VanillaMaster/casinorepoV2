@@ -3,6 +3,7 @@ package com.company.classes;
 
 import com.company.classes.keyboards.keyboard;
 import com.company.classes.keyboards.mainkeyboard;
+import com.company.classes.keyboards.slotMachineKeyboard;
 import com.company.classes.playerDataConstruct.playerDataShell;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -21,6 +22,7 @@ public class TCI extends TelegramLongPollingBot {
     private Map<String, keyboard> keyboards = new HashMap<>(){
         {
             put("commands",new mainkeyboard());
+            put("slots",new slotMachineKeyboard());
         }
     };
 
@@ -54,13 +56,17 @@ public class TCI extends TelegramLongPollingBot {
 
     }
     //отправляет сообщение пользователю
-    public void sendMsg(String msg, String chat_id) {
+    public void sendMsg(String msg, String chat_id,String keyboardType) {
 
         SendMessage message = new SendMessage(); // Create a message object object
         message.setChatId(chat_id);
         message.setText(msg);
 
-        keyboards.get("commands").setKeyboard(message);
+        if (keyboards.containsKey(keyboardType)) {
+            keyboards.get(keyboardType).setKeyboard(message);
+        } else {
+            System.out.println("unknown keyboard");
+        }
 
         //setButtons(message);
 
