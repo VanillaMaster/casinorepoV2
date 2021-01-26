@@ -1,25 +1,38 @@
 package com.company.classes.playerDataConstruct;
 
-import java.util.HashMap;
+import com.company.classes.TCI;
+
+import java.util.Timer;
 import java.util.TimerTask;
 
 public class playerKillTimer extends TimerTask {
 
-    private HashMap map;
-    private playerDataShell shell;
+    private TCI TCI;
+    private String UserID;
+    private playerDataShell Shell;
+    private Timer timer;
 
-    public playerKillTimer(HashMap iMap, playerDataShell iShell) {
-        map = iMap;
-        shell = iShell;
+    public playerKillTimer(TCI iTCI, String ID, playerDataShell IShell, Timer ITimer) {
+        TCI = iTCI;
+        UserID = ID;
+        Shell = IShell;
+        timer = ITimer;
     }
 
     @Override
     public void run() {
-        System.out.println("timer proc");
-        shell.currentLifeSpan--;
-        if (shell.currentLifeSpan >= 0) {
-            // работает ли ?
-            map.remove(shell.getPlayerData().telegramID);
+
+        Shell.LifeSpanCycle();
+
+        if (Shell.getCurrentLifeSpan() <= 0) {
+            System.out.println(("time to die: " + UserID));
+
+            timer.cancel();
+            timer.purge();
+
+            TCI.removePlayer(UserID);
+
         }
+
     }
 }

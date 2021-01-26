@@ -12,7 +12,7 @@ public class TCISmartIO {
     }
 
     public void slotResultOutput(playerData playerData, String msg, Integer first, Integer seccond, Integer third){
-        TCI.sendMsg("\\/\\/\\/\\/\\/ \n"+"| "+first+" | "+seccond+" | "+ third +" |" + "\n/\\/\\/\\/\\/\\"+"\n \n" +msg,playerData.telegramID,"non");
+        TCI.sendMsg("\\/\\/\\/\\/\\/ \n"+"| "+first+" | "+seccond+" | "+ third +" |" + "\n/\\/\\/\\/\\/\\"+"\n \n" +msg,playerData.telegramID,"commands");
     }
     public void outPut(playerData playerData,String str){
         TCI.sendMsg(str,playerData.telegramID,"slots");

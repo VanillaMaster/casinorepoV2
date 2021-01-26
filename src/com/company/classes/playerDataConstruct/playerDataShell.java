@@ -7,7 +7,6 @@ import com.google.gson.Gson;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
-import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
@@ -17,53 +16,98 @@ public class playerDataShell {
 
     private final Gson gson = new Gson();
 
-    private static final int lifeSpan = 5; //Сктолько сколько существует информация о сущности(не работает)
 
-    private HashMap parrentMap;
+
+    //============== data construct ================
+
+    private playerData playerData = new playerData(); // хронит данные игрока, dataShell - является оболочкой для этих данных
+
+    public playerData getPlayerData(){
+
+        currentLifeSpan = lifeSpan;
+
+        return playerData;
+    }
+
+    private String UserID;
+
+    public String getUserID(){
+        return UserID;
+    }
+
+    //==============================================
+
 
     private ArrayDeque<String> commandTimeLine = new ArrayDeque<String>();   //Очередь для перенаправления потока ввода
 
-    //добавить элемент в очередь(станет первым)
-    public void addToQueue(String nextInputTarget){
-        commandTimeLine.addFirst(nextInputTarget);
-    }
+    public void addToQueue(String nextInputTarget){ commandTimeLine.addFirst(nextInputTarget); } //добавить элемент в очередь(станет первым)
 
-    private TCI TCI;
+    private TCI TCI; // интерфейс работы с чатом
 
-    private Map<String, TCICommands> commands = new HashMap<String, TCICommands>() {{
-    }};
+    private Map<String, TCICommands> commands = new HashMap<String, TCICommands>();
 
-    //команды доступные игроку
+
     public playerDataShell(TCI iTCI,String telegramID){
         TCI = iTCI;
+        UserID = telegramID;
         initPlayer(telegramID);
 
+        //команды доступные игроку
         commands.put("/help", new help(iTCI));
         commands.put("/info",new info(iTCI));
         commands.put("/slots",new slots(iTCI));
         commands.put("/kreps",new kreps(iTCI));
+        commands.put("/lifespan",new lifespan(iTCI));
+
     }
 
-    public int currentLifeSpan = lifeSpan;
 
-    private Timer timer = new Timer(true); //(не работает)
 
+    //============= lifeSpan construct =============
+
+    private static final int lifeSpan = 5; //продолжительность жизни данных (в циклах таймера) (в процессе отладки)
+
+    private int currentLifeSpan = lifeSpan; //текущая продолжительность жизни
+
+    public int getCurrentLifeSpan(){
+        return currentLifeSpan;
+    }
+
+    public void LifeSpanCycle(){
+        currentLifeSpan--;
+    }
+
+    //==============================================
+
+
+
+    //============== timer construct ===============
+
+    private Timer timer = new Timer(true); //таймер
+
+    //инициализация таймера
     private void initTimer(){
-        TimerTask timerTask = new playerKillTimer(parrentMap,this);
-        timer.schedule(timerTask,0,60*1000);
+
+        TimerTask timerTask = new playerKillTimer(TCI,UserID,this, timer);
+        timer.schedule(timerTask,0,10*1000);
     }
+
+    //==============================================
+
+
 
     private void initPlayer(String telegramID){
 
-        boolean alreadyExsist = false;
+        boolean alreadyExist = false;
 
-        URL url = null;
+        //URL url = null;
+
         try {
-            alreadyExsist = Boolean.parseBoolean(requset.getDBIndex("https://vanilla-db.herokuapp.com/api/v1/isexisting",
+            alreadyExist = Boolean.parseBoolean(requset.getDBIndex("https://vanilla-db.herokuapp.com/api/v1/isexisting",
                     ("{\"login\":\"adminApp\",\"password\":\"000000\",\"name\":\""+ telegramID +".json\"}").getBytes(StandardCharsets.UTF_8)));
-            System.out.println(alreadyExsist);
+            System.out.println(alreadyExist);
 
-            if (alreadyExsist){
+            if (alreadyExist){
                 playerData = gson.fromJson(requset.getDBIndex("https://vanilla-db.herokuapp.com/api/v1/getdbdata",
                         ("{\"login\":\"adminApp\",\"password\":\"000000\",\"name\":\""+ telegramID +".json\"}") .getBytes(StandardCharsets.UTF_8) ),playerData.class);
 
@@ -83,19 +127,11 @@ public class playerDataShell {
             e.printStackTrace();
         }
 
-        //initTimer();
+        initTimer();
 
     }
 
-    //инициализирует данные игрока
-    public playerData getPlayerData(){
-
-        currentLifeSpan = lifeSpan;
-
-        return playerData;
-    }
-
-    //исполняет команды доступные игроку + для определния потока ввода для команд требущих ввод после себя
+    //обрабатывает текущие входные данные в соответствии с очередью( commandTimeLine )
     public void executeCommand(String command){
 
         if (commandTimeLine.peekFirst()== null){
@@ -123,9 +159,5 @@ public class playerDataShell {
         }
 
     }
-
-    //==============================================
-
-    private playerData playerData = new playerData();
 
 }

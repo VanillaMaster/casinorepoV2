@@ -15,7 +15,7 @@ public class httpRequest {
         URL url = new URL(iUrl);
         URLConnection con = url.openConnection();
         HttpURLConnection http = (HttpURLConnection)con;
-        http.setRequestMethod("POST"); // PUT is another valid option
+        http.setRequestMethod("POST");
         http.setDoOutput(true);
 
         //byte[] out = ("{\"login\":\"adminApp\",\"password\":\"000000\",\"name\":\""+ telegramID +".json\"}") .getBytes(StandardCharsets.UTF_8);
