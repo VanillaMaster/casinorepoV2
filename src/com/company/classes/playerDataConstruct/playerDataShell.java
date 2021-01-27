@@ -16,6 +16,8 @@ public class playerDataShell {
 
     private final Gson gson = new Gson();
 
+    private boolean isNewUser = false;
+
 
 
     //============== data construct ================
@@ -115,6 +117,7 @@ public class playerDataShell {
             } else {
 
                 playerData = new playerData(telegramID);
+                isNewUser = true;
 
             }
 
@@ -128,6 +131,29 @@ public class playerDataShell {
         }
 
         initTimer();
+
+    }
+
+    public void saveData(){
+
+        String currentData = gson.toJson(playerData).replaceAll("\"","\\\\\"");
+        System.out.println(currentData);
+
+        String resp = "-1";
+
+        String url = "https://vanilla-db.herokuapp.com/api/v1/update";
+        if (isNewUser){
+            url = "https://vanilla-db.herokuapp.com/api/v1/upload";
+        }
+
+        try {
+            resp = requset.getDBIndex(url,
+                    ("{\"login\":\"adminApp\",\"password\":\"000000\",\"name\":\""+ UserID +".json\",\"data\":\"" + currentData + "\"}").getBytes(StandardCharsets.UTF_8));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println(resp);
 
     }
 

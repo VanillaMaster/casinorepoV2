@@ -79,6 +79,7 @@ public class TCI extends TelegramLongPollingBot {
     }
 
     public void removePlayer(String ID){
+        players.get(ID).saveData();
         players.remove(ID);
         System.gc();
     }
