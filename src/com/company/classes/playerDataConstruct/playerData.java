@@ -28,9 +28,9 @@ public class playerData {
 
     public String telegramID = "";
 
-    public String status = "";
+    public String status = "default";
 
-    public String displayStatus = "";
+    public String displayStatus = "очередняра";
 
     private String date = formatter().format(java.time.LocalDateTime.now());
 

@@ -8,7 +8,7 @@ import com.company.classes.playerDataConstruct.playerDataShell;
  */
 public class help implements TCICommands {
 
-    private static final String helpText = "Введите /slots - для игры в слоты \nВведите /kreps - для игры в крепс \nВведите /info - для всей доступной информации об игроке ";
+    private static final String helpText = "Введите /slots - для игры в слоты \nВведите /kreps - для игры в крепс \nВведите /info - для всей доступной информации об игроке \n\nTips:\nQ:как получить статус ?\nA: попросить администрацию и возможно вам его выдадут";
     private TCI TCI;
 
     public help(TCI iTCI) { TCI = iTCI; }
