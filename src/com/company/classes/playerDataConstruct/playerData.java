@@ -12,7 +12,7 @@ public class playerData {
     public playerData() {
     }
 
-    private Integer points = -1; // сделать для крепс
+    private Integer points = -1;
 
     public String telegramID = "";
 

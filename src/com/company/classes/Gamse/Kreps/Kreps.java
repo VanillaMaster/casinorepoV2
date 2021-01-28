@@ -93,7 +93,7 @@ public class Kreps implements TCIGame {
             isAdditionalInputRequired = true;
             return 1;
         }
-        if (Integer.parseInt(input.split(" ")[1]) > playerData.points) {
+        if (Integer.parseInt(input.split(" ")[1]) > playerData.getPoints()) {
             SIO.outPut(playerData,"у вас недостаточно средств для такой ставки, please try again");
             isAdditionalInputRequired = true;
             return 1;
@@ -106,7 +106,7 @@ public class Kreps implements TCIGame {
 
     private int stageTwo(playerData playerData,String inputStatus, int inputBet){
 
-        playerData.points -= inputBet;
+        playerData.PointModify(-inputBet,false);
 
         int winChance = RNG.roll(playerData.krepsPart1.winrate(), phaseOneWinRate, 0, 1); //ролл 0 или 1 как эвивалент победе поражению в зависимоти от винрейта игрока
         int roll;
@@ -128,18 +128,18 @@ public class Kreps implements TCIGame {
         String rollString=Integer.toString(roll);
 
         if (inputStatus.equals((BetOption.dpass).toString()) && (rollString.matches("1|2|3|7|11|12"))) {
-            playerData.points += (inputBet * 2);
-            SIO.hMultiOutput(playerData,Integer.toString(roll), ("ваши очки: "+playerData.points));
+            playerData.PointModify(inputBet * 2,false);
+            SIO.hMultiOutput(playerData,Integer.toString(roll), ("ваши очки: "+playerData.getPoints()));
             playerData.krepsPart1.addWin(2);
             return 0;
         } else if (inputStatus.equals((BetOption.pass).toString()) && (rollString.matches("4|5|6|8|9|10|11"))) {
-            playerData.points += (inputBet * 2);
-            SIO.hMultiOutput(playerData,Integer.toString(roll), ("ваши очки: "+playerData.points));
+            playerData.PointModify(inputBet * 2,false);
+            SIO.hMultiOutput(playerData,Integer.toString(roll), ("ваши очки: "+playerData.getPoints()));
             playerData.krepsPart1.addWin(2);
             pointer = roll;
             return stageThree(playerData);// next stage <----------------------------------------------------------------
         } else {
-            SIO.hMultiOutput(playerData,Integer.toString(roll), ("ваши очки: "+playerData.points));
+            SIO.hMultiOutput(playerData,Integer.toString(roll), ("ваши очки: "+playerData.getPoints()));
             playerData.krepsPart1.addLose(1);
             return 0;
         }
@@ -163,7 +163,7 @@ public class Kreps implements TCIGame {
             SIO.outPut(playerData, "incorrect input, please try again (kreps phase2)");
             isAdditionalInputRequired = true;
             return 4;
-        } else if (Integer.parseInt(input.split(" ")[1]) > playerData.points) {
+        } else if (Integer.parseInt(input.split(" ")[1]) > playerData.getPoints()) {
             SIO.outPut(playerData, "у вас недостаточно средств для такой ставки, please try again");
             isAdditionalInputRequired = true;
             return 4;
@@ -174,7 +174,7 @@ public class Kreps implements TCIGame {
 
     private int stageFive(playerData playerData,int pointer,int inputNumber,int inputBet){
 
-        playerData.points -= inputBet;
+        playerData.PointModify(-inputBet, false);
 
         boolean keepRolling = true;
 
@@ -190,7 +190,7 @@ public class Kreps implements TCIGame {
             }
 
             if ((keepRolling) && (inputNumber == (firsDice + secondDice))) {
-                playerData.points += (inputBet * 8);
+                playerData.PointModify(+inputBet * 8, false);
                 keepRolling = false;
                 playerData.krepsPart2.addWin(1);
             }
@@ -201,7 +201,7 @@ public class Kreps implements TCIGame {
 
         } while (keepRolling);
 
-        SIO.outPut(playerData,"ваши очки: "+playerData.points);
+        SIO.outPut(playerData,"ваши очки: "+playerData.getPoints());
 
         return 0;
 
