@@ -78,7 +78,7 @@ public class SlotMachine implements TCIGame {
         int roll2=RNG.roll(50,50,1,7);
         int roll3=RNG.roll(50,50,1,7);
         if(roll1 == 6 && roll2 == 6 && roll3 == 6){
-            playerData.PointModify(-playerData.getPoints(),true);
+            playerData.PointModify(-playerData.getPoints(),false);
         }else if (roll1 == 7 && roll2 == 7 && roll3 == 7){
             playerData.PointModify(inputBet * 100,true);
         }

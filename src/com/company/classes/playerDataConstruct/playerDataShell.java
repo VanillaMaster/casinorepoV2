@@ -8,13 +8,19 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
+
+import static java.time.temporal.ChronoUnit.SECONDS;
 
 public class playerDataShell {
 
     private httpRequest requset = new httpRequest();
 
     private final Gson gson = new Gson();
+
+    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
     private boolean isNewUser = false;
 
@@ -112,6 +118,10 @@ public class playerDataShell {
             if (alreadyExist){
                 playerData = gson.fromJson(requset.getDBIndex("https://vanilla-db.herokuapp.com/api/v1/getdbdata",
                         ("{\"login\":\"adminApp\",\"password\":\"000000\",\"name\":\""+ telegramID +".json\"}") .getBytes(StandardCharsets.UTF_8) ),playerData.class);
+
+                System.out.println(SECONDS.between(LocalDateTime.parse(playerData.getDate(), formatter),java.time.LocalDateTime.now()));// < ==== последний вход
+
+                playerData.setDate(formatter.format(java.time.LocalDateTime.now()));
 
 
             } else {
