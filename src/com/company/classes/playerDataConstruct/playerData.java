@@ -12,12 +12,28 @@ public class playerData {
     public playerData() {
     }
 
-    public Integer points = -1;
+    private Integer points = -1; // сделать для крепс
 
     public String telegramID = "";
 
+    public String status = "";
+
+    public String displayStatus = "";
+
     public GameDataPattern krepsPart1 = new GameDataPattern(0.5);
     public GameDataPattern krepsPart2 = new GameDataPattern(0.5);
+
+    public Integer getPoints() {
+        return points;
+    }
+
+    public void PointModify(int input, boolean applyStatus){
+        if (applyStatus){
+            points += input;
+        } else {
+            points += input;
+        }
+    }
 
 
 }

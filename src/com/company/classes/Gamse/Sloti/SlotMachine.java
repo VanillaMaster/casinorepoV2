@@ -62,7 +62,7 @@ public class SlotMachine implements TCIGame {
             isAdditionalInputRequired = true;
             return 1;
         }
-        if (Integer.parseInt(input) > p.points) {
+        if (Integer.parseInt(input) > p.getPoints()) {
             SIO.outPut(p,"у вас недостаточно средств для такой ставки, please try again");
             isAdditionalInputRequired = true;
             return 1;
@@ -73,22 +73,22 @@ public class SlotMachine implements TCIGame {
 
     private int stageThree(playerData playerData,int inputBet){
 
-        playerData.points -= inputBet;
+        playerData.PointModify(-inputBet,false);
         int roll1=RNG.roll(50,50,1,7);
         int roll2=RNG.roll(50,50,1,7);
         int roll3=RNG.roll(50,50,1,7);
         if(roll1 == 6 && roll2 == 6 && roll3 == 6){
-            playerData.points -= playerData.points;
+            playerData.PointModify(-playerData.getPoints(),true);
         }else if (roll1 == 7 && roll2 == 7 && roll3 == 7){
-            playerData.points += (inputBet * 100);
+            playerData.PointModify(inputBet * 100,true);
         }
         else if (roll1 == roll2) {
-            playerData.points += (inputBet * 2);
+            playerData.PointModify(inputBet * 2,true);
             if (roll2 == roll3){
-                playerData.points += (inputBet * 5);
+                playerData.PointModify(inputBet * 5,true);
             }
         }
-        SIO.slotResultOutput(playerData,("ваши очки: "+playerData.points),roll1,roll2,roll3);
+        SIO.slotResultOutput(playerData,("ваши очки: "+playerData.getPoints()),roll1,roll2,roll3);
 
         return 0;
     }
