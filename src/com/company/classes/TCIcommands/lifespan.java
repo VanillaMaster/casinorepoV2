@@ -8,14 +8,22 @@ import com.company.classes.playerDataConstruct.playerDataShell;
  */
 public class lifespan implements TCICommands {
 
-    private com.company.classes.TCI TCI;
+    private TCI TCI;
 
-    public lifespan(TCI iTCI) {
+    private playerDataShell playerDataShell;
+
+    public lifespan(TCI iTCI,playerDataShell iPlayerDataShell) {
         TCI = iTCI;
+        playerDataShell = iPlayerDataShell;
     }
 
-    public void execute(playerDataShell playerDataShell, String data) {
+    public void execute(String[] data) {
         String outputLifeSpan = "LifeSpan: " + playerDataShell.getCurrentLifeSpan();
-        TCI.sendMsg(outputLifeSpan, playerDataShell.getUserID(),"non");
+
+        if (data.length == 0) {
+            TCI.sendMsg(outputLifeSpan, playerDataShell.getUserID(),"non");
+        } else {
+            TCI.sendMsg("unexpected arguments", playerDataShell.getPlayerData().telegramID, "commands");
+        }
     }
 }

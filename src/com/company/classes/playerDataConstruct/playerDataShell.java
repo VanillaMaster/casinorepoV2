@@ -16,7 +16,7 @@ import static java.time.temporal.ChronoUnit.SECONDS;
 
 public class playerDataShell {
 
-    private httpRequest requset = new httpRequest();
+    private final httpRequest request = new httpRequest();
 
     private final Gson gson = new Gson();
 
@@ -28,7 +28,7 @@ public class playerDataShell {
 
     //============== data construct ================
 
-    private playerData playerData = new playerData(); // хронит данные игрока, dataShell - является оболочкой для этих данных
+    private playerData playerData; // хронит данные игрока, dataShell - является оболочкой для этих данных
 
     public playerData getPlayerData(){
 
@@ -46,13 +46,13 @@ public class playerDataShell {
     //==============================================
 
 
-    private ArrayDeque<String> commandTimeLine = new ArrayDeque<String>();   //Очередь для перенаправления потока ввода
+    private ArrayDeque<String> commandTimeLine = new ArrayDeque<>();   //Очередь для перенаправления потока ввода
 
     public void addToQueue(String nextInputTarget){ commandTimeLine.addFirst(nextInputTarget); } //добавить элемент в очередь(станет первым)
 
-    private TCI TCI; // интерфейс работы с чатом
+    private final TCI TCI; // интерфейс работы с чатом
 
-    private Map<String, TCICommands> commands = new HashMap<String, TCICommands>();
+    private Map<String, TCICommands> commands = new HashMap<>();
 
 
     public playerDataShell(TCI iTCI,String telegramID){
@@ -61,11 +61,11 @@ public class playerDataShell {
         initPlayer(telegramID);
 
         //команды доступные игроку
-        commands.put("/help", new help(iTCI));
-        commands.put("/info",new info(iTCI));
-        commands.put("/slots",new slots(iTCI));
-        commands.put("/kreps",new kreps(iTCI));
-        commands.put("/lifespan",new lifespan(iTCI));
+        commands.put("/help", new help(iTCI,this));
+        commands.put("/info",new info(iTCI,this));
+        commands.put("/slots",new slots(iTCI,this));
+        commands.put("/kreps",new kreps(iTCI,this));
+        commands.put("/lifespan",new lifespan(iTCI,this));
 
     }
 
@@ -111,12 +111,12 @@ public class playerDataShell {
         //URL url = null;
 
         try {
-            alreadyExist = Boolean.parseBoolean(requset.getDBIndex("https://vanilla-db.herokuapp.com/api/v1/isexisting",
+            alreadyExist = Boolean.parseBoolean(request.getDBIndex("https://vanilla-db.herokuapp.com/api/v1/isexisting",
                     ("{\"login\":\"adminApp\",\"password\":\"000000\",\"name\":\""+ telegramID +".json\"}").getBytes(StandardCharsets.UTF_8)));
             System.out.println(alreadyExist);
 
             if (alreadyExist){
-                playerData = gson.fromJson(requset.getDBIndex("https://vanilla-db.herokuapp.com/api/v1/getdbdata",
+                playerData = gson.fromJson(request.getDBIndex("https://vanilla-db.herokuapp.com/api/v1/getdbdata",
                         ("{\"login\":\"adminApp\",\"password\":\"000000\",\"name\":\""+ telegramID +".json\"}") .getBytes(StandardCharsets.UTF_8) ),playerData.class);
 
                 System.out.println(SECONDS.between(LocalDateTime.parse(playerData.getDate(), formatter),java.time.LocalDateTime.now()));// < ==== последний вход
@@ -157,7 +157,7 @@ public class playerDataShell {
         }
 
         try {
-            resp = requset.getDBIndex(url,
+            resp = request.getDBIndex(url,
                     ("{\"login\":\"adminApp\",\"password\":\"000000\",\"name\":\""+ UserID +".json\",\"data\":\"" + currentData + "\"}").getBytes(StandardCharsets.UTF_8));
         } catch (IOException e) {
             e.printStackTrace();
@@ -168,12 +168,54 @@ public class playerDataShell {
     }
 
     //обрабатывает текущие входные данные в соответствии с очередью( commandTimeLine )
-    public void executeCommand(String command){
+    public void executeCommand(String iData){
 
-        if (commandTimeLine.peekFirst()== null){
+        //новая система обработки комманд (с поддержкой аргументов - аргументы и так существовали но работали не явно и небыло возможности их использовать вне кейса игр)
+        //предположительно работает бес сбоев
+
+
+        //=========== command pre-processing ===========
+
+        String[] arguments = iData.split(" ");
+        String command;
+
+        if (commandTimeLine.isEmpty()){
+            if (arguments.length > 1){
+                command = arguments[0];
+                String[] tmp = new String[arguments.length-1];
+
+                System.arraycopy(arguments, 1, tmp, 0, tmp.length);
+                arguments = tmp;
+            } else {
+                command = arguments[0];
+                arguments = new String[0];
+            }
+        } else {
+            command = commandTimeLine.pollFirst();
+        }
+
+        //==============================================
+
+
+
+        //============ command executing ===============
+
+        if (commands.containsKey(command)) {
+            commands.get(command).execute(arguments);
+        }
+        else {
+            TCI.sendMsg("unknown command, \"/help\" for command list",getPlayerData().telegramID,"non");
+        }
+
+        //======================================
+
+
+        //legacy bullshit
+        /*
+        if (commandTimeLine.isEmpty()){
 
             if (commands.containsKey(command)) {
-                commands.get(command).execute(this,"");
+                commands.get(command).execute(this,null);
             }
             else {
                 TCI.sendMsg("unknown command, \"/help\" for command list",getPlayerData().telegramID,"non");
@@ -193,6 +235,7 @@ public class playerDataShell {
 
 
         }
+        */
 
     }
 

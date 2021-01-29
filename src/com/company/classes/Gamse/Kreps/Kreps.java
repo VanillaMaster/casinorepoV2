@@ -4,6 +4,7 @@ import com.company.classes.Gamse.TCIGame;
 import com.company.classes.NTRandom;
 import com.company.classes.TCI;
 import com.company.classes.playerDataConstruct.playerData;
+import com.company.classes.pointsModifier.pointsModifier;
 import com.company.classes.utilits.TCISmartIO;
 
 import java.util.Random;
@@ -33,6 +34,7 @@ public class Kreps implements TCIGame {
     private final NTRandom RNG = new NTRandom();
     private final TCISmartIO SIO;
     private final Random random = new Random();
+    private final pointsModifier modifier = new pointsModifier();
 
     private int pointer = -1;
     private boolean isAdditionalInputRequired = false;
@@ -50,7 +52,7 @@ public class Kreps implements TCIGame {
      * запучкает игру Крепс
      * @param playerData игрок
      */
-    public boolean play(playerData playerData, String data){
+    public boolean play(playerData playerData, String[] data){
 
         isAdditionalInputRequired = false;
 
@@ -86,27 +88,34 @@ public class Kreps implements TCIGame {
         return 1;
     }
 
-    private int stageOne(playerData playerData, String input){
+    private int stageOne(playerData playerData, String[] input){
 
-        if (!input.matches("(pass|dpass) [0-9]+")) {
-            SIO.outPut(playerData,"incorrect input, please try again (kreps phase1)");
+        if (input.length == 2) {
+
+            if (!input[0].matches("(pass|dpass)") || !input[1].matches("[0-9]+")) {
+                SIO.outPut(playerData, "incorrect input, please try again (kreps phase1)");
+                isAdditionalInputRequired = true;
+                return 1;
+            }
+            if (Integer.parseInt(input[1]) > playerData.getPoints()) {
+                SIO.outPut(playerData, "у вас недостаточно средств для такой ставки, please try again");
+                isAdditionalInputRequired = true;
+                return 1;
+            }
+
+            return stageTwo(playerData, input[0], Integer.parseInt(input[1]));//next stage
+
+        } else {
+            SIO.outPut(playerData, "incorrect input, please try again (kreps phase1)");
             isAdditionalInputRequired = true;
             return 1;
         }
-        if (Integer.parseInt(input.split(" ")[1]) > playerData.getPoints()) {
-            SIO.outPut(playerData,"у вас недостаточно средств для такой ставки, please try again");
-            isAdditionalInputRequired = true;
-            return 1;
-        }
-
-
-
-        return stageTwo(playerData,input.split(" ")[0],Integer.parseInt(input.split(" ")[1]));//next stage
     }
 
     private int stageTwo(playerData playerData,String inputStatus, int inputBet){
 
-        playerData.PointModify(-inputBet,false);
+        modifier.remove(playerData,inputBet,false);
+        //playerData.PointModify(-inputBet,false);
 
         int winChance = RNG.roll(playerData.krepsPart1.winrate(), phaseOneWinRate, 0, 1); //ролл 0 или 1 как эвивалент победе поражению в зависимоти от винрейта игрока
         int roll;
@@ -128,12 +137,14 @@ public class Kreps implements TCIGame {
         String rollString=Integer.toString(roll);
 
         if (inputStatus.equals((BetOption.dpass).toString()) && (rollString.matches("1|2|3|7|11|12"))) {
-            playerData.PointModify(inputBet * 2,false);
+            modifier.add(playerData,inputBet * 2,false);
+            //playerData.PointModify(inputBet * 2,false);
             SIO.hMultiOutput(playerData,Integer.toString(roll), ("ваши очки: "+playerData.getPoints()));
             playerData.krepsPart1.addWin(2);
             return 0;
         } else if (inputStatus.equals((BetOption.pass).toString()) && (rollString.matches("4|5|6|8|9|10|11"))) {
-            playerData.PointModify(inputBet * 2,false);
+            modifier.add(playerData,inputBet * 2,false);
+            //playerData.PointModify(inputBet * 2,false);
             SIO.hMultiOutput(playerData,Integer.toString(roll), ("ваши очки: "+playerData.getPoints()));
             playerData.krepsPart1.addWin(2);
             pointer = roll;
@@ -153,28 +164,36 @@ public class Kreps implements TCIGame {
         return 4;
     }
 
-    private int stageFour(playerData playerData,String input){
+    private int stageFour(playerData playerData,String[] input){
 
-        if (!input.matches("[0-9]+ [0-9]+")) {
+        if(input.length == 2) {
+
+            if (!input[0].matches("[0-9]+") || !input[1].matches("[0-9]+")) {
+                SIO.outPut(playerData, "incorrect input, please try again (kreps phase2)");
+                isAdditionalInputRequired = true;
+                return 4;
+            } else if (Integer.parseInt(input[0]) > 24) {
+                SIO.outPut(playerData, "incorrect input, please try again (kreps phase2)");
+                isAdditionalInputRequired = true;
+                return 4;
+            } else if (Integer.parseInt(input[1]) > playerData.getPoints()) {
+                SIO.outPut(playerData, "у вас недостаточно средств для такой ставки, please try again");
+                isAdditionalInputRequired = true;
+                return 4;
+            }
+            return stageFive(playerData, pointer, Integer.parseInt(input[0]), Integer.parseInt(input[1]));
+        } else {
             SIO.outPut(playerData, "incorrect input, please try again (kreps phase2)");
-            isAdditionalInputRequired = true;
-            return 4;
-        } else if (Integer.parseInt(input.split(" ")[0]) > 24){
-            SIO.outPut(playerData, "incorrect input, please try again (kreps phase2)");
-            isAdditionalInputRequired = true;
-            return 4;
-        } else if (Integer.parseInt(input.split(" ")[1]) > playerData.getPoints()) {
-            SIO.outPut(playerData, "у вас недостаточно средств для такой ставки, please try again");
             isAdditionalInputRequired = true;
             return 4;
         }
-        return stageFive(playerData,pointer,Integer.parseInt(input.split(" ")[0]),Integer.parseInt(input.split(" ")[1]));
 
     }
 
     private int stageFive(playerData playerData,int pointer,int inputNumber,int inputBet){
 
-        playerData.PointModify(-inputBet, false);
+        modifier.remove(playerData,inputBet,false);
+        //playerData.PointModify(-inputBet, false);
 
         boolean keepRolling = true;
 
@@ -190,7 +209,8 @@ public class Kreps implements TCIGame {
             }
 
             if ((keepRolling) && (inputNumber == (firsDice + secondDice))) {
-                playerData.PointModify(+inputBet * 8, false);
+                modifier.add(playerData,inputBet * 8,false);
+                //playerData.PointModify(+inputBet * 8, false);
                 keepRolling = false;
                 playerData.krepsPart2.addWin(1);
             }

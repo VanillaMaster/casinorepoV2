@@ -11,14 +11,17 @@ public class kreps implements TCICommands {
 
     private Kreps Kreps;
 
-    public kreps(TCI iTCI) {
+    private playerDataShell playerDataShell;
+
+    public kreps(TCI iTCI,playerDataShell iPlayerDataShell) {
         TCI = iTCI;
+        playerDataShell = iPlayerDataShell;
         Kreps = new Kreps(iTCI);
     }
 
 
     @Override
-    public void execute(playerDataShell playerDataShell, String data) {
+    public void execute(String[] data) {
         boolean isAdditionalInputRequired = Kreps.play(playerDataShell.getPlayerData(), data);
         if (isAdditionalInputRequired) {
             playerDataShell.addToQueue("/kreps");

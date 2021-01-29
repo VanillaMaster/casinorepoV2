@@ -10,14 +10,22 @@ public class info implements TCICommands {
 
     private com.company.classes.TCI TCI;
 
-    public info(TCI iTCI) {
+    private playerDataShell playerDataShell;
+
+    public info(TCI iTCI, playerDataShell iPlayerDataShell) {
         TCI = iTCI;
+        playerDataShell = iPlayerDataShell;
     }
 
-    public void execute(playerDataShell playerDataShell, String data) {
+    public void execute(String[] data) {
         String outputPoints = "Points: " + playerDataShell.getPlayerData().getPoints().toString();
         String outputID = "ID: " + playerDataShell.getPlayerData().telegramID;
         String outputStatus = "Status: " + playerDataShell.getPlayerData().displayStatus;
-        TCI.sendMsg(outputPoints + "\n" + outputID + "\n" + outputStatus, playerDataShell.getPlayerData().telegramID,"non");
+
+        if (data.length == 0) {
+            TCI.sendMsg(outputPoints + "\n" + outputID + "\n" + outputStatus, playerDataShell.getPlayerData().telegramID, "non");
+        } else {
+            TCI.sendMsg("unexpected arguments", playerDataShell.getPlayerData().telegramID, "commands");
+        }
     }
 }
