@@ -225,33 +225,6 @@ public class playerDataShell {
         //======================================
 
 
-        //legacy bullshit
-        /*
-        if (commandTimeLine.isEmpty()){
-
-            if (commands.containsKey(command)) {
-                commands.get(command).execute(this,null);
-            }
-            else {
-                TCI.sendMsg("unknown command, \"/help\" for command list",getPlayerData().telegramID,"non");
-            }
-
-        } else {
-
-
-            String tmp = commandTimeLine.pollFirst();
-
-            if (commands.containsKey(tmp)) {
-                commands.get(tmp).execute(this,command);
-            }
-            else {
-                TCI.sendMsg("error on pds switch: "+tmp,getPlayerData().telegramID ,"non");
-            }
-
-
-        }
-        */
-
     }
 
 }
