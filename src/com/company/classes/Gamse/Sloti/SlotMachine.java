@@ -40,7 +40,7 @@ public class SlotMachine implements TCIGame {
                 break;
 
             default:
-                SIO.outPut(playerData,"wtf error");
+                SIO.outPut(playerData,"wtf error","commands");
                 break;
         }
 
@@ -49,7 +49,7 @@ public class SlotMachine implements TCIGame {
     }
 
     private int stageZero(playerData playerData){
-        SIO.outPut(playerData,"количество ставки");
+        SIO.outPut(playerData,"количество ставки","slots");
         isAdditionalInputRequired = true;
         return 1;
     }
@@ -57,12 +57,12 @@ public class SlotMachine implements TCIGame {
     private int stageOne(playerData p,String[] input) {
         if (input.length == 1) {
             if (!input[0].matches("[0-9]+")) {
-                SIO.outPut(p, "incorrect input, please try again (slots)");
+                SIO.outPut(p, "incorrect input, please try again (slots)","slots");
                 isAdditionalInputRequired = true;
                 return 1;
             }
             if (Integer.parseInt(input[0]) > p.getPoints()) {
-                SIO.outPut(p, "у вас недостаточно средств для такой ставки, please try again");
+                SIO.outPut(p, "у вас недостаточно средств для такой ставки, please try again","slots");
                 isAdditionalInputRequired = true;
                 return 1;
             }
@@ -70,7 +70,7 @@ public class SlotMachine implements TCIGame {
             return stageThree(p,Integer.parseInt(input[0]));
 
         } else {
-            SIO.outPut(p, "incorrect input, please try again (slots)");
+            SIO.outPut(p, "incorrect input, please try again (slots)","slots");
             isAdditionalInputRequired = true;
             return 1;
         }

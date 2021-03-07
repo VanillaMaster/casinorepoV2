@@ -14,13 +14,14 @@ public class TCISmartIO {
     public void slotResultOutput(playerData playerData, String msg, Integer first, Integer seccond, Integer third){
         TCI.sendMsg("\\/\\/\\/\\/\\/ \n"+"| "+first+" | "+seccond+" | "+ third +" |" + "\n/\\/\\/\\/\\/\\"+"\n \n" +msg,playerData.telegramID,"commands");
     }
-    public void outPut(playerData playerData,String str){
-        TCI.sendMsg(str,playerData.telegramID,"slots");
+
+    public void outPut(playerData playerData,String str,String keyboard){
+        TCI.sendMsg(str,playerData.telegramID,keyboard);
     }
 
-    public void hMultiOutput(playerData playerData, String roll, String points){
+    public void hMultiOutput(playerData playerData, String roll, String points, String keyboard){
 
-        TCI.sendMsg(roll+"\n\n"+points,playerData.telegramID,"non");
+        TCI.sendMsg(roll+"\n\n"+points,playerData.telegramID,keyboard);
 
     }
 
