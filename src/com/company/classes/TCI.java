@@ -2,7 +2,8 @@ package com.company.classes;
 
 
 import com.company.classes.keyboards.keyboard;
-import com.company.classes.keyboards.mainkeyboard;
+import com.company.classes.keyboards.krepsKeyboard;
+import com.company.classes.keyboards.mainKeyboard;
 import com.company.classes.keyboards.slotMachineKeyboard;
 import com.company.classes.playerDataConstruct.playerDataShell;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
@@ -21,8 +22,9 @@ public class TCI extends TelegramLongPollingBot {
 
     private Map<String, keyboard> keyboards = new HashMap<>(){
         {
-            put("commands",new mainkeyboard());
+            put("commands",new mainKeyboard());
             put("slots",new slotMachineKeyboard());
+            put("kreps",new krepsKeyboard());
         }
     };
 

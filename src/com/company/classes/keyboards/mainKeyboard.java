@@ -8,7 +8,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.Keyboard
 import java.util.ArrayList;
 import java.util.List;
 
-public class mainkeyboard implements keyboard {
+public class mainKeyboard implements keyboard {
 
 
     public synchronized void setKeyboard(SendMessage sendMessage) {
