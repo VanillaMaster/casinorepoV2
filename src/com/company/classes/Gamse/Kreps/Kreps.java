@@ -29,7 +29,7 @@ public class Kreps implements TCIGame {
     private final int loseNumber=7;//число проигрыша 2 стадии
 
     private final int[] dpassWinNumbers = new int[] {1,2,3,7,11,12}; //выйгрышные числа для dpass
-    private final int[] passWinNumbers = new int[] {4,5,6,8,9,10,11}; //выйгрышные числа для pass
+    private final int[] passWinNumbers = new int[] {4,5,6,8,9,10}; //выйгрышные числа для pass
 
     private final NTRandom RNG = new NTRandom();
     private final TCISmartIO SIO;

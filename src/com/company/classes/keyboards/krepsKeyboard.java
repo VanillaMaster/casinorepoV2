@@ -39,6 +39,8 @@ public class krepsKeyboard implements keyboard{
         keyboard.add(keyboardFirstRow);
         keyboard.add(keyboardSecondRow);
 
+        replyKeyboardMarkup.setOneTimeKeyboard(true);
+
         // и устанваливаем этот список нашей клавиатуре
         replyKeyboardMarkup.setKeyboard(keyboard);
     }
