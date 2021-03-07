@@ -73,7 +73,7 @@ public class playerDataShell {
 
     //============= lifeSpan construct =============
 
-    private static final int lifeSpan = 5; //продолжительность жизни данных (в циклах таймера) (в процессе отладки)
+    private final int lifeSpan = 5; //продолжительность жизни данных (в циклах таймера) (в процессе отладки)
 
     private int currentLifeSpan = lifeSpan; //текущая продолжительность жизни
 
@@ -106,18 +106,30 @@ public class playerDataShell {
 
     private void initPlayer(String telegramID){
 
-        boolean alreadyExist = false;
+        int alreadyExist = -1;
 
         //URL url = null;
 
         try {
-            alreadyExist = Boolean.parseBoolean(request.getDBIndex("https://vanilla-db.herokuapp.com/api/v1/isexisting",
-                    ("{\"login\":\"adminApp\",\"password\":\"000000\",\"name\":\""+ telegramID +".json\"}").getBytes(StandardCharsets.UTF_8)));
+            alreadyExist = Integer.parseInt(request.getDBIndex("https://vanilla-db.herokuapp.com/api/v1/isexisting",
+                    ("{\"login\":\"adminApp\",\"password\":\"000000\",\"name\":\""+ telegramID +"\"}").getBytes(StandardCharsets.UTF_8)));
             System.out.println(alreadyExist);
 
-            if (alreadyExist){
-                playerData = gson.fromJson(request.getDBIndex("https://vanilla-db.herokuapp.com/api/v1/getdbdata",
-                        ("{\"login\":\"adminApp\",\"password\":\"000000\",\"name\":\""+ telegramID +".json\"}") .getBytes(StandardCharsets.UTF_8) ),playerData.class);
+            if (alreadyExist != -1){
+                String resp = request.getDBIndex("https://vanilla-db.herokuapp.com/api/v1/getdbdata",
+                        ("{\"login\":\"adminApp\",\"password\":\"000000\",\"name\":\""+ telegramID +"\"}") .getBytes(StandardCharsets.UTF_8) );
+
+                resp = resp.replaceAll("\\\\\"","\"");
+
+                resp = resp.replaceAll("\"\\{","{");
+
+                resp = resp.replaceAll("}\"","}");
+
+                System.out.println(resp);
+
+                playerData = gson.fromJson(resp,playerData.class);
+
+                System.out.println("converted");
 
                 System.out.println(SECONDS.between(LocalDateTime.parse(playerData.getDate(), formatter),java.time.LocalDateTime.now()));// < ==== последний вход
 
@@ -156,13 +168,16 @@ public class playerDataShell {
             url = "https://vanilla-db.herokuapp.com/api/v1/upload";
         }
 
+        System.out.println("try request");
+
         try {
             resp = request.getDBIndex(url,
-                    ("{\"login\":\"adminApp\",\"password\":\"000000\",\"name\":\""+ UserID +".json\",\"data\":\"" + currentData + "\"}").getBytes(StandardCharsets.UTF_8));
+                    ("{\"login\":\"adminApp\",\"password\":\"000000\",\"name\":\""+ UserID +"\",\"data\":\"" + currentData + "\"}").getBytes(StandardCharsets.UTF_8));
         } catch (IOException e) {
             e.printStackTrace();
         }
 
+        System.out.println("resp: ");
         System.out.println(resp);
 
     }

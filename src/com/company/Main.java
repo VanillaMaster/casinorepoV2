@@ -15,7 +15,7 @@ public class Main {
 
         FileInputStream fis;
         Properties property = new Properties();
-        String token = "-1";
+        String token = "";
 
         try {
             fis = new FileInputStream("src/com/company/resources/conf.properties");
@@ -29,7 +29,7 @@ public class Main {
             System.err.println("Error: conf file doesn't exist");
         }
 
-        if (token != "-1") {
+        if (token != "") {
             try {
                 TelegramBotsApi botsApi = new TelegramBotsApi(DefaultBotSession.class);
                 botsApi.registerBot(new TCI(token));
