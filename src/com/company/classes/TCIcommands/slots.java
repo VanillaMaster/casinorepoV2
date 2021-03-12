@@ -1,6 +1,6 @@
 package com.company.classes.TCIcommands;
 
-import com.company.classes.Gamse.Sloti.SlotMachine;
+import com.company.classes.Gamse.Sloti.SlotMachineV2;
 import com.company.classes.TCI;
 import com.company.classes.playerDataConstruct.playerDataShell;
 
@@ -11,14 +11,16 @@ public class slots implements TCICommands {
 
     private TCI TCI;
 
-    private SlotMachine slotMachine;
+    private SlotMachineV2 slotMachine;
 
     private playerDataShell playerDataShell;
 
-    public slots(TCI iTCI, playerDataShell iPlayerDataShell) {
+    public slots() { }
+
+    public void init(TCI iTCI,playerDataShell iPlayerDataShell) {
         TCI = iTCI;
         playerDataShell = iPlayerDataShell;
-        slotMachine = new SlotMachine(iTCI);
+        slotMachine = new SlotMachineV2(iTCI);
     }
 
 

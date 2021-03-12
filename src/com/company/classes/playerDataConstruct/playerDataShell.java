@@ -13,15 +13,19 @@ import static java.time.temporal.ChronoUnit.SECONDS;
 
 public class playerDataShell {
 
-    private final httpRequest request = new httpRequest();
-
     private final Gson gson = new Gson();
 
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
+    private final db db = new db();
+
+    private final TCI TCI; // интерфейс работы с чатом
+
     private boolean isNewUser = false;
 
-    private final db db = new db();
+    private ArrayDeque<String> commandTimeLine = new ArrayDeque<>();   //Очередь для перенаправления потока ввода
+
+    public void addToQueue(String nextInputTarget){ commandTimeLine.addFirst(nextInputTarget); } //добавить элемент в очередь(станет первым)
 
     //============== data construct ================
 
@@ -43,13 +47,38 @@ public class playerDataShell {
     //==============================================
 
 
-    private ArrayDeque<String> commandTimeLine = new ArrayDeque<>();   //Очередь для перенаправления потока ввода
+    private enum commands {
+        help(new help()),
+        info(new info()),
+        slots(new slots()),
+        kreps(new kreps()),
+        lifespan(new lifespan()),
+        DEFAULT(new help());
 
-    public void addToQueue(String nextInputTarget){ commandTimeLine.addFirst(nextInputTarget); } //добавить элемент в очередь(станет первым)
 
-    private final TCI TCI; // интерфейс работы с чатом
+        public static TCICommands get(String s)
+        {
+            for(commands choice:values()) {
+                if (("/"+choice.name()).equals(s))
+                    return choice.command;
+            }
+            return commands.DEFAULT.command;
+        }
 
-    private Map<String, TCICommands> commands = new HashMap<>();
+        public static void init(TCI iTCI, playerDataShell iPlayerDataShell)
+        {
+            for(commands choice:values())
+                choice.command.init(iTCI,iPlayerDataShell);
+        }
+
+        private final TCICommands command;
+
+        commands(TCICommands command) {
+            this.command = command;
+        }
+
+    }
+
 
 
     public playerDataShell(TCI iTCI,String telegramID){
@@ -57,12 +86,7 @@ public class playerDataShell {
         UserID = telegramID;
         initPlayer();
 
-        //команды доступные игроку
-        commands.put("/help", new help(iTCI,this));
-        commands.put("/info",new info(iTCI,this));
-        commands.put("/slots",new slots(iTCI,this));
-        commands.put("/kreps",new kreps(iTCI,this));
-        commands.put("/lifespan",new lifespan(iTCI,this));
+        commands.init(iTCI,this);
 
     }
 
@@ -137,9 +161,6 @@ public class playerDataShell {
     //обрабатывает текущие входные данные в соответствии с очередью( commandTimeLine )
     public void executeCommand(String iData){
 
-        //новая система обработки комманд (с поддержкой аргументов - аргументы и так существовали но работали не явно и небыло возможности их использовать вне кейса игр)
-
-
         //=========== command pre-processing ===========
 
         String[] arguments = iData.split(" ");
@@ -161,8 +182,6 @@ public class playerDataShell {
 
             if (tmpCommand.equals(arguments[0])){
 
-                System.out.println("0");
-
                 if (arguments.length > 1){
                     command = arguments[0];
                     String[] tmp = new String[arguments.length-1];
@@ -175,25 +194,18 @@ public class playerDataShell {
                 }
 
             } else {
-                System.out.println("1");
                 command = tmpCommand;
             }
         }
 
         //==============================================
 
-        System.out.println(command);
-        System.out.println(arguments.length);
-
+        //System.out.println(command);
+        //System.out.println(arguments.length);
 
         //============ command executing ===============
 
-        if (commands.containsKey(command)) {
-            commands.get(command).execute(arguments);
-        }
-        else {
-            TCI.sendMsg("unknown command, \"/help\" for command list",getPlayerData().telegramID,"non");
-        }
+        commands.get(command).execute(arguments);
 
         //======================================
 

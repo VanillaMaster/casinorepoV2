@@ -12,7 +12,9 @@ public class info implements TCICommands {
 
     private playerDataShell playerDataShell;
 
-    public info(TCI iTCI, playerDataShell iPlayerDataShell) {
+    public info() { }
+
+    public void init(TCI iTCI,playerDataShell iPlayerDataShell) {
         TCI = iTCI;
         playerDataShell = iPlayerDataShell;
     }

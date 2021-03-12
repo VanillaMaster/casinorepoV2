@@ -13,7 +13,9 @@ public class kreps implements TCICommands {
 
     private playerDataShell playerDataShell;
 
-    public kreps(TCI iTCI,playerDataShell iPlayerDataShell) {
+    public kreps() { }
+
+    public void init(TCI iTCI,playerDataShell iPlayerDataShell) {
         TCI = iTCI;
         playerDataShell = iPlayerDataShell;
         Kreps = new Kreps(iTCI);

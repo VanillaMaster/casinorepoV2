@@ -12,7 +12,9 @@ public class lifespan implements TCICommands {
 
     private playerDataShell playerDataShell;
 
-    public lifespan(TCI iTCI,playerDataShell iPlayerDataShell) {
+    public lifespan() { }
+
+    public void init(TCI iTCI,playerDataShell iPlayerDataShell) {
         TCI = iTCI;
         playerDataShell = iPlayerDataShell;
     }

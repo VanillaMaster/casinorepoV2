@@ -56,7 +56,9 @@ public class help implements TCICommands {
 
     private playerDataShell playerDataShell;
 
-    public help(TCI iTCI,playerDataShell iPlayerDataShell) {
+    public help() { }
+
+    public void init(TCI iTCI,playerDataShell iPlayerDataShell) {
         TCI = iTCI;
         playerDataShell = iPlayerDataShell;
     }
