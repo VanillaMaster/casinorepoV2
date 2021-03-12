@@ -11,7 +11,32 @@ import java.util.Properties;
 
 public class Main {
 
+    private enum test {
+        DEFAULT{
+            public void run(){}
+        },
+
+        TEST{
+            public void run() {
+                System.out.println("asd");
+            }
+        };
+
+        public static test get(String s)
+        {
+            for(test choice:values())
+                if (choice.name().equals(s))
+                    return test.valueOf(choice.name());
+            return test.DEFAULT;
+        }
+
+
+        public abstract void run();
+
+    }
+
     public static void main(String[] args) throws TelegramApiException {
+
 
         String token = getToken();
 

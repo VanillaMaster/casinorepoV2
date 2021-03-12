@@ -157,11 +157,33 @@ public class playerDataShell {
                 arguments = new String[0];
             }
         } else {
-            command = commandTimeLine.pollFirst();
+            String tmpCommand = commandTimeLine.pollFirst();
+
+            if (tmpCommand.equals(arguments[0])){
+
+                System.out.println("0");
+
+                if (arguments.length > 1){
+                    command = arguments[0];
+                    String[] tmp = new String[arguments.length-1];
+
+                    System.arraycopy(arguments, 1, tmp, 0, tmp.length);
+                    arguments = tmp;
+                } else {
+                    command = arguments[0];
+                    arguments = new String[0];
+                }
+
+            } else {
+                System.out.println("1");
+                command = tmpCommand;
+            }
         }
 
         //==============================================
 
+        System.out.println(command);
+        System.out.println(arguments.length);
 
 
         //============ command executing ===============
