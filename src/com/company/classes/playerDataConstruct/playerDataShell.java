@@ -5,9 +5,6 @@ import com.company.classes.TCIcommands.*;
 import com.google.gson.Gson;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
-import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -24,7 +21,7 @@ public class playerDataShell {
 
     private boolean isNewUser = false;
 
-
+    private final db db = new db();
 
     //============== data construct ================
 
@@ -58,7 +55,7 @@ public class playerDataShell {
     public playerDataShell(TCI iTCI,String telegramID){
         TCI = iTCI;
         UserID = telegramID;
-        initPlayer(telegramID);
+        initPlayer();
 
         //команды доступные игроку
         commands.put("/help", new help(iTCI,this));
@@ -104,50 +101,25 @@ public class playerDataShell {
 
 
 
-    private void initPlayer(String telegramID){
-
-        int alreadyExist = -1;
-
-        //URL url = null;
+    private void initPlayer(){
 
         try {
-            alreadyExist = Integer.parseInt(request.getDBIndex("https://vanilla-db.herokuapp.com/api/v1/isexisting",
-                    ("{\"login\":\"adminApp\",\"password\":\"000000\",\"name\":\""+ telegramID +"\"}").getBytes(StandardCharsets.UTF_8)));
-            System.out.println(alreadyExist);
 
-            if (alreadyExist != -1){
-                String resp = request.getDBIndex("https://vanilla-db.herokuapp.com/api/v1/getdbdata",
-                        ("{\"login\":\"adminApp\",\"password\":\"000000\",\"name\":\""+ telegramID +"\"}") .getBytes(StandardCharsets.UTF_8) );
+            isNewUser = !db.isExist(UserID);
 
-                resp = resp.replaceAll("\\\\\"","\"");
+            if (!isNewUser){
 
-                resp = resp.replaceAll("\"\\{","{");
-
-                resp = resp.replaceAll("}\"","}");
-
-                System.out.println(resp);
-
-                playerData = gson.fromJson(resp,playerData.class);
-
-                System.out.println("converted");
+                playerData = db.readDb(UserID);
 
                 System.out.println(SECONDS.between(LocalDateTime.parse(playerData.getDate(), formatter),java.time.LocalDateTime.now()));// < ==== последний вход
 
                 playerData.setDate(formatter.format(java.time.LocalDateTime.now()));
 
-
             } else {
-
-                playerData = new playerData(telegramID);
-                isNewUser = true;
-
+                playerData = new playerData(UserID);
             }
 
 
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (ProtocolException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -158,27 +130,7 @@ public class playerDataShell {
 
     public void saveData(){
 
-        String currentData = gson.toJson(playerData).replaceAll("\"","\\\\\"");
-        System.out.println(currentData);
-
-        String resp = "-1";
-
-        String url = "https://vanilla-db.herokuapp.com/api/v1/update";
-        if (isNewUser){
-            url = "https://vanilla-db.herokuapp.com/api/v1/upload";
-        }
-
-        System.out.println("try request");
-
-        try {
-            resp = request.getDBIndex(url,
-                    ("{\"login\":\"adminApp\",\"password\":\"000000\",\"name\":\""+ UserID +"\",\"data\":\"" + currentData + "\"}").getBytes(StandardCharsets.UTF_8));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        System.out.println("resp: ");
-        System.out.println(resp);
+        db.saveData(isNewUser,playerData,UserID);
 
     }
 
@@ -186,7 +138,6 @@ public class playerDataShell {
     public void executeCommand(String iData){
 
         //новая система обработки комманд (с поддержкой аргументов - аргументы и так существовали но работали не явно и небыло возможности их использовать вне кейса игр)
-        //предположительно работает бес сбоев
 
 
         //=========== command pre-processing ===========

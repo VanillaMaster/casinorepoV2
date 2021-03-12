@@ -59,4 +59,8 @@ public class NTRandom {
     public int getRandom(int[] mx) {
         return mx[random.nextInt(mx.length)];
     }
+
+    public int nextTnt(int i){
+        return random.nextInt(i);
+    }
 }

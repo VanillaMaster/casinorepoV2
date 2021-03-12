@@ -13,21 +13,7 @@ public class Main {
 
     public static void main(String[] args) throws TelegramApiException {
 
-        FileInputStream fis;
-        Properties property = new Properties();
-        String token = "";
-
-        try {
-            fis = new FileInputStream("src/com/company/resources/conf.properties");
-            property.load(fis);
-
-            token = property.getProperty("token");
-
-            System.out.println("token: " + token);
-
-        } catch (IOException e) {
-            System.err.println("Error: conf file doesn't exist");
-        }
+        String token = getToken();
 
         if (token != "") {
             try {
@@ -37,6 +23,30 @@ public class Main {
                 e.printStackTrace();
             }
         }
+
+
+    }
+
+    private static String getToken(){
+
+        try {
+            FileInputStream fis = new FileInputStream("src/com/company/resources/conf.properties");
+
+            Properties property = new Properties();
+
+            property.load(fis);
+
+            String token = property.getProperty("token");
+
+            System.out.println("token: " + token);
+
+            return token;
+
+        } catch (IOException e) {
+            System.err.println("Error: conf file doesn't exist");
+            return "-1";
+        }
+
     }
 }
 
