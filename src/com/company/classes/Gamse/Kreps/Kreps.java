@@ -19,8 +19,8 @@ public class Kreps implements TCIGame {
         dpass
     }
 
-    int firsDice;
-    int secondDice;
+    //int firsDice;
+    //int secondDice;
 
     private final int phaseOneWinRate = 50; //винрейт фазы 1
     private final int phaseTwoWinRate = 50; //винрейт фазы 2
@@ -201,7 +201,17 @@ public class Kreps implements TCIGame {
 
             int preRoll = RNG.rollNumber(playerData.krepsPart2.winrate(), phaseTwoWinRate, 2, 24, inputNumber, phaseTwoBaseWinRate);
 
-            GeneratorOfNumber(preRoll);
+            //GeneratorOfNumber(preRoll);
+
+            int firsDice, secondDice;
+
+            if (preRoll > 12) {
+                secondDice = random.nextInt(25 - preRoll) + preRoll - 12;
+                firsDice = preRoll - secondDice;
+            } else {
+                firsDice = random.nextInt(preRoll - 1) + 1;
+                secondDice = preRoll - firsDice;
+            }
 
             if (firsDice == pointer || firsDice == loseNumber || secondDice == pointer || secondDice == loseNumber) {
                 keepRolling = false;
@@ -226,6 +236,7 @@ public class Kreps implements TCIGame {
         return 0;
 
     }
+    /*
     //генерирует два квази рандомных числа из квизи рандомного числа
     private void GeneratorOfNumber(int preRoll){
         if (preRoll > 12) {
@@ -236,5 +247,6 @@ public class Kreps implements TCIGame {
             secondDice = preRoll - firsDice;
         }
     }
+    */
 
 }
