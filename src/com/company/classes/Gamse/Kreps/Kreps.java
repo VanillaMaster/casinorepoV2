@@ -6,6 +6,7 @@ import com.company.classes.TCI;
 import com.company.classes.playerDataConstruct.playerData;
 import com.company.classes.pointsModifier.pointsModifier;
 import com.company.classes.utilits.TCISmartIO;
+import com.google.common.primitives.Ints;
 
 import java.util.Random;
 
@@ -18,7 +19,6 @@ public class Kreps implements TCIGame {
         pass,
         dpass
     }
-
     //int firsDice;
     //int secondDice;
 
@@ -103,7 +103,8 @@ public class Kreps implements TCIGame {
                 return 1;
             }
 
-            return stageTwo(playerData, input[0], Integer.parseInt(input[1]));//next stage
+            BetOption inputBet= BetOption.valueOf(input[0]);
+            return stageTwo(playerData, inputBet, Integer.parseInt(input[1]));//next stage
 
         } else {
             SIO.outPut(playerData, "incorrect input, please try again (kreps phase1)","kreps");
@@ -112,7 +113,7 @@ public class Kreps implements TCIGame {
         }
     }
 
-    private int stageTwo(playerData playerData,String inputStatus, int inputBet){
+    private int stageTwo(playerData playerData,BetOption inputStatus, int inputBet){
 
         modifier.remove(playerData,inputBet,false);
         //playerData.PointModify(-inputBet,false);
@@ -121,30 +122,26 @@ public class Kreps implements TCIGame {
         int roll;
 
         if (winChance == 0) {
-            if (inputStatus.equals((BetOption.dpass).toString())){
+            if (inputStatus.equals((BetOption.dpass))){
                 roll = RNG.getRandom(dpassWinNumbers);
             } else {
                 roll = RNG.getRandom(passWinNumbers);
             }
         } else {
-            if (inputStatus.equals((BetOption.dpass).toString())){
+            if (inputStatus.equals((BetOption.dpass))){
                 roll = RNG.getRandom(passWinNumbers);
             } else {
                 roll = RNG.getRandom(dpassWinNumbers);
             }
         }
 
-        String rollString=Integer.toString(roll);
-
-        if (inputStatus.equals((BetOption.dpass).toString()) && (rollString.matches("1|2|3|7|11|12"))) {
+        if (inputStatus.equals((BetOption.dpass)) && (Ints.contains(dpassWinNumbers, roll))) {
             modifier.add(playerData,inputBet * 2,false);
-            //playerData.PointModify(inputBet * 2,false);
             SIO.hMultiOutput(playerData,Integer.toString(roll), ("ваши очки: "+playerData.getPoints()),"commands");
             playerData.krepsPart1.addWin(2);
             return 0;
-        } else if (inputStatus.equals((BetOption.pass).toString()) && (rollString.matches("4|5|6|8|9|10|11"))) {
+        } else if (inputStatus.equals((BetOption.pass)) && (Ints.contains(passWinNumbers, roll))) {
             modifier.add(playerData,inputBet * 2,false);
-            //playerData.PointModify(inputBet * 2,false);
             SIO.hMultiOutput(playerData,Integer.toString(roll), ("ваши очки: "+playerData.getPoints()),"non");
             playerData.krepsPart1.addWin(2);
             pointer = roll;
