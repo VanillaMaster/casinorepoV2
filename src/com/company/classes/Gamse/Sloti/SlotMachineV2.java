@@ -47,6 +47,8 @@ public class SlotMachineV2 implements TCIGame {
 
                     modifier.remove(playerData,inputBet,false);
 
+                    //docs: https://imgur.com/a/bqpI9Gv
+
                     int preRoll = RNG.roll(50,50,1,(729+1));
 
                     int[] roll = new int[3];
@@ -54,7 +56,7 @@ public class SlotMachineV2 implements TCIGame {
                     roll[1] = RNG.nextTnt(8)+1;
                     if (roll[1] == roll[0])
                         roll[1]++;
-                    roll[1] = RNG.nextTnt(7)+1;
+                    roll[2] = RNG.nextTnt(7)+1;
                     if (roll[2] == roll[0])
                         roll[2]++;
                     if (roll[2] == roll[1])

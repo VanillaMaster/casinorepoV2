@@ -48,49 +48,30 @@ public class playerDataShell {
 
     private enum commnadList{
         none,
-        help;
+        help,
+        info,
+        slots,
+        kreps,
+        lifespan;
 
         public static commnadList get(String s)
         {
             for(commnadList choice:values())
-                if (choice.name().equals(s))
+                if ((choice.name()).equals(s))
                     return choice;
             return commnadList.none;
         }
     }
 
-    private enum commands {
-        help(new help()),
-        info(new info()),
-        slots(new slots()),
-        kreps(new kreps()),
-        lifespan(new lifespan()),
-        DEFAULT(new help());
-
-
-        public static TCICommands get(String s)
+    private Map<commnadList, TCICommands> commands = new HashMap<>(){
         {
-            for(commands choice:values()) {
-                if (("/"+choice.name()).equals(s))
-                    return choice.command;
-            }
-            return commands.DEFAULT.command;
+            put(commnadList.help, new help());
+            put(commnadList.info,new info());
+            put(commnadList.slots,new slots());
+            put(commnadList.kreps,new kreps());
+            put(commnadList.lifespan,new lifespan());
         }
-
-        public static void init(TCI iTCI, playerDataShell iPlayerDataShell)
-        {
-            for(commands choice:values())
-                choice.command.init(iTCI,iPlayerDataShell);
-        }
-
-        private final TCICommands command;
-
-        commands(TCICommands command) {
-            this.command = command;
-        }
-
-    }
-
+    };
 
 
     public playerDataShell(TCI iTCI,String telegramID){
@@ -98,7 +79,9 @@ public class playerDataShell {
         UserID = telegramID;
         initPlayer();
 
-        commands.init(iTCI,this);
+        commands.forEach((key, value) -> {
+            value.init(TCI,this);
+        });
 
     }
 
@@ -176,17 +159,20 @@ public class playerDataShell {
         //=========== command pre-processing ===========
 
         String[] arguments = iData.split(" ");
-        String command;
+        //String command;
+        commnadList command;
 
         if (commandTimeLine.isEmpty()){
             if (arguments.length > 1){
-                command = arguments[0];
+                //command = arguments[0];
+                command = commnadList.get(arguments[0].substring(1));
                 String[] tmp = new String[arguments.length-1];
 
                 System.arraycopy(arguments, 1, tmp, 0, tmp.length);
                 arguments = tmp;
             } else {
-                command = arguments[0];
+                //command = arguments[0];
+                command = commnadList.get(arguments[0].substring(1));
                 arguments = new String[0];
             }
         } else {
@@ -195,18 +181,21 @@ public class playerDataShell {
             if (tmpCommand.equals(arguments[0])){
 
                 if (arguments.length > 1){
-                    command = arguments[0];
+                    //command = arguments[0];
+                    command = commnadList.get(arguments[0].substring(1));
                     String[] tmp = new String[arguments.length-1];
 
                     System.arraycopy(arguments, 1, tmp, 0, tmp.length);
                     arguments = tmp;
                 } else {
-                    command = arguments[0];
+                    //command = arguments[0];
+                    command = commnadList.get(arguments[0].substring(1));
                     arguments = new String[0];
                 }
 
             } else {
-                command = tmpCommand;
+                //command = tmpCommand;
+                command = commnadList.get(tmpCommand.substring(1));
             }
         }
 
