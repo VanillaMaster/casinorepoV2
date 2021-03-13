@@ -16,19 +16,29 @@ public class NTRandom {
      */
     public int roll(int winrate, int desiredWinrate, int minRoll, int maxRoll) {
 
-        int[] rn = new int[]{0, 0};
+        int[] rn = new int[3];
 
-        rn[0] = random.nextInt((maxRoll - minRoll + 1)) + minRoll;
-        rn[1] = random.nextInt((maxRoll - minRoll + 1)) + minRoll;
+        for (int i = 0; i < rn.length; i++)
+            rn[i] = random.nextInt((maxRoll - minRoll + 1)) + minRoll;
 
         Arrays.sort(rn);
 
-        if (winrate == desiredWinrate) {
-            return random.nextInt((maxRoll - minRoll + 1)) + minRoll;
-        } else if (winrate > desiredWinrate) {
-            return rn[0];
+        int preRoll = random.nextInt(101);
+        double multiplicator = 0.5;
+        if (desiredWinrate>50){
+            multiplicator = 50/(double)(-desiredWinrate);
         } else {
-            return rn[1];
+            multiplicator = 50/(double)(100-desiredWinrate);
+        }
+        int diffBetv = ((int)((winrate - desiredWinrate)*multiplicator) + 50);
+
+
+        if (diffBetv < preRoll){
+            //pseudo win
+            return rn[rn.length-1];
+        } else {
+            //pseudo lose
+            return rn[0];
         }
     }
 

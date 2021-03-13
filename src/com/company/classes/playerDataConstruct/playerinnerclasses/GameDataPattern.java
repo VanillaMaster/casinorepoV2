@@ -1,4 +1,4 @@
-package com.company.classes.playerinnerclasses;
+package com.company.classes.playerDataConstruct.playerinnerclasses;
 
 /**
  * хранит игровые данные

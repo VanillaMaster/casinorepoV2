@@ -46,6 +46,18 @@ public class playerDataShell {
 
     //==============================================
 
+    private enum commnadList{
+        none,
+        help;
+
+        public static commnadList get(String s)
+        {
+            for(commnadList choice:values())
+                if (choice.name().equals(s))
+                    return choice;
+            return commnadList.none;
+        }
+    }
 
     private enum commands {
         help(new help()),

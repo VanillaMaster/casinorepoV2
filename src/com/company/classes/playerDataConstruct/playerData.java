@@ -1,6 +1,6 @@
 package com.company.classes.playerDataConstruct;
 
-import com.company.classes.playerinnerclasses.GameDataPattern;
+import com.company.classes.playerDataConstruct.playerinnerclasses.GameDataPattern;
 
 import java.time.format.DateTimeFormatter;
 
@@ -25,6 +25,8 @@ public class playerData {
 
     public GameDataPattern krepsPart1 = new GameDataPattern(0.5);
     public GameDataPattern krepsPart2 = new GameDataPattern(0.5);
+
+    //public GameDataPattern slotMachine = new GameDataPattern(0.5);
 
     public Integer getPoints() { return points; }
 

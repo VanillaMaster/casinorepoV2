@@ -46,21 +46,37 @@ public class SlotMachineV2 implements TCIGame {
                     int inputBet = Integer.parseInt(data[0]);
 
                     modifier.remove(playerData,inputBet,false);
-                    int roll1=RNG.roll(50,50,1,7);
-                    int roll2=RNG.roll(50,50,1,7);
-                    int roll3=RNG.roll(50,50,1,7);
-                    if(roll1 == 6 && roll2 == 6 && roll3 == 6){
-                        modifier.remove(playerData,playerData.getPoints(),false);
-                    }else if (roll1 == 7 && roll2 == 7 && roll3 == 7){
+
+                    int preRoll = RNG.roll(50,50,1,(729+1));
+
+                    int[] roll = new int[3];
+                    roll[0] = RNG.nextTnt(9)+1;
+                    roll[1] = RNG.nextTnt(8)+1;
+                    if (roll[1] == roll[0])
+                        roll[1]++;
+                    roll[1] = RNG.nextTnt(7)+1;
+                    if (roll[2] == roll[0])
+                        roll[2]++;
+                    if (roll[2] == roll[1])
+                        roll[2]++;
+
+                    if (preRoll > (729 - 9)){
+                        // three
+                        roll[1] = roll[0];
+                        roll[2] = roll[0];
                         modifier.add(playerData,inputBet * 100,true);
+                        //playerData.
                     }
-                    else if (roll1 == roll2) {
-                        modifier.add(playerData,inputBet * 2,true);;
-                        if (roll2 == roll3){
-                            modifier.remove(playerData,inputBet * 5,true);
-                        }
+                    if (preRoll > (729-9-81) && preRoll < (729 - 9)){
+                        roll[1] = roll[2];
+                        modifier.add(playerData,inputBet * 2,true);
                     }
-                    TCI.sendMsg("\\/\\/\\/\\/\\/ \n"+"| "+roll1+" | "+roll2+" | "+ roll3 +" |" + "\n/\\/\\/\\/\\/\\"+"\n \n" +("ваши очки: "+playerData.getPoints()),playerData.telegramID,"commands");
+                    if (preRoll > (729-9-81-81) && preRoll < (729-9-81)){
+                        roll[1] = roll[0];
+                        modifier.add(playerData,inputBet * 2,true);
+                    }
+
+                    TCI.sendMsg("\\/\\/\\/\\/\\/ \n"+"| "+roll[0]+" | "+roll[1]+" | "+ roll[2] +" |" + "\n/\\/\\/\\/\\/\\"+"\n \n" +("ваши очки: "+playerData.getPoints()),playerData.telegramID,"commands");
                     currStage.setCurrentStage(stages.zero);
                     return false;
 
