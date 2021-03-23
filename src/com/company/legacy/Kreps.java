@@ -1,4 +1,4 @@
-package com.company.classes.Gamse.Kreps;
+package com.company.legacy;
 
 import com.company.classes.Gamse.TCIGame;
 import com.company.classes.NTRandom;

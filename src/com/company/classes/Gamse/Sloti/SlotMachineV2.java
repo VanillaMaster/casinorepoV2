@@ -96,7 +96,7 @@ public class SlotMachineV2 implements TCIGame {
 
     }
 
-    private static class stageHolder{
+    private class stageHolder{
         private stages currentStage = stages.zero;
         public void setCurrentStage(stages stages){
             this.currentStage = stages;
