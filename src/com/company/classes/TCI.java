@@ -77,19 +77,9 @@ public class TCI extends TelegramLongPollingBot {
         SendMessage message = new SendMessage(); // Create a message object object
         message.setChatId(chat_id);
         message.setText(msg);
+        keyboardsList keyboard = keyboardsList.get(keyboardType);
 
-        keyboards.get(keyboardsList.get(keyboardType)).setKeyboard(message);
-
-        /*
-        if (keyboards.containsKey(keyboardType)) {
-            keyboards.get(keyboardType).setKeyboard(message);
-        } else if (keyboardType != "non") {
-            System.out.println("unknown keyboard");
-        }
-
-         */
-
-        //setButtons(message);
+        keyboards.get(keyboard).setKeyboard(message);
 
         try {
             execute(message); // Sending our message object to user
