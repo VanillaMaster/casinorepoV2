@@ -52,11 +52,11 @@ public class SlotMachineV2 implements TCIGame {
                     int preRoll = RNG.roll(50,50,1,(729+1));
 
                     int[] roll = new int[3];
-                    roll[0] = RNG.nextTnt(9)+1;
-                    roll[1] = RNG.nextTnt(8)+1;
+                    roll[0] = RNG.nextInt(9)+1;
+                    roll[1] = RNG.nextInt(8)+1;
                     if (roll[1] == roll[0])
                         roll[1]++;
-                    roll[2] = RNG.nextTnt(7)+1;
+                    roll[2] = RNG.nextInt(7)+1;
                     if (roll[2] == roll[0])
                         roll[2]++;
                     if (roll[2] == roll[1])

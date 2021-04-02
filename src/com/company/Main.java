@@ -1,6 +1,7 @@
 package com.company;
 
 import com.company.classes.TCI;
+import com.google.gson.Gson;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
@@ -9,38 +10,17 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
 
+
 public class Main {
 
-    private enum test {
-        DEFAULT{
-            public void run(){}
-        },
-
-        TEST{
-            public void run() {
-                System.out.println("asd");
-            }
-        };
-
-        public static test get(String s)
-        {
-            for(test choice:values())
-                if (choice.name().equals(s))
-                    return test.valueOf(choice.name());
-            return test.DEFAULT;
-        }
-
-
-        public abstract void run();
-
-    }
+    private static final Gson gson = new Gson();
 
     public static void main(String[] args) throws TelegramApiException {
 
 
         String token = getToken();
 
-        if (token != "") {
+        if (!token.equals("-1")) {
             try {
                 TelegramBotsApi botsApi = new TelegramBotsApi(DefaultBotSession.class);
                 botsApi.registerBot(new TCI(token));
@@ -48,6 +28,8 @@ public class Main {
                 e.printStackTrace();
             }
         }
+
+
 
 
     }

@@ -70,7 +70,7 @@ public class NTRandom {
         return mx[random.nextInt(mx.length)];
     }
 
-    public int nextTnt(int i){
+    public int nextInt(int i){
         return random.nextInt(i);
     }
 }
