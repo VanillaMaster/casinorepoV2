@@ -27,6 +27,7 @@ public class db {
     }
 
     private data bodyPattern = new data();
+    private String URL;
 
     public db(){
         try {
@@ -35,6 +36,7 @@ public class db {
             property.load(fis);
             bodyPattern.password = property.getProperty("dbPassword");
             bodyPattern.login = property.getProperty("dbLogin");
+            URL = property.getProperty("URL");
         } catch (IOException e) {
             System.err.println("Error: conf file doesn't exist");
         }
@@ -47,9 +49,9 @@ public class db {
 
         String resp = "-1";
 
-        String url = "https://vanilla-db.herokuapp.com/api/v1/update";
+        String url = (URL + "api/v1/update");
         if (isNewUser){
-            url = "https://vanilla-db.herokuapp.com/api/v1/upload";
+            url = (URL + "api/v1/upload");
         }
 
         System.out.println("request sent...");
@@ -72,14 +74,14 @@ public class db {
     public boolean isExist(String telegramID) throws IOException {
         data body = bodyPattern.clone();
         body.name = telegramID;
-        return Integer.parseInt(request.getDBIndex("https://vanilla-db.herokuapp.com/api/v1/isexisting",(gson.toJson(body)).getBytes(StandardCharsets.UTF_8))) != -1;
+        return Integer.parseInt(request.getDBIndex((URL + "api/v1/isexisting"),(gson.toJson(body)).getBytes(StandardCharsets.UTF_8))) != -1;
 
     }
 
     public playerData readDb(String telegramID) throws IOException {
         data body = bodyPattern.clone();
         body.name = telegramID;
-        String resp = request.getDBIndex("https://vanilla-db.herokuapp.com/api/v1/getdbdata",(gson.toJson(body)).getBytes(StandardCharsets.UTF_8));
+        String resp = request.getDBIndex((URL + "api/v1/getdbdata"),(gson.toJson(body)).getBytes(StandardCharsets.UTF_8));
 
         resp = resp.replaceAll("\\\\\"","\"");
         resp = resp.replaceAll("\"\\{","{");
