@@ -157,58 +157,36 @@ public class playerDataShell {
     public void executeCommand(String iData){
 
         //=========== command pre-processing ===========
-
-        String[] arguments = iData.split(" ");
-        //String command;
+        ArrayList<String> arguments = new ArrayList<>(Arrays.asList(iData.split(" ")));
         commnadList command;
 
         if (commandTimeLine.isEmpty()){
-            if (arguments.length > 1){
-                //command = arguments[0];
-                command = commnadList.get(arguments[0].substring(1));
-                String[] tmp = new String[arguments.length-1];
+            if (arguments.size() > 1){
+                command = commnadList.get(arguments.get(0).substring(1));
+                arguments.remove(0);
 
-                System.arraycopy(arguments, 1, tmp, 0, tmp.length);
-                arguments = tmp;
             } else {
-                //command = arguments[0];
-                command = commnadList.get(arguments[0].substring(1));
-                arguments = new String[0];
+                command = commnadList.get(arguments.get(0).substring(1));
+                arguments.clear();
             }
         } else {
             String tmpCommand = commandTimeLine.pollFirst();
 
-            if (tmpCommand.equals(arguments[0])){
-
-                if (arguments.length > 1){
-                    //command = arguments[0];
-                    command = commnadList.get(arguments[0].substring(1));
-                    String[] tmp = new String[arguments.length-1];
-
-                    System.arraycopy(arguments, 1, tmp, 0, tmp.length);
-                    arguments = tmp;
+            if (tmpCommand.equals(arguments.get(0))){
+                if (arguments.size() > 1){
+                    command = commnadList.get(arguments.get(0).substring(1));
+                    arguments.remove(0);
                 } else {
-                    //command = arguments[0];
-                    command = commnadList.get(arguments[0].substring(1));
-                    arguments = new String[0];
+                    command = commnadList.get(arguments.get(0).substring(1));
+                    arguments.clear();
                 }
-
             } else {
-                //command = tmpCommand;
                 command = commnadList.get(tmpCommand.substring(1));
             }
         }
-
-        //==============================================
-
-        //System.out.println(command);
-        //System.out.println(arguments.length);
-
         //============ command executing ===============
-
-        commands.get(command).execute(arguments);
-
-        //======================================
+        commands.get(command).execute(arguments.toArray(new String[0]));
+        //==============================================
 
 
     }
