@@ -5,6 +5,7 @@ import com.company.classes.NTRandom;
 import com.company.classes.TCI;
 import com.company.classes.playerDataConstruct.playerData;
 import com.company.classes.pointsModifier.pointsModifier;
+import com.google.common.primitives.Ints;
 
 import java.util.Random;
 
@@ -99,9 +100,7 @@ public class KrepsV2 implements TCIGame {
                         }
                     }
 
-                    String rollString=Integer.toString(roll);
-
-                    if (betOption.equals(betOptions.dpass) && (rollString.matches("1|2|3|7|11|12"))) {
+                    if (betOption.equals(betOptions.dpass) && (Ints.contains(dpassWinNumbers,roll))) {
                         modifier.add(playerData,inputBet * 2,false);
 
                         TCI.sendMsg((roll+"\n\n"+"ваши очки: "+playerData.getPoints()),playerData.telegramID,"commands");
@@ -111,7 +110,7 @@ public class KrepsV2 implements TCIGame {
                         currStage.setCurrentStage(stages.zero);
                         return false;
 
-                    } else if (betOption.equals(betOptions.pass) && (rollString.matches("4|5|6|8|9|10"))) {
+                    } else if (betOption.equals(betOptions.pass) && ((Ints.contains(passWinNumbers,roll)))) {
                         modifier.add(playerData,inputBet * 2,false);
                         TCI.sendMsg((roll+"\n\n"+ "ваши очки: "+playerData.getPoints()),playerData.telegramID,"non");
 
