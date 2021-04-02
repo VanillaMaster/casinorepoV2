@@ -23,23 +23,23 @@ public class KrepsV2 implements TCIGame {
     //===========================================================================================================
 
 
-    enum betOptions {
+    enum BetOptions {
         pass("pass"),
         dpass("dpass"),
         NaN(null);
 
         private final String string;
 
-        betOptions(String string) {
+        BetOptions(String string) {
             this.string = string;
         }
 
-        public static betOptions get(String s)
+        public static BetOptions get(String s)
         {
-            for(betOptions choice:values())
+            for(BetOptions choice:values())
                 if (choice.name().equals(s))
                     return choice;
-            return betOptions.NaN;
+            return BetOptions.NaN;
         }
 
     }
@@ -79,7 +79,7 @@ public class KrepsV2 implements TCIGame {
                     //=================
 
                     int inputBet = Integer.parseInt(data[1]);
-                    betOptions betOption = betOptions.get(data[0]);
+                    BetOptions betOption = BetOptions.get(data[0]);
 
                     modifier.remove(playerData,inputBet,false);
 
@@ -87,20 +87,20 @@ public class KrepsV2 implements TCIGame {
                     int roll;
 
                     if (winChance == 0) {
-                        if (data[0].equals((betOptions.dpass).toString())){
+                        if (data[0].equals((BetOptions.dpass).toString())){
                             roll = RNG.getRandom(dpassWinNumbers);
                         } else {
                             roll = RNG.getRandom(passWinNumbers);
                         }
                     } else {
-                        if (data[0].equals((betOptions.dpass).toString())){
+                        if (data[0].equals((BetOptions.dpass).toString())){
                             roll = RNG.getRandom(passWinNumbers);
                         } else {
                             roll = RNG.getRandom(dpassWinNumbers);
                         }
                     }
 
-                    if (betOption.equals(betOptions.dpass) && (Ints.contains(dpassWinNumbers,roll))) {
+                    if (betOption.equals(BetOptions.dpass) && (Ints.contains(dpassWinNumbers,roll))) {
                         modifier.add(playerData,inputBet * 2,false);
 
                         TCI.sendMsg((roll+"\n\n"+"ваши очки: "+playerData.getPoints()),playerData.telegramID,"commands");
@@ -110,7 +110,7 @@ public class KrepsV2 implements TCIGame {
                         currStage.setCurrentStage(stages.zero);
                         return false;
 
-                    } else if (betOption.equals(betOptions.pass) && ((Ints.contains(passWinNumbers,roll)))) {
+                    } else if (betOption.equals(BetOptions.pass) && ((Ints.contains(passWinNumbers,roll)))) {
                         modifier.add(playerData,inputBet * 2,false);
                         TCI.sendMsg((roll+"\n\n"+ "ваши очки: "+playerData.getPoints()),playerData.telegramID,"non");
 

@@ -8,10 +8,7 @@ import com.company.classes.playerDataConstruct.playerDataShell;
  */
 public class help implements TCICommands {
 
-    private static final String helpText = "Введите /slots - для игры в слоты \nВведите /kreps - для игры в крепс \nВведите /info - для всей доступной информации об игроке\nВведите /help \"command name\" - для дополнительной справки о комманде \n\nTips:\nQ:как получить статус ?\nA: попросить администрацию и возможно вам его выдадут";
-
-
-    private enum test {
+    private enum Test {
         DEFAULT("Введите /slots - для игры в слоты \nВведите /kreps - для игры в крепс \nВведите /info - для всей доступной информации об игроке\nВведите /help \"command name\" - для дополнительной справки о комманде \n\nTips:\nQ:как получить статус ?\nA: попросить администрацию и возможно вам его выдадут"),
 
         ERROR("unexpected arguments"),
@@ -30,7 +27,7 @@ public class help implements TCICommands {
 
         private final String string;
 
-        test(String string) {
+        Test(String string) {
             this.string = string;
         }
 
@@ -38,16 +35,13 @@ public class help implements TCICommands {
             return string;
         }
 
-        public static test get(String s)
+        public static Test get(String s)
         {
-            for(test choice:values())
+            for(Test choice:values())
                 if (choice.name().equals(s))
                     return choice;
-            return test.ERROR;
+            return Test.ERROR;
         }
-
-
-        //public abstract String run();
 
     }
 
@@ -66,9 +60,9 @@ public class help implements TCICommands {
     public void execute(String[] data) {
 
         if (data.length == 0){
-            TCI.sendMsg(test.DEFAULT.getString(), playerDataShell.getPlayerData().telegramID, "commands");
+            TCI.sendMsg(Test.DEFAULT.getString(), playerDataShell.getPlayerData().telegramID, "commands");
         } else {
-            TCI.sendMsg(test.get(data[0]).getString(), playerDataShell.getPlayerData().telegramID, "commands");
+            TCI.sendMsg(Test.get(data[0]).getString(), playerDataShell.getPlayerData().telegramID, "commands");
         }
     }
 }

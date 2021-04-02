@@ -20,25 +20,25 @@ public class TCI extends TelegramLongPollingBot {
 
     private Map<String, playerDataShell> players = new HashMap<>();
 
-    private Map<keyboardsList, keyboard> keyboards = new HashMap<>(){
+    private Map<KeyboardsList, keyboard> keyboards = new HashMap<>(){
         {
-            put(keyboardsList.commands,new mainKeyboard());
-            put(keyboardsList.slots,new slotMachineKeyboard());
-            put(keyboardsList.kreps,new krepsKeyboard());
+            put(KeyboardsList.commands,new mainKeyboard());
+            put(KeyboardsList.slots,new slotMachineKeyboard());
+            put(KeyboardsList.kreps,new krepsKeyboard());
         }
     };
 
-    private enum keyboardsList{
+    private enum KeyboardsList {
         commands,
         slots,
         kreps;
 
-        public static keyboardsList get(String s)
+        public static KeyboardsList get(String s)
         {
-            for(keyboardsList choice:values())
+            for(KeyboardsList choice:values())
                 if ((choice.name()).equals(s))
                     return choice;
-            return keyboardsList.commands;
+            return KeyboardsList.commands;
         }
     }
 
@@ -77,7 +77,7 @@ public class TCI extends TelegramLongPollingBot {
         SendMessage message = new SendMessage(); // Create a message object object
         message.setChatId(chat_id);
         message.setText(msg);
-        keyboardsList keyboard = keyboardsList.get(keyboardType);
+        KeyboardsList keyboard = KeyboardsList.get(keyboardType);
 
         keyboards.get(keyboard).setKeyboard(message);
 
