@@ -5,6 +5,7 @@ import com.company.classes.NTRandom;
 import com.company.classes.TCI;
 import com.company.classes.playerDataConstruct.playerData;
 import com.company.classes.pointsModifier.pointsModifier;
+import com.company.classes.utilits.KeyboardsList;
 
 public class SlotMachineV2 implements TCIGame {
 
@@ -14,7 +15,7 @@ public class SlotMachineV2 implements TCIGame {
             public boolean run(stageHolder currStage,TCI TCI,playerData playerData,String[] data) {
                 currStage.setCurrentStage(stages.one);
 
-                TCI.sendMsg("количество ставки",playerData.telegramID,"slots");
+                TCI.sendMsg("количество ставки",playerData.telegramID,KeyboardsList.slots);
 
                 return true;
             }
@@ -31,12 +32,12 @@ public class SlotMachineV2 implements TCIGame {
 
                 if (data.length == 1) {
                     if (!data[0].matches("[0-9]+")) {
-                        TCI.sendMsg("incorrect input, please try again (slots)",playerData.telegramID,"slots");
+                        TCI.sendMsg("incorrect input, please try again (slots)",playerData.telegramID, KeyboardsList.slots);
                         currStage.setCurrentStage(stages.one);
                         return true;
                     }
                     if (Integer.parseInt(data[0]) > playerData.getPoints()) {
-                        TCI.sendMsg("у вас недостаточно средств для такой ставки, please try again",playerData.telegramID,"slots");
+                        TCI.sendMsg("у вас недостаточно средств для такой ставки, please try again",playerData.telegramID,KeyboardsList.slots);
                         currStage.setCurrentStage(stages.one);
                         return true;
                     }
@@ -78,12 +79,12 @@ public class SlotMachineV2 implements TCIGame {
                         modifier.add(playerData,inputBet * 2,true);
                     }
 
-                    TCI.sendMsg("\\/\\/\\/\\/\\/ \n"+"| "+roll[0]+" | "+roll[1]+" | "+ roll[2] +" |" + "\n/\\/\\/\\/\\/\\"+"\n \n" +("ваши очки: "+playerData.getPoints()),playerData.telegramID,"commands");
+                    TCI.sendMsg("\\/\\/\\/\\/\\/ \n"+"| "+roll[0]+" | "+roll[1]+" | "+ roll[2] +" |" + "\n/\\/\\/\\/\\/\\"+"\n \n" +("ваши очки: "+playerData.getPoints()),playerData.telegramID,KeyboardsList.commands);
                     currStage.setCurrentStage(stages.zero);
                     return false;
 
                 } else {
-                    TCI.sendMsg("incorrect input, please try again (slots)",playerData.telegramID,"slots");
+                    TCI.sendMsg("incorrect input, please try again (slots)",playerData.telegramID,KeyboardsList.slots);
                     currStage.setCurrentStage(stages.one);
                     return true;
                 }

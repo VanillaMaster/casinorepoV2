@@ -5,7 +5,6 @@ import com.company.classes.NTRandom;
 import com.company.classes.TCI;
 import com.company.classes.playerDataConstruct.playerData;
 import com.company.classes.pointsModifier.pointsModifier;
-import com.company.classes.utilits.TCISmartIO;
 import com.google.common.primitives.Ints;
 
 import java.util.Random;

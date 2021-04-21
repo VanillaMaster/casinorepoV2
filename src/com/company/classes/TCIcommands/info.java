@@ -2,6 +2,7 @@ package com.company.classes.TCIcommands;
 
 import com.company.classes.TCI;
 import com.company.classes.playerDataConstruct.playerDataShell;
+import com.company.classes.utilits.KeyboardsList;
 
 /**
  * Комагда информаци о пользователе
@@ -25,9 +26,9 @@ public class info implements TCICommands {
         String outputStatus = "Status: " + playerDataShell.getPlayerData().displayStatus;
 
         if (data.length == 0) {
-            TCI.sendMsg(outputPoints + "\n" + outputID + "\n" + outputStatus, playerDataShell.getPlayerData().telegramID, "non");
+            TCI.sendMsg(outputPoints + "\n" + outputID + "\n" + outputStatus, playerDataShell.getPlayerData().telegramID, KeyboardsList.non);
         } else {
-            TCI.sendMsg("unexpected arguments", playerDataShell.getPlayerData().telegramID, "commands");
+            TCI.sendMsg("unexpected arguments", playerDataShell.getPlayerData().telegramID, KeyboardsList.commands);
         }
     }
 }

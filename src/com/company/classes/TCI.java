@@ -6,6 +6,7 @@ import com.company.classes.keyboards.krepsKeyboard;
 import com.company.classes.keyboards.mainKeyboard;
 import com.company.classes.keyboards.slotMachineKeyboard;
 import com.company.classes.playerDataConstruct.playerDataShell;
+import com.company.classes.utilits.KeyboardsList;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -27,20 +28,6 @@ public class TCI extends TelegramLongPollingBot {
             put(KeyboardsList.kreps,new krepsKeyboard());
         }
     };
-
-    private enum KeyboardsList {
-        commands,
-        slots,
-        kreps;
-
-        public static KeyboardsList get(String s)
-        {
-            for(KeyboardsList choice:values())
-                if ((choice.name()).equals(s))
-                    return choice;
-            return KeyboardsList.commands;
-        }
-    }
 
     public TCI(String token) { this.token = token; }
 
@@ -72,14 +59,15 @@ public class TCI extends TelegramLongPollingBot {
 
     }
     //отправляет сообщение пользователю
-    public void sendMsg(String msg, String chat_id,String keyboardType) {
+    public void sendMsg(String msg, String chat_id,KeyboardsList keyboardType) {
 
         SendMessage message = new SendMessage(); // Create a message object object
         message.setChatId(chat_id);
         message.setText(msg);
-        KeyboardsList keyboard = KeyboardsList.get(keyboardType);
 
-        keyboards.get(keyboard).setKeyboard(message);
+        if (keyboards.containsKey(keyboardType)) {
+            keyboards.get(keyboardType).setKeyboard(message);
+        }
 
         try {
             execute(message); // Sending our message object to user

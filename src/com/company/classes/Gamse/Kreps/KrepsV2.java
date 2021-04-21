@@ -5,8 +5,10 @@ import com.company.classes.NTRandom;
 import com.company.classes.TCI;
 import com.company.classes.playerDataConstruct.playerData;
 import com.company.classes.pointsModifier.pointsModifier;
+import com.company.classes.utilits.KeyboardsList;
 import com.google.common.primitives.Ints;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 public class KrepsV2 implements TCIGame {
@@ -24,15 +26,10 @@ public class KrepsV2 implements TCIGame {
 
 
     enum BetOptions {
-        pass("pass"),
-        dpass("dpass"),
-        NaN(null);
+        pass,
+        dpass,
+        NaN;
 
-        private final String string;
-
-        BetOptions(String string) {
-            this.string = string;
-        }
 
         public static BetOptions get(String s)
         {
@@ -45,182 +42,205 @@ public class KrepsV2 implements TCIGame {
     }
 
 
-
     private enum stages {
 
-        zero{
-            public boolean run(stageHolder currStage,TCI TCI,playerData playerData,String[] data) {
+        zero(KeyboardsList.commands){
+            public stageResult run(stageHolder currStage, playerData playerData,String[] data) {
+
                 currStage.setCurrentStage(stages.one);
 
-                TCI.sendMsg("pass или dpass и количество ставки",playerData.telegramID,"kreps");
+                return new stageResult(true,"pass или dpass и количество ставки");
 
-                return true;
             }
         },
-        one{
+        one(KeyboardsList.kreps){
 
             private final pointsModifier modifier = new pointsModifier();
             private final NTRandom RNG = new NTRandom();
 
-            public boolean run(stageHolder currStage,TCI TCI,playerData playerData,String[] data) {
-                if (data.length == 2) {
+            private String validate(String[] data,Integer points){
+                if (data.length!=2){
+                    return "incorrect input, please try again (kreps phase1) code#2";
+                }
+                if (!data[0].matches("(pass|dpass)") || !data[1].matches("[0-9]+")){
+                    return "incorrect input, please try again (kreps phase1) code#2\"";
+                }
+                if (Integer.parseInt(data[1]) > points){
+                    return "у вас недостаточно средств для такой ставки, please try again";
+                }
+                return null;
+            }
 
-                    if (!data[0].matches("(pass|dpass)") || !data[1].matches("[0-9]+")) {
-                        TCI.sendMsg("incorrect input, please try again (kreps phase1) code#1",playerData.telegramID,"kreps");
-                        currStage.setCurrentStage(stages.one);
-                        return true;
-                    }
-                    if (Integer.parseInt(data[1]) > playerData.getPoints()) {
-                        TCI.sendMsg("у вас недостаточно средств для такой ставки, please try again",playerData.telegramID,"kreps");
-                        currStage.setCurrentStage(stages.one);
-                        return true;
-                    }
+            private Integer getRoll(String[] data,playerData playerData){
+                //ролл 0 или 1 как эвивалент победе поражению в зависимоти от винрейта игрока
+                int winChance = RNG.roll(playerData.krepsPart1.winrate(), phaseOneWinRate, 0, 1);
 
-                    //=================
-
-                    int inputBet = Integer.parseInt(data[1]);
-                    BetOptions betOption = BetOptions.get(data[0]);
-
-                    modifier.remove(playerData,inputBet,false);
-
-                    int winChance = RNG.roll(playerData.krepsPart1.winrate(), phaseOneWinRate, 0, 1); //ролл 0 или 1 как эвивалент победе поражению в зависимоти от винрейта игрока
-                    int roll;
-
-                    if (winChance == 0) {
-                        if (data[0].equals((BetOptions.dpass).toString())){
-                            roll = RNG.getRandom(dpassWinNumbers);
-                        } else {
-                            roll = RNG.getRandom(passWinNumbers);
-                        }
+                if (winChance == 0) {
+                    if (data[0].equals((BetOptions.dpass).toString())){
+                        return RNG.getRandom(dpassWinNumbers);
                     } else {
-                        if (data[0].equals((BetOptions.dpass).toString())){
-                            roll = RNG.getRandom(passWinNumbers);
-                        } else {
-                            roll = RNG.getRandom(dpassWinNumbers);
-                        }
+                        return RNG.getRandom(passWinNumbers);
                     }
-
-                    if (betOption.equals(BetOptions.dpass) && (Ints.contains(dpassWinNumbers,roll))) {
-                        modifier.add(playerData,inputBet * 2,false);
-
-                        TCI.sendMsg((roll+"\n\n"+"ваши очки: "+playerData.getPoints()),playerData.telegramID,"commands");
-
-                        playerData.krepsPart1.addWin(2);
-
-                        currStage.setCurrentStage(stages.zero);
-                        return false;
-
-                    } else if (betOption.equals(BetOptions.pass) && ((Ints.contains(passWinNumbers,roll)))) {
-                        modifier.add(playerData,inputBet * 2,false);
-                        TCI.sendMsg((roll+"\n\n"+ "ваши очки: "+playerData.getPoints()),playerData.telegramID,"non");
-
-                        playerData.krepsPart1.addWin(2);
-
-                        currStage.setPointer(roll);
-
-                        TCI.sendMsg("число ставки и количество ставки",playerData.telegramID,"non");
-                        currStage.setCurrentStage(stages.two);
-                        return true;
-
-                    } else {
-                        TCI.sendMsg(Integer.toString(roll)+"\n\n"+("ваши очки: "+playerData.getPoints()),playerData.telegramID,"commands");
-
-                        playerData.krepsPart1.addLose(1);
-                        currStage.setCurrentStage(stages.zero);
-                        return false;
-                    }
-                    //=================
-
-
                 } else {
-                    TCI.sendMsg("incorrect input, please try again (kreps phase1) code#2",playerData.telegramID,"kreps");
-                    currStage.setCurrentStage(stages.one);
-                    return true;
+                    if (data[0].equals((BetOptions.dpass).toString())){
+                        return RNG.getRandom(passWinNumbers);
+                    } else {
+                        return RNG.getRandom(dpassWinNumbers);
+                    }
                 }
             }
+
+            public stageResult run(stageHolder currStage, playerData playerData,String[] data) {
+
+                String isInValid = validate(data,playerData.getPoints());
+
+                if (isInValid!= null){
+                    currStage.setCurrentStage(stages.one);
+                    return new stageResult(true,isInValid);
+                }
+
+                //=================
+
+                int inputBet = Integer.parseInt(data[1]);
+                BetOptions betOption = BetOptions.get(data[0]);
+
+                modifier.remove(playerData,inputBet,false);
+
+                int roll = getRoll(data,playerData);
+
+                if (betOption.equals(BetOptions.dpass) && (Ints.contains(dpassWinNumbers,roll))) {
+                    modifier.add(playerData,inputBet * 2,false);
+
+                    playerData.krepsPart1.addWin(2);
+
+                    currStage.setCurrentStage(stages.zero);
+                    return new stageResult(false,(roll+"\n\n"+"ваши очки: "+playerData.getPoints()));
+                    //return false;
+
+                } else if (betOption.equals(BetOptions.pass) && ((Ints.contains(passWinNumbers,roll)))) {
+                    modifier.add(playerData,inputBet * 2,false);
+
+                    stageResult result = new stageResult(true,(roll+"\n\n"+ "ваши очки: "+playerData.getPoints()));
+
+                    playerData.krepsPart1.addWin(2);
+
+                    currStage.setPointer(roll);
+
+                    result.addResponse("число ставки и количество ставки");
+
+                    currStage.setCurrentStage(stages.two);
+                    return result;
+
+                } else { ;
+                    playerData.krepsPart1.addLose(1);
+                    currStage.setCurrentStage(stages.zero);
+                    return new stageResult(false,(Integer.toString(roll)+"\n\n"+("ваши очки: "+playerData.getPoints())));
+                }
+                //=================
+            }
         },
-        two{
+        two(KeyboardsList.non){
 
             private final pointsModifier modifier = new pointsModifier();
             private final NTRandom RNG = new NTRandom();
             private final Random random = new Random();
 
-            public boolean run(stageHolder currStage,TCI TCI,playerData playerData,String[] data) {
+            private String validate(String[] data,Integer points){
+                if (data.length!=2){
+                    return "incorrect input, please try again (kreps phase2) code#5";
+                }
+                if (!data[0].matches("[0-9]+") || !data[1].matches("[0-9]+")){
+                    return "incorrect input, please try again (kreps phase2) code#3";
+                }
+                if (Integer.parseInt(data[0]) > 24){
+                    return "incorrect input, please try again (kreps phase2) code#4";
+                }
+                if (Integer.parseInt(data[1]) > points){
+                    return "у вас недостаточно средств для такой ставки, please try again";
+                }
+                return null;
+            }
 
-                if(data.length == 2) {
+            public stageResult run(stageHolder currStage, playerData playerData,String[] data) {
 
-                    if (!data[0].matches("[0-9]+") || !data[1].matches("[0-9]+")) {
-                        TCI.sendMsg("incorrect input, please try again (kreps phase2) code#3",playerData.telegramID,"non");
-                        currStage.setCurrentStage(stages.two);
-                        return true;
-                    } else if (Integer.parseInt(data[0]) > 24) {
-                        TCI.sendMsg("incorrect input, please try again (kreps phase2) code#4",playerData.telegramID,"non");
-                        currStage.setCurrentStage(stages.two);
-                        return true;
-                    } else if (Integer.parseInt(data[1]) > playerData.getPoints()) {
-                        TCI.sendMsg("у вас недостаточно средств для такой ставки, please try again",playerData.telegramID,"non");
-                        currStage.setCurrentStage(stages.two);
-                        return true;
+                String isInValid = validate(data,playerData.getPoints());
+
+                if (isInValid!= null){
+                    currStage.setCurrentStage(stages.two);
+                    return new stageResult(true,isInValid);
+                }
+
+                modifier.remove(playerData,Integer.parseInt(data[1]),false);
+
+                boolean keepRolling = true;
+
+                stageResult result = new stageResult(false);
+
+                do {
+
+                    int preRoll = RNG.rollNumber(playerData.krepsPart2.winrate(), phaseTwoWinRate, 2, 24, Integer.parseInt(data[0]), phaseTwoBaseWinRate);
+
+                    int firsDice, secondDice;
+
+                    if (preRoll > 12) {
+                        secondDice = random.nextInt(25 - preRoll) + preRoll - 12;
+                        firsDice = preRoll - secondDice;
+                    } else {
+                        firsDice = random.nextInt(preRoll - 1) + 1;
+                        secondDice = preRoll - firsDice;
                     }
 
-                    modifier.remove(playerData,Integer.parseInt(data[1]),false);
+                    if (firsDice == currStage.getPointer() || firsDice == loseNumber || secondDice == currStage.getPointer() || secondDice == loseNumber) {
+                        keepRolling = false;
+                        playerData.krepsPart2.addLose(1);
+                    }
 
-                    boolean keepRolling = true;
+                    if ((keepRolling) && (Integer.parseInt(data[0]) == (firsDice + secondDice))) {
+                        modifier.add(playerData,Integer.parseInt(data[1]) * 8,false);
+                        keepRolling = false;
+                        playerData.krepsPart2.addWin(1);
+                    }
 
-                    do {
-
-                        int preRoll = RNG.rollNumber(playerData.krepsPart2.winrate(), phaseTwoWinRate, 2, 24, Integer.parseInt(data[0]), phaseTwoBaseWinRate);
-
-                        int firsDice, secondDice;
-
-                        if (preRoll > 12) {
-                            secondDice = random.nextInt(25 - preRoll) + preRoll - 12;
-                            firsDice = preRoll - secondDice;
-                        } else {
-                            firsDice = random.nextInt(preRoll - 1) + 1;
-                            secondDice = preRoll - firsDice;
-                        }
-
-                        if (firsDice == currStage.getPointer() || firsDice == loseNumber || secondDice == currStage.getPointer() || secondDice == loseNumber) {
-                            keepRolling = false;
-                            playerData.krepsPart2.addLose(1);
-                        }
-
-                        if ((keepRolling) && (Integer.parseInt(data[0]) == (firsDice + secondDice))) {
-                            modifier.add(playerData,Integer.parseInt(data[1]) * 8,false);
-                            keepRolling = false;
-                            playerData.krepsPart2.addWin(1);
-                        }
-
-                        TCI.sendMsg((firsDice+"\n"+secondDice),playerData.telegramID,"non");
+                    result.addResponse((firsDice+"\n"+secondDice));
 
 
-                    } while (keepRolling);
+                } while (keepRolling);
 
-                    currStage.setCurrentStage(stages.zero);
-                    TCI.sendMsg(("ваши очки: "+playerData.getPoints()),playerData.telegramID,"commands");
-                    return false;
+                currStage.setCurrentStage(stages.zero);
+                result.addResponse(("ваши очки: "+playerData.getPoints()));
+                return result;
 
-                    //====
+                //====
 
-                } else {
-                    TCI.sendMsg("incorrect input, please try again (kreps phase2) code#5",playerData.telegramID,"non");
-                    currStage.setCurrentStage(stages.two);
-                    return true;
-                }
 
             }
         };
 
+        private final KeyboardsList s;
 
-        public abstract boolean run(stageHolder currStage,TCI TCI,playerData playerData,String[] data);
+        stages(KeyboardsList s){this.s = s;};
+
+        public KeyboardsList getKeyboard(){
+            return this.s;
+        }
+
+        public abstract stageResult run(stageHolder currStage,playerData playerData,String[] data);
 
     }
 
     private stageHolder currentStage = new stageHolder();
 
     public boolean play(playerData playerData, String[] data) {
-        return currentStage.getCurrentStage().run(currentStage,TCI,playerData,data);
+
+        stageResult result = currentStage.getCurrentStage().run(currentStage,playerData,data);
+
+        String[] messages = result.getResponseText();
+
+        for (int i = 0; i < messages.length; i++) {
+            TCI.sendMsg(messages[i],playerData.telegramID,currentStage.getCurrentStage().getKeyboard());
+        }
+
+        return result.isAdditionalInputRequired();
     }
 
     private TCI TCI;
@@ -250,6 +270,31 @@ public class KrepsV2 implements TCIGame {
         }
     }
 
+    private static class stageResult{
+        private boolean isAdditionalInputRequired;
+        private ArrayList<String> responseText = new ArrayList<>();
+
+        stageResult(boolean isAdditionalInputRequired,String responseText){
+            this.isAdditionalInputRequired = isAdditionalInputRequired;
+            this.responseText.add(responseText);
+        }
+
+        stageResult(boolean isAdditionalInputRequired){
+            this.isAdditionalInputRequired = isAdditionalInputRequired;
+        }
+
+        public void addResponse(String responseText){
+            this.responseText.add(responseText);
+        }
+
+        public boolean isAdditionalInputRequired(){
+            return isAdditionalInputRequired;
+        }
+
+        public String[] getResponseText() {
+            return responseText.toArray(new String[0]);
+        }
+    }
 
 
 }

@@ -161,23 +161,22 @@ public class playerDataShell {
         commnadList command;
 
         if (commandTimeLine.isEmpty()){
+            command = commnadList.get(arguments.get(0).substring(1));
             if (arguments.size() > 1){
-                command = commnadList.get(arguments.get(0).substring(1));
                 arguments.remove(0);
-
             } else {
-                command = commnadList.get(arguments.get(0).substring(1));
+                //если колличество аргументов 0, тоесть их нет , то remove at 0 будет вызывать ошибку
                 arguments.clear();
             }
         } else {
             String tmpCommand = commandTimeLine.pollFirst();
 
             if (tmpCommand.equals(arguments.get(0))){
+                command = commnadList.get(arguments.get(0).substring(1));
                 if (arguments.size() > 1){
-                    command = commnadList.get(arguments.get(0).substring(1));
                     arguments.remove(0);
                 } else {
-                    command = commnadList.get(arguments.get(0).substring(1));
+                    //если колличество аргументов 0, тоесть их нет , то remove at 0 будет вызывать ошибку
                     arguments.clear();
                 }
             } else {

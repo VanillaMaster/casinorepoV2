@@ -17,7 +17,6 @@ public class Main {
 
     public static void main(String[] args) throws TelegramApiException {
 
-
         String token = getToken();
 
         if (!token.equals("-1")) {

@@ -2,6 +2,7 @@ package com.company.classes.TCIcommands;
 
 import com.company.classes.TCI;
 import com.company.classes.playerDataConstruct.playerDataShell;
+import com.company.classes.utilits.KeyboardsList;
 
 /**
  * коммнада справки
@@ -60,9 +61,9 @@ public class help implements TCICommands {
     public void execute(String[] data) {
 
         if (data.length == 0){
-            TCI.sendMsg(Test.DEFAULT.getString(), playerDataShell.getPlayerData().telegramID, "commands");
+            TCI.sendMsg(Test.DEFAULT.getString(), playerDataShell.getPlayerData().telegramID, KeyboardsList.commands);
         } else {
-            TCI.sendMsg(Test.get(data[0]).getString(), playerDataShell.getPlayerData().telegramID, "commands");
+            TCI.sendMsg(Test.get(data[0]).getString(), playerDataShell.getPlayerData().telegramID, KeyboardsList.commands);
         }
     }
 }
