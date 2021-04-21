@@ -22,7 +22,6 @@ public class KrepsV2 implements TCIGame {
     private static final int[] passWinNumbers = new int[] {4,5,6,8,9,10}; //выйгрышные числа для pass
     //===========================================================================================================
 
-
     enum BetOptions {
         pass("pass"),
         dpass("dpass"),
@@ -41,7 +40,6 @@ public class KrepsV2 implements TCIGame {
                     return choice;
             return BetOptions.NaN;
         }
-
     }
 
 
@@ -83,17 +81,17 @@ public class KrepsV2 implements TCIGame {
 
                     modifier.remove(playerData,inputBet,false);
 
-                    int winChance = RNG.roll(playerData.krepsPart1.winrate(), phaseOneWinRate, 0, 1); //ролл 0 или 1 как эвивалент победе поражению в зависимоти от винрейта игрока
+                    int winIdentifier = RNG.roll(playerData.krepsPart1.winrate(), phaseOneWinRate, 0, 1); //ролл 0 или 1 как эвивалент победе поражению в зависимоти от винрейта игрока
                     int roll;
 
-                    if (winChance == 0) {
-                        if (data[0].equals((BetOptions.dpass).toString())){
+                    if (winIdentifier == 0) {
+                        if (betOption.equals(BetOptions.dpass)){
                             roll = RNG.getRandom(dpassWinNumbers);
                         } else {
                             roll = RNG.getRandom(passWinNumbers);
                         }
                     } else {
-                        if (data[0].equals((BetOptions.dpass).toString())){
+                        if (betOption.equals(BetOptions.dpass)){
                             roll = RNG.getRandom(passWinNumbers);
                         } else {
                             roll = RNG.getRandom(dpassWinNumbers);
@@ -171,28 +169,20 @@ public class KrepsV2 implements TCIGame {
 
                         int preRoll = RNG.rollNumber(playerData.krepsPart2.winrate(), phaseTwoWinRate, 2, 24, Integer.parseInt(data[0]), phaseTwoBaseWinRate);
 
-                        int firsDice, secondDice;
+                        int[] dice =RNG.twoNumberGenerator(preRoll);
 
-                        if (preRoll > 12) {
-                            secondDice = random.nextInt(25 - preRoll) + preRoll - 12;
-                            firsDice = preRoll - secondDice;
-                        } else {
-                            firsDice = random.nextInt(preRoll - 1) + 1;
-                            secondDice = preRoll - firsDice;
-                        }
-
-                        if (firsDice == currStage.getPointer() || firsDice == loseNumber || secondDice == currStage.getPointer() || secondDice == loseNumber) {
+                        if (dice[0] == currStage.getPointer() || dice[0] == loseNumber || dice[1] == currStage.getPointer() || dice[1] == loseNumber) {
                             keepRolling = false;
                             playerData.krepsPart2.addLose(1);
                         }
 
-                        if ((keepRolling) && (Integer.parseInt(data[0]) == (firsDice + secondDice))) {
+                        if ((keepRolling) && (Integer.parseInt(data[0]) == (dice[0] + dice[1]))) {
                             modifier.add(playerData,Integer.parseInt(data[1]) * 8,false);
                             keepRolling = false;
                             playerData.krepsPart2.addWin(1);
                         }
 
-                        TCI.sendMsg((firsDice+"\n"+secondDice),playerData.telegramID,"non");
+                        TCI.sendMsg((dice[0]+"\n"+dice[1]),playerData.telegramID,"non");
 
 
                     } while (keepRolling);

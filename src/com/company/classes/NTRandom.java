@@ -8,11 +8,7 @@ public class NTRandom {
     final Random random = new Random();
 
     /**
-     * @param winrate        текущий винрейт игрока
-     * @param desiredWinrate нужный винрейт игрока
-     * @param minRoll        нижняя граница броска
-     * @param maxRoll        верхняя граница броска
-     * @return рандомное число
+     * https://imgur.com/a/LFgtH80 обьяснение работы
      */
     public int roll(int winrate, int desiredWinrate, int minRoll, int maxRoll) {
 
@@ -43,12 +39,7 @@ public class NTRandom {
     }
 
     /**
-     * @param winrate        текущий винрейт игрока
-     * @param desiredWinrate нужный винрейт игрока
-     * @param minRoll        нижняя граница броска
-     * @param maxRoll        верхняя граница броска
-     * @param desiredRoll    нужныое число
-     * @param defaultWinrate базовый винрейт
+     * https://imgur.com/a/NtnT2d1 обьяснение работы
      * @return квази рандомное число
      */
     public int rollNumber(int winrate, int desiredWinrate, int minRoll, int maxRoll, int desiredRoll, int defaultWinrate) {
@@ -64,6 +55,20 @@ public class NTRandom {
             }
             return roll;
         }
+    }
+    /**
+     * https://imgur.com/a/R0FEFLp обьяснение работы метода
+     */
+    public int[] twoNumberGenerator(int preRoll){
+        int secondDice,firsDice;
+        if (preRoll > 12) {
+             secondDice = random.nextInt(25 - preRoll) + preRoll - 12;
+             firsDice = preRoll - secondDice;
+        } else {
+             firsDice = random.nextInt(preRoll - 1) + 1;
+             secondDice = preRoll - firsDice;
+        }
+        return new int[] {firsDice, secondDice};
     }
 
     public int getRandom(int[] mx) {
