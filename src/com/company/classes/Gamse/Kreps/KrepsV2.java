@@ -73,9 +73,9 @@ public class KrepsV2 implements TCIGame {
 
             private Integer getRoll(String[] data,playerData playerData){
                 //ролл 0 или 1 как эвивалент победе поражению в зависимоти от винрейта игрока
-                int winChance = RNG.roll(playerData.krepsPart1.winrate(), phaseOneWinRate, 0, 1);
+                int winIdentifier  = RNG.roll(playerData.krepsPart1.winrate(), phaseOneWinRate, 0, 1);
 
-                if (winChance == 0) {
+                if (winIdentifier  == 0) {
                     if (data[0].equals((BetOptions.dpass).toString())){
                         return RNG.getRandom(dpassWinNumbers);
                     } else {
@@ -180,28 +180,20 @@ public class KrepsV2 implements TCIGame {
 
                     int preRoll = RNG.rollNumber(playerData.krepsPart2.winrate(), phaseTwoWinRate, 2, 24, Integer.parseInt(data[0]), phaseTwoBaseWinRate);
 
-                    int firsDice, secondDice;
+                    int[] dice =RNG.twoNumberGenerator(preRoll);
 
-                    if (preRoll > 12) {
-                        secondDice = random.nextInt(25 - preRoll) + preRoll - 12;
-                        firsDice = preRoll - secondDice;
-                    } else {
-                        firsDice = random.nextInt(preRoll - 1) + 1;
-                        secondDice = preRoll - firsDice;
-                    }
-
-                    if (firsDice == currStage.getPointer() || firsDice == loseNumber || secondDice == currStage.getPointer() || secondDice == loseNumber) {
+                    if (dice[0] == currStage.getPointer() || dice[0] == loseNumber || dice[1] == currStage.getPointer() || dice[1] == loseNumber) {
                         keepRolling = false;
                         playerData.krepsPart2.addLose(1);
                     }
 
-                    if ((keepRolling) && (Integer.parseInt(data[0]) == (firsDice + secondDice))) {
+                    if ((keepRolling) && (Integer.parseInt(data[0]) == (dice[0] + dice[1]))) {
                         modifier.add(playerData,Integer.parseInt(data[1]) * 8,false);
                         keepRolling = false;
                         playerData.krepsPart2.addWin(1);
                     }
 
-                    result.addResponse((firsDice+"\n"+secondDice));
+                    result.addResponse((dice[0]+"\n"+dice[1]));
 
 
                 } while (keepRolling);
