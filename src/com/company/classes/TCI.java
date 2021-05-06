@@ -49,12 +49,18 @@ public class TCI extends TelegramLongPollingBot {
             String inputMsg = update.getMessage().getText();
             Long chat_id = update.getMessage().getChatId();
 
+            /*
             if (!players.containsKey(chat_id)) {
                 playerDataShell tmpShell = new playerDataShell(this, String.valueOf(chat_id));
                 players.put(chat_id, tmpShell);
             }
+            */
+
+            players.computeIfAbsent(chat_id,player -> new playerDataShell(this, String.valueOf(chat_id)));
 
             players.get(chat_id).executeCommand(inputMsg);
+
+
         }
 
     }
