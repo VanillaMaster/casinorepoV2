@@ -19,7 +19,7 @@ public class TCI extends TelegramLongPollingBot {
     
     private String token;
 
-    private Map<String, playerDataShell> players = new HashMap<>();
+    private Map<Long, playerDataShell> players = new HashMap<>();
 
     private Map<KeyboardsList, keyboard> keyboards = new HashMap<>(){
         {
@@ -47,10 +47,10 @@ public class TCI extends TelegramLongPollingBot {
         if (update.hasMessage() && update.getMessage().hasText()) {
 
             String inputMsg = update.getMessage().getText();
-            String chat_id = String.valueOf(update.getMessage().getChatId());
+            Long chat_id = update.getMessage().getChatId();
 
             if (!players.containsKey(chat_id)) {
-                playerDataShell tmpShell = new playerDataShell(this, chat_id);
+                playerDataShell tmpShell = new playerDataShell(this, String.valueOf(chat_id));
                 players.put(chat_id, tmpShell);
             }
 
