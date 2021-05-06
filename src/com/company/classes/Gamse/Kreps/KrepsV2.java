@@ -19,7 +19,6 @@ public class KrepsV2 implements TCIGame {
     private static final int phaseTwoBaseWinRate = 4; //базовый винрейт для фазы 2
 
     private static final int loseNumber=7;//число проигрыша 2 стадии
-
     //===========================================================================================================
 
     enum BetOptions {
@@ -176,8 +175,10 @@ public class KrepsV2 implements TCIGame {
                     currStage.setCurrentStage(stages.two);
                     return new stageResult(true,isInValid);
                 }
+                int inputNumber = Integer.parseInt(data[0]);
+                int inputBet = Integer.parseInt(data[1]);
 
-                modifier.remove(playerData,Integer.parseInt(data[1]),false);
+                modifier.remove(playerData,inputBet,false);
 
                 boolean keepRolling = true;
 
@@ -185,7 +186,7 @@ public class KrepsV2 implements TCIGame {
 
                 do {
 
-                    int preRoll = RNG.rollNumber(playerData.krepsPart2.winrate(), phaseTwoWinRate, 2, 24, Integer.parseInt(data[0]), phaseTwoBaseWinRate);
+                    int preRoll = RNG.rollNumber(playerData.krepsPart2.winrate(), phaseTwoWinRate, 2, 24, inputNumber, phaseTwoBaseWinRate);
 
                     int[] dice =RNG.twoNumberGenerator(preRoll);
 
@@ -194,8 +195,8 @@ public class KrepsV2 implements TCIGame {
                         playerData.krepsPart2.addLose(1);
                     }
 
-                    if ((keepRolling) && (Integer.parseInt(data[0]) == (dice[0] + dice[1]))) {
-                        modifier.add(playerData,Integer.parseInt(data[1]) * 8,false);
+                    if ((keepRolling) && (inputNumber == (dice[0] + dice[1]))) {
+                        modifier.add(playerData,inputBet * 8,false);
                         keepRolling = false;
                         playerData.krepsPart2.addWin(1);
                     }
@@ -208,9 +209,6 @@ public class KrepsV2 implements TCIGame {
                 currStage.setCurrentStage(stages.zero);
                 result.addResponse(("ваши очки: "+playerData.getPoints()));
                 return result;
-
-                //====
-
 
             }
         };
