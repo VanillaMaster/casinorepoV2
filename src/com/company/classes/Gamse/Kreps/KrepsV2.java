@@ -65,17 +65,17 @@ public class KrepsV2 implements TCIGame {
             private final pointsModifier modifier = new pointsModifier();
             private final NTRandom RNG = new NTRandom();
 
-            private String validate(String[] data,Integer points){
+            private SOneValidData validate(String[] data,Integer points){
                 if (data.length!=2){
-                    return "incorrect input, please try again (kreps phase1) code#2";
+                    return new SOneValidData("incorrect input, please try again (kreps phase1) code#2");
                 }
                 if (!data[0].matches("(pass|dpass)") || !data[1].matches("[0-9]+")){
-                    return "incorrect input, please try again (kreps phase1) code#2\"";
+                    return new SOneValidData("incorrect input, please try again (kreps phase1) code#2\"");
                 }
                 if (Integer.parseInt(data[1]) > points){
-                    return "у вас недостаточно средств для такой ставки, please try again";
+                    return new SOneValidData("у вас недостаточно средств для такой ставки, please try again");
                 }
-                return null;
+                return new SOneValidData(BetOptions.get(data[0]),Integer.parseInt(data[1]),null);
             }
 
             private Integer getRoll(BetOptions betOption,playerData playerData){
@@ -99,17 +99,17 @@ public class KrepsV2 implements TCIGame {
 
             public stageResult run(stageHolder currStage, playerData playerData,String[] data) {
 
-                String isInValid = validate(data,playerData.getPoints());
+                SOneValidData validData = validate(data,playerData.getPoints());
 
-                if (isInValid!= null){
+                if (validData.getError() != null){
                     currStage.setCurrentStage(stages.one);
-                    return new stageResult(true,isInValid);
+                    return new stageResult(true,validData.getError());
                 }
 
                 //=================
 
-                int inputBet = Integer.parseInt(data[1]);
-                BetOptions betOption = BetOptions.get(data[0]);
+                int inputBet = validData.getInputBet();
+                BetOptions betOption = validData.getBetOption();
 
                 modifier.remove(playerData,inputBet,false);
 
@@ -295,5 +295,32 @@ public class KrepsV2 implements TCIGame {
         }
     }
 
+    private static class SOneValidData{
+
+        private String error;
+        private int inputBet;
+        private BetOptions betOption;
+
+        public SOneValidData(String error){
+            this.betOption = null;
+            this.inputBet = 0;
+            this.error = error;
+        }
+
+        public SOneValidData(BetOptions betOption,int inputBet,String error){
+            this.betOption = betOption;
+            this.inputBet = inputBet;
+            this.error = error;
+        }
+        public BetOptions getBetOption() {
+            return betOption;
+        }
+        public int getInputBet() {
+            return inputBet;
+        }
+        public String getError() {
+            return error;
+        }
+    }
 
 }
