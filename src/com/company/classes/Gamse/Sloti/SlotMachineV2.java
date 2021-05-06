@@ -1,5 +1,6 @@
 package com.company.classes.Gamse.Sloti;
 
+
 import com.company.classes.Gamse.TCIGame;
 import com.company.classes.NTRandom;
 import com.company.classes.TCI;
@@ -9,103 +10,76 @@ import com.company.classes.utilits.KeyboardsList;
 
 public class SlotMachineV2 implements TCIGame {
 
+    protected enum stages {
+        zero(KeyboardsList.commands){
+            public stageResult run(stageHolder currStage, playerData playerData, String[] data) {
+                return new stageResult(true,"количество ставки",stages.one);
 
-    private enum stages {
-        zero{
-            public boolean run(stageHolder currStage,TCI TCI,playerData playerData,String[] data) {
-                currStage.setCurrentStage(stages.one);
-
-                TCI.sendMsg("количество ставки",playerData.telegramID,KeyboardsList.slots);
-
-                return true;
             }
         },
-        one{
+        one(KeyboardsList.slots){
 
             private final pointsModifier modifier = new pointsModifier();
             private final NTRandom RNG = new NTRandom();
 
-            public boolean run(stageHolder currStage,TCI TCI,playerData playerData,String[] data) {
-                currStage.setCurrentStage(stages.one);
+            public stageResult run(stageHolder currStage, playerData playerData, String[] data) {
 
-                //====
+                String isInValid = validate.validateOne(data,playerData.getPoints());
 
-                if (data.length == 1) {
-                    if (!data[0].matches("[0-9]+")) {
-                        TCI.sendMsg("incorrect input, please try again (slots)",playerData.telegramID, KeyboardsList.slots);
-                        currStage.setCurrentStage(stages.one);
-                        return true;
-                    }
-                    if (Integer.parseInt(data[0]) > playerData.getPoints()) {
-                        TCI.sendMsg("у вас недостаточно средств для такой ставки, please try again",playerData.telegramID,KeyboardsList.slots);
-                        currStage.setCurrentStage(stages.one);
-                        return true;
-                    }
-
-                    //================
-
-                    int inputBet = Integer.parseInt(data[0]);
-
-                    modifier.remove(playerData,inputBet,false);
-
-                    //docs: https://imgur.com/a/bqpI9Gv
-
-                    int preRoll = RNG.roll(50,50,1,(729+1));
-
-                    int[] roll = new int[3];
-                    roll[0] = RNG.nextInt(9)+1;
-                    roll[1] = RNG.nextInt(8)+1;
-                    if (roll[1] == roll[0])
-                        roll[1]++;
-                    roll[2] = RNG.nextInt(7)+1;
-                    if (roll[2] == roll[0])
-                        roll[2]++;
-                    if (roll[2] == roll[1])
-                        roll[2]++;
-
-                    if (preRoll > (729 - 9)){
-                        // three
-                        roll[1] = roll[0];
-                        roll[2] = roll[0];
-                        modifier.add(playerData,inputBet * 100,true);
-                        //playerData.
-                    }
-                    if (preRoll > (729-9-81) && preRoll < (729 - 9)){
-                        roll[1] = roll[2];
-                        modifier.add(playerData,inputBet * 2,true);
-                    }
-                    if (preRoll > (729-9-81-81) && preRoll < (729-9-81)){
-                        roll[1] = roll[0];
-                        modifier.add(playerData,inputBet * 2,true);
-                    }
-
-                    TCI.sendMsg("\\/\\/\\/\\/\\/ \n"+"| "+roll[0]+" | "+roll[1]+" | "+ roll[2] +" |" + "\n/\\/\\/\\/\\/\\"+"\n \n" +("ваши очки: "+playerData.getPoints()),playerData.telegramID,KeyboardsList.commands);
-                    currStage.setCurrentStage(stages.zero);
-                    return false;
-
-                } else {
-                    TCI.sendMsg("incorrect input, please try again (slots)",playerData.telegramID,KeyboardsList.slots);
-                    currStage.setCurrentStage(stages.one);
-                    return true;
+                if (isInValid!= null){
+                    return new stageResult(true,isInValid, stages.one);
                 }
 
+                int inputBet = Integer.parseInt(data[0]);
 
+                modifier.remove(playerData,inputBet,false);
+
+                //docs: https://imgur.com/a/bqpI9Gv
+
+                int preRoll = RNG.roll(50,50,1,(729+1));
+
+                int[] roll = new int[3];
+                roll[0] = RNG.nextInt(9)+1;
+                roll[1] = RNG.nextInt(8)+1;
+                if (roll[1] == roll[0])
+                    roll[1]++;
+                roll[2] = RNG.nextInt(7)+1;
+                if (roll[2] == roll[0])
+                    roll[2]++;
+                if (roll[2] == roll[1])
+                    roll[2]++;
+
+                if (preRoll > (729 - 9)){
+                    // three
+                    roll[1] = roll[0];
+                    roll[2] = roll[0];
+                    modifier.add(playerData,inputBet * 100,true);
+                    //playerData.
+                }
+                if (preRoll > (729-9-81) && preRoll < (729 - 9)){
+                    roll[1] = roll[2];
+                    modifier.add(playerData,inputBet * 2,true);
+                }
+                if (preRoll > (729-9-81-81) && preRoll < (729-9-81)){
+                    roll[1] = roll[0];
+                    modifier.add(playerData,inputBet * 2,true);
+                }
+
+                return new stageResult(false,"\\/\\/\\/\\/\\/ \n"+"| "+roll[0]+" | "+roll[1]+" | "+ roll[2] +" |" + "\n/\\/\\/\\/\\/\\"+"\n \n" +("ваши очки: "+playerData.getPoints()),stages.zero);
             }
         };
 
-        public abstract boolean run(stageHolder currStage,TCI TCI,playerData playerData,String[] data);
+        private final KeyboardsList s;
 
-    }
+        stages(KeyboardsList s){this.s = s;};
 
-    private class stageHolder{
-        private stages currentStage = stages.zero;
-        public void setCurrentStage(stages stages){
-            this.currentStage = stages;
+        public KeyboardsList getKeyboard(){
+            return this.s;
         }
-        public stages getCurrentStage() {
-            return currentStage;
-        }
-    }
+
+        public abstract stageResult run(stageHolder currStage, playerData playerData, String[] data);
+
+    };
 
     private stageHolder currentStage = new stageHolder();
 
@@ -117,7 +91,17 @@ public class SlotMachineV2 implements TCIGame {
 
     public boolean play(playerData playerData, String[] data) {
 
-        return currentStage.getCurrentStage().run(currentStage,TCI,playerData,data);
+        stageResult result = currentStage.getCurrentStage().run(currentStage,playerData,data);
+
+        currentStage.setCurrentStage(result.getStage());
+
+        String[] messages = result.getResponseText();
+
+        for (int i = 0; i < messages.length; i++) {
+            TCI.sendMsg(messages[i],playerData.telegramID,currentStage.getCurrentStage().getKeyboard());
+        }
+
+        return result.isAdditionalInputRequired();
 
     }
 

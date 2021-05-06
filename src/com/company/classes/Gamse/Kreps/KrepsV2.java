@@ -104,7 +104,6 @@ public class KrepsV2 implements TCIGame {
 
             private final pointsModifier modifier = new pointsModifier();
             private final NTRandom RNG = new NTRandom();
-            private final Random random = new Random();
 
             public stageResult run(stageHolder currStage, playerData playerData,String[] data) {
 
