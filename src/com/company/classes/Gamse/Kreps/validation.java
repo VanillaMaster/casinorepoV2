@@ -1,17 +1,17 @@
 package com.company.classes.Gamse.Kreps;
 
-class Validation {
-    public static SOneValidData validateOne(String[] data,Integer points){
+class validation {
+    public static sOneValidData validateOne(String[] data, Integer points){
         if (data.length!=2){
-            return new SOneValidData("incorrect input, please try again (kreps phase1) code#2");
+            return new sOneValidData("incorrect input, please try again (kreps phase1) code#2");
         }
         if (!data[0].matches("(pass|dpass)") || !data[1].matches("[0-9]+")){
-            return new SOneValidData("incorrect input, please try again (kreps phase1) code#2\"");
+            return new sOneValidData("incorrect input, please try again (kreps phase1) code#2\"");
         }
         if (Integer.parseInt(data[1]) > points){
-            return new SOneValidData("у вас недостаточно средств для такой ставки, please try again");
+            return new sOneValidData("у вас недостаточно средств для такой ставки, please try again");
         }
-        return new SOneValidData(BetOptions.get(data[0]),Integer.parseInt(data[1]),null);
+        return new sOneValidData(BetOptions.get(data[0]),Integer.parseInt(data[1]),null);
     }
     public static String validateTwo(String[] data,Integer points){
         if (data.length!=2){

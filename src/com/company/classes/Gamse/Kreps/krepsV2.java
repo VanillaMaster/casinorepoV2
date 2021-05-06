@@ -8,10 +8,7 @@ import com.company.classes.pointsModifier.pointsModifier;
 import com.company.classes.utilits.KeyboardsList;
 import com.google.common.primitives.Ints;
 
-import java.util.ArrayList;
-import java.util.Random;
-
-public class KrepsV2 implements TCIGame {
+public class krepsV2 implements TCIGame {
 
     //===========================================================================================================
     private static final int phaseOneWinRate = 50; //винрейт фазы 1
@@ -57,7 +54,7 @@ public class KrepsV2 implements TCIGame {
 
             public stageResult run(stageHolder currStage, playerData playerData,String[] data) {
 
-                SOneValidData validData = Validation.validateOne(data,playerData.getPoints());
+                sOneValidData validData = validation.validateOne(data,playerData.getPoints());
 
                 if (validData.getError() != null){
                     return new stageResult(true,validData.getError(),stages.one);
@@ -107,7 +104,7 @@ public class KrepsV2 implements TCIGame {
 
             public stageResult run(stageHolder currStage, playerData playerData,String[] data) {
 
-                String isInValid = Validation.validateTwo(data,playerData.getPoints());
+                String isInValid = validation.validateTwo(data,playerData.getPoints());
 
                 if (isInValid!= null){
                     return new stageResult(true,isInValid,stages.two);
@@ -180,7 +177,7 @@ public class KrepsV2 implements TCIGame {
 
     private TCI TCI;
 
-    public KrepsV2(TCI iTCI){
+    public krepsV2(TCI iTCI){
         TCI = iTCI;
     }
 }

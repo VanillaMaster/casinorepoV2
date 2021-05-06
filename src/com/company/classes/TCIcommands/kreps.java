@@ -1,6 +1,6 @@
 package com.company.classes.TCIcommands;
 
-import com.company.classes.Gamse.Kreps.KrepsV2;
+import com.company.classes.Gamse.Kreps.krepsV2;
 import com.company.classes.TCI;
 import com.company.classes.playerDataConstruct.playerDataShell;
 /**
@@ -9,7 +9,7 @@ import com.company.classes.playerDataConstruct.playerDataShell;
 public class kreps implements TCICommands {
     private com.company.classes.TCI TCI;
 
-    private KrepsV2 Kreps;
+    private krepsV2 Kreps;
 
     private playerDataShell playerDataShell;
 
@@ -18,7 +18,7 @@ public class kreps implements TCICommands {
     public void init(TCI iTCI,playerDataShell iPlayerDataShell) {
         TCI = iTCI;
         playerDataShell = iPlayerDataShell;
-        Kreps = new KrepsV2(iTCI);
+        Kreps = new krepsV2(iTCI);
     }
 
 

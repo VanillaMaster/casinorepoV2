@@ -5,16 +5,16 @@ class stageResult {
 
     private boolean isAdditionalInputRequired;
     private ArrayList<String> responseText = new ArrayList<>();
-    private KrepsV2.stages stage;
+    private krepsV2.stages stage;
 
 
-    stageResult(boolean isAdditionalInputRequired, String responseText, KrepsV2.stages stage){
+    stageResult(boolean isAdditionalInputRequired, String responseText, krepsV2.stages stage){
         this.isAdditionalInputRequired = isAdditionalInputRequired;
         this.responseText.add(responseText);
         this.stage = stage;
     }
 
-    stageResult(boolean isAdditionalInputRequired, KrepsV2.stages stage){
+    stageResult(boolean isAdditionalInputRequired, krepsV2.stages stage){
         this.isAdditionalInputRequired = isAdditionalInputRequired;
         this.stage = stage;
     }
@@ -31,7 +31,7 @@ class stageResult {
         return responseText.toArray(new String[0]);
     }
 
-    public KrepsV2.stages getStage() {
+    public krepsV2.stages getStage() {
         return stage;
     }
 }

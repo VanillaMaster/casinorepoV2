@@ -1,17 +1,17 @@
 package com.company.classes.Gamse.Kreps;
 
-class SOneValidData {
+class sOneValidData {
     private String error;
     private int inputBet;
     private BetOptions betOption;
 
-    public SOneValidData(String error){
+    public sOneValidData(String error){
         this.betOption = null;
         this.inputBet = 0;
         this.error = error;
     }
 
-    public SOneValidData(BetOptions betOption, int inputBet, String error){
+    public sOneValidData(BetOptions betOption, int inputBet, String error){
         this.betOption = betOption;
         this.inputBet = inputBet;
         this.error = error;

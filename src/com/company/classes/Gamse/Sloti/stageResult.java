@@ -5,16 +5,16 @@ import java.util.ArrayList;
 class stageResult {
     private boolean isAdditionalInputRequired;
     private ArrayList<String> responseText = new ArrayList<>();
-    private SlotMachineV2.stages stage;
+    private slotMachineV2.stages stage;
 
 
-    stageResult(boolean isAdditionalInputRequired, String responseText, SlotMachineV2.stages stage){
+    stageResult(boolean isAdditionalInputRequired, String responseText, slotMachineV2.stages stage){
         this.isAdditionalInputRequired = isAdditionalInputRequired;
         this.responseText.add(responseText);
         this.stage = stage;
     }
 
-    stageResult(boolean isAdditionalInputRequired, SlotMachineV2.stages stage){
+    stageResult(boolean isAdditionalInputRequired, slotMachineV2.stages stage){
         this.isAdditionalInputRequired = isAdditionalInputRequired;
         this.stage = stage;
     }
@@ -31,7 +31,7 @@ class stageResult {
         return responseText.toArray(new String[0]);
     }
 
-    public SlotMachineV2.stages getStage() {
+    public slotMachineV2.stages getStage() {
         return stage;
     }
 }

@@ -1,7 +1,7 @@
 package com.company.classes.Gamse.Kreps;
 
 class stageHolder {
-    private KrepsV2.stages currentStage = KrepsV2.stages.zero;
+    private krepsV2.stages currentStage = krepsV2.stages.zero;
 
     private int pointer;
 
@@ -13,10 +13,10 @@ class stageHolder {
         return pointer;
     }
 
-    public void setCurrentStage(KrepsV2.stages stages){
+    public void setCurrentStage(krepsV2.stages stages){
         this.currentStage = stages;
     }
-    public KrepsV2.stages getCurrentStage() {
+    public krepsV2.stages getCurrentStage() {
         return currentStage;
     }
 }

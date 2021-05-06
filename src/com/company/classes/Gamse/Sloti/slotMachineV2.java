@@ -8,7 +8,7 @@ import com.company.classes.playerDataConstruct.playerData;
 import com.company.classes.pointsModifier.pointsModifier;
 import com.company.classes.utilits.KeyboardsList;
 
-public class SlotMachineV2 implements TCIGame {
+public class slotMachineV2 implements TCIGame {
 
     protected enum stages {
         zero(KeyboardsList.commands){
@@ -85,7 +85,7 @@ public class SlotMachineV2 implements TCIGame {
 
     private TCI TCI;
 
-    public SlotMachineV2(TCI iTCI){
+    public slotMachineV2(TCI iTCI){
         TCI = iTCI;
     }
 
