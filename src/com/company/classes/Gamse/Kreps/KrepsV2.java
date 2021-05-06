@@ -53,9 +53,9 @@ public class KrepsV2 implements TCIGame {
         zero(KeyboardsList.commands){
             public stageResult run(stageHolder currStage, playerData playerData,String[] data) {
 
-                currStage.setCurrentStage(stages.one);
+                //currStage.setCurrentStage(stages.one);
 
-                return new stageResult(true,"pass или dpass и количество ставки");
+                return new stageResult(true,"pass или dpass и количество ставки",stages.one);
 
             }
         },
@@ -101,8 +101,8 @@ public class KrepsV2 implements TCIGame {
                 SOneValidData validData = validate(data,playerData.getPoints());
 
                 if (validData.getError() != null){
-                    currStage.setCurrentStage(stages.one);
-                    return new stageResult(true,validData.getError());
+                    //currStage.setCurrentStage(stages.one);
+                    return new stageResult(true,validData.getError(),stages.one);
                 }
 
                 //=================
@@ -119,14 +119,14 @@ public class KrepsV2 implements TCIGame {
 
                     playerData.krepsPart1.addWin(2);
 
-                    currStage.setCurrentStage(stages.zero);
-                    return new stageResult(false,(roll+"\n\n"+"ваши очки: "+playerData.getPoints()));
+                    //currStage.setCurrentStage(stages.zero);
+                    return new stageResult(false,(roll+"\n\n"+"ваши очки: "+playerData.getPoints()),stages.zero);
                     //return false;
 
                 } else if (betOption.equals(BetOptions.pass) && ((Ints.contains(betOption.getWinNumbers(),roll)))) {
                     modifier.add(playerData,inputBet * 2,false);
 
-                    stageResult result = new stageResult(true,(roll+"\n\n"+ "ваши очки: "+playerData.getPoints()));
+                    stageResult result = new stageResult(true,(roll+"\n\n"+ "ваши очки: "+playerData.getPoints()),stages.two);
 
                     playerData.krepsPart1.addWin(2);
 
@@ -134,13 +134,13 @@ public class KrepsV2 implements TCIGame {
 
                     result.addResponse("число ставки и количество ставки");
 
-                    currStage.setCurrentStage(stages.two);
+                    //currStage.setCurrentStage(stages.two);
                     return result;
 
-                } else { ;
+                } else {
                     playerData.krepsPart1.addLose(1);
-                    currStage.setCurrentStage(stages.zero);
-                    return new stageResult(false,(Integer.toString(roll)+"\n\n"+("ваши очки: "+playerData.getPoints())));
+                    //currStage.setCurrentStage(stages.zero);
+                    return new stageResult(false,(Integer.toString(roll)+"\n\n"+("ваши очки: "+playerData.getPoints())),stages.zero);
                 }
                 //=================
             }
@@ -172,8 +172,8 @@ public class KrepsV2 implements TCIGame {
                 String isInValid = validate(data,playerData.getPoints());
 
                 if (isInValid!= null){
-                    currStage.setCurrentStage(stages.two);
-                    return new stageResult(true,isInValid);
+                    //currStage.setCurrentStage(stages.two);
+                    return new stageResult(true,isInValid,stages.two);
                 }
                 int inputNumber = Integer.parseInt(data[0]);
                 int inputBet = Integer.parseInt(data[1]);
@@ -182,7 +182,7 @@ public class KrepsV2 implements TCIGame {
 
                 boolean keepRolling = true;
 
-                stageResult result = new stageResult(false);
+                stageResult result = new stageResult(false,stages.zero);
 
                 do {
 
@@ -206,7 +206,7 @@ public class KrepsV2 implements TCIGame {
 
                 } while (keepRolling);
 
-                currStage.setCurrentStage(stages.zero);
+                //currStage.setCurrentStage(stages.zero);
                 result.addResponse(("ваши очки: "+playerData.getPoints()));
                 return result;
 
@@ -230,6 +230,8 @@ public class KrepsV2 implements TCIGame {
     public boolean play(playerData playerData, String[] data) {
 
         stageResult result = currentStage.getCurrentStage().run(currentStage,playerData,data);
+
+        currentStage.setCurrentStage(result.getStage());
 
         String[] messages = result.getResponseText();
 
@@ -270,14 +272,18 @@ public class KrepsV2 implements TCIGame {
     private static class stageResult{
         private boolean isAdditionalInputRequired;
         private ArrayList<String> responseText = new ArrayList<>();
+        private stages stage;
 
-        stageResult(boolean isAdditionalInputRequired,String responseText){
+
+        stageResult(boolean isAdditionalInputRequired,String responseText,stages stage){
             this.isAdditionalInputRequired = isAdditionalInputRequired;
             this.responseText.add(responseText);
+            this.stage = stage;
         }
 
-        stageResult(boolean isAdditionalInputRequired){
+        stageResult(boolean isAdditionalInputRequired,stages stage){
             this.isAdditionalInputRequired = isAdditionalInputRequired;
+            this.stage = stage;
         }
 
         public void addResponse(String responseText){
@@ -290,6 +296,10 @@ public class KrepsV2 implements TCIGame {
 
         public String[] getResponseText() {
             return responseText.toArray(new String[0]);
+        }
+
+        public stages getStage() {
+            return stage;
         }
     }
 
