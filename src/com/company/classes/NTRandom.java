@@ -9,10 +9,12 @@ public class NTRandom {
 
     /**
      * https://imgur.com/a/LFgtH80 обьяснение работы
+     * numberOfRolls это переменная определяющия размер выборки рандомных чисел чем больше размер тем рандомнее исход
      */
     public int roll(int winrate, int desiredWinrate, int minRoll, int maxRoll) {
 
-        int[] rn = new int[3];
+        int numberOfRolls=3;
+        int[] rn = new int[numberOfRolls];
 
         for (int i = 0; i < rn.length; i++)
             rn[i] = random.nextInt((maxRoll - minRoll + 1)) + minRoll;
@@ -58,6 +60,7 @@ public class NTRandom {
     }
     /**
      * https://imgur.com/a/R0FEFLp обьяснение работы метода
+     * @param preRoll число в дипазоне 2 24 которое генерируеться посредством метода rollNumber
      */
     public int[] twoNumberGenerator(int preRoll){
         int secondDice,firsDice;

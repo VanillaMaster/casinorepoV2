@@ -20,16 +20,23 @@ public class KrepsV2 implements TCIGame {
 
     private static final int loseNumber=7;//число проигрыша 2 стадии
 
-    private static final int[] dpassWinNumbers = new int[] {1,2,3,7,11,12}; //выйгрышные числа для dpass
-    private static final int[] passWinNumbers = new int[] {4,5,6,8,9,10}; //выйгрышные числа для pass
     //===========================================================================================================
 
-
     enum BetOptions {
-        pass,
-        dpass,
+        pass(new int[] {1,2,3,7,11,12}),
+        dpass(new int[]{4, 5, 6, 8, 9, 10}),
         NaN;
 
+        int[] WinNumbers;
+        BetOptions(int[] i) {
+            WinNumbers = i;
+        }
+        int[] getWinNumbers() {
+            return WinNumbers;
+        }
+
+        BetOptions() {
+        }
 
         public static BetOptions get(String s)
         {
@@ -71,21 +78,21 @@ public class KrepsV2 implements TCIGame {
                 return null;
             }
 
-            private Integer getRoll(String[] data,playerData playerData){
+            private Integer getRoll(BetOptions betOption,playerData playerData){
                 //ролл 0 или 1 как эвивалент победе поражению в зависимоти от винрейта игрока
                 int winIdentifier  = RNG.roll(playerData.krepsPart1.winrate(), phaseOneWinRate, 0, 1);
 
                 if (winIdentifier  == 0) {
-                    if (data[0].equals((BetOptions.dpass).toString())){
-                        return RNG.getRandom(dpassWinNumbers);
+                    if (betOption.equals((BetOptions.dpass))){
+                        return RNG.getRandom(BetOptions.dpass.getWinNumbers());
                     } else {
-                        return RNG.getRandom(passWinNumbers);
+                        return RNG.getRandom(BetOptions.pass.getWinNumbers());
                     }
                 } else {
-                    if (data[0].equals((BetOptions.dpass).toString())){
-                        return RNG.getRandom(passWinNumbers);
+                    if (betOption.equals((BetOptions.dpass))){
+                        return RNG.getRandom(BetOptions.pass.getWinNumbers());
                     } else {
-                        return RNG.getRandom(dpassWinNumbers);
+                        return RNG.getRandom(BetOptions.dpass.getWinNumbers());
                     }
                 }
             }
@@ -106,9 +113,9 @@ public class KrepsV2 implements TCIGame {
 
                 modifier.remove(playerData,inputBet,false);
 
-                int roll = getRoll(data,playerData);
+                int roll = getRoll(betOption,playerData);
 
-                if (betOption.equals(BetOptions.dpass) && (Ints.contains(dpassWinNumbers,roll))) {
+                if (betOption.equals(BetOptions.dpass) && (Ints.contains(betOption.getWinNumbers(),roll))) {
                     modifier.add(playerData,inputBet * 2,false);
 
                     playerData.krepsPart1.addWin(2);
@@ -117,7 +124,7 @@ public class KrepsV2 implements TCIGame {
                     return new stageResult(false,(roll+"\n\n"+"ваши очки: "+playerData.getPoints()));
                     //return false;
 
-                } else if (betOption.equals(BetOptions.pass) && ((Ints.contains(passWinNumbers,roll)))) {
+                } else if (betOption.equals(BetOptions.pass) && ((Ints.contains(betOption.getWinNumbers(),roll)))) {
                     modifier.add(playerData,inputBet * 2,false);
 
                     stageResult result = new stageResult(true,(roll+"\n\n"+ "ваши очки: "+playerData.getPoints()));
