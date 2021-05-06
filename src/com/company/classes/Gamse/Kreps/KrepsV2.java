@@ -53,8 +53,6 @@ public class KrepsV2 implements TCIGame {
         zero(KeyboardsList.commands){
             public stageResult run(stageHolder currStage, playerData playerData,String[] data) {
 
-                //currStage.setCurrentStage(stages.one);
-
                 return new stageResult(true,"pass или dpass и количество ставки",stages.one);
 
             }
@@ -101,7 +99,6 @@ public class KrepsV2 implements TCIGame {
                 SOneValidData validData = validate(data,playerData.getPoints());
 
                 if (validData.getError() != null){
-                    //currStage.setCurrentStage(stages.one);
                     return new stageResult(true,validData.getError(),stages.one);
                 }
 
@@ -119,7 +116,6 @@ public class KrepsV2 implements TCIGame {
 
                     playerData.krepsPart1.addWin(2);
 
-                    //currStage.setCurrentStage(stages.zero);
                     return new stageResult(false,(roll+"\n\n"+"ваши очки: "+playerData.getPoints()),stages.zero);
                     //return false;
 
@@ -134,12 +130,10 @@ public class KrepsV2 implements TCIGame {
 
                     result.addResponse("число ставки и количество ставки");
 
-                    //currStage.setCurrentStage(stages.two);
                     return result;
 
                 } else {
                     playerData.krepsPart1.addLose(1);
-                    //currStage.setCurrentStage(stages.zero);
                     return new stageResult(false,(Integer.toString(roll)+"\n\n"+("ваши очки: "+playerData.getPoints())),stages.zero);
                 }
                 //=================
@@ -172,7 +166,6 @@ public class KrepsV2 implements TCIGame {
                 String isInValid = validate(data,playerData.getPoints());
 
                 if (isInValid!= null){
-                    //currStage.setCurrentStage(stages.two);
                     return new stageResult(true,isInValid,stages.two);
                 }
                 int inputNumber = Integer.parseInt(data[0]);
@@ -206,7 +199,6 @@ public class KrepsV2 implements TCIGame {
 
                 } while (keepRolling);
 
-                //currStage.setCurrentStage(stages.zero);
                 result.addResponse(("ваши очки: "+playerData.getPoints()));
                 return result;
 
